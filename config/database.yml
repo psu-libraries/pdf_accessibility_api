@@ -15,8 +15,8 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  database: <%= ENV.fetch("POSTGRES_DB", "scholarsphere") %>
-  username: <%= ENV.fetch("POSTGRES_USER", "scholarsphere") %>
+  database: <%= ENV.fetch("POSTGRES_DB", "pdf_accessibility_api") %>
+  username: <%= ENV.fetch("POSTGRES_USER", "pdf_accessibility_api") %>
   password: <%= ENV.fetch("POSTGRES_PASSWORD", nil) %>
   port: <%= ENV.fetch("POSTGRES_PORT", nil ) %>
   host: <%= ENV.fetch("POSTGRES_HOST", nil) %>
@@ -86,4 +86,4 @@ test:
 #
 production:
   <<: *default
-  
+
