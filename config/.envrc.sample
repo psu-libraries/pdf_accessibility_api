@@ -1,0 +1,7 @@
+# Get values from vault
+
+export POSTGRES_DB=
+export POSTGRES_USER=
+export POSTGRES_PASSWORD=
+export POSTGRES_PORT=
+export POSTGRES+HOST=
