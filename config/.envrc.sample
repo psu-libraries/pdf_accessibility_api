@@ -1,5 +1,6 @@
 # Get values from vault
 
+export API_BEARER_TOKEN=
 export POSTGRES_DB=
 export POSTGRES_USER=
 export POSTGRES_PASSWORD=
