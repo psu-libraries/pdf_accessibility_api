@@ -111,16 +111,14 @@ GEM
       smart_properties
     error_highlight (0.7.0)
     erubi (1.13.1)
-    ffi (1.17.2)
+    ffi (1.17.2-aarch64-linux-gnu)
+    ffi (1.17.2-arm64-darwin)
+    ffi (1.17.2-x86_64-linux-gnu)
     globalid (1.2.1)
       activesupport (>= 6.1)
     html_tokenizer (0.0.8)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
-    importmap-rails (2.1.0)
-      actionpack (>= 6.0.0)
-      activesupport (>= 6.0.0)
-      railties (>= 6.0.0)
     io-console (0.8.0)
     irb (1.15.2)
       pp (>= 0.6.0)
@@ -143,7 +141,6 @@ GEM
       net-smtp
     marcel (1.0.4)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.9)
     minitest (5.25.5)
     msgpack (1.8.0)
     net-imap (0.5.9)
@@ -164,8 +161,11 @@ GEM
       rubocop-rspec (~> 2)
       scss_lint (~> 0.55)
     nio4r (2.7.4)
-    nokogiri (1.18.8)
-      mini_portile2 (~> 2.8.2)
+    nokogiri (1.18.8-aarch64-linux-gnu)
+      racc (~> 1.4)
+    nokogiri (1.18.8-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.18.8-x86_64-linux-gnu)
       racc (~> 1.4)
     parallel (1.27.0)
     parser (3.3.8.0)
@@ -227,6 +227,8 @@ GEM
     rdoc (6.14.1)
       erb
       psych (>= 4.0.0)
+    redis-client (0.25.0)
+      connection_pool
     regexp_parser (2.10.0)
     reline (0.6.1)
       io-console (~> 0.5)
@@ -297,6 +299,12 @@ GEM
     scss_lint (0.60.0)
       sass (~> 3.5, >= 3.5.5)
     securerandom (0.4.1)
+    sidekiq (8.0.4)
+      connection_pool (>= 2.5.0)
+      json (>= 2.9.0)
+      logger (>= 1.6.2)
+      rack (>= 3.1.0)
+      redis-client (>= 0.23.2)
     smart_properties (1.17.0)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
@@ -311,9 +319,6 @@ GEM
     stringio (3.1.7)
     thor (1.3.2)
     timeout (0.4.3)
-    turbo-rails (2.0.16)
-      actionpack (>= 7.1.0)
-      railties (>= 7.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.1.4)
@@ -340,7 +345,6 @@ DEPENDENCIES
   bootsnap
   debug
   error_highlight (>= 0.4.0)
-  importmap-rails
   jbuilder
   niftany
   pg (~> 1.1)
@@ -348,11 +352,14 @@ DEPENDENCIES
   rails (~> 7.2.2, >= 7.2.2.1)
   rspec-rails
   rubocop-rails-omakase
+  sidekiq
   sprockets-rails
   stimulus-rails
-  turbo-rails
   tzinfo-data
   web-console
+
+RUBY VERSION
+   ruby 3.4.1p0
 
 BUNDLED WITH
    2.3.8
