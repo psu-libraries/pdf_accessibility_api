@@ -111,8 +111,14 @@ GEM
       smart_properties
     error_highlight (0.7.0)
     erubi (1.13.1)
+    factory_bot (6.5.4)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.5.0)
+      factory_bot (~> 6.5)
+      railties (>= 6.1.0)
     ffi (1.17.2-aarch64-linux-gnu)
     ffi (1.17.2-arm64-darwin)
+    ffi (1.17.2-x86_64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -165,6 +171,8 @@ GEM
     nokogiri (1.18.8-aarch64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.18.8-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.18.8-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.18.8-x86_64-linux-gnu)
       racc (~> 1.4)
@@ -299,6 +307,8 @@ GEM
     scss_lint (0.60.0)
       sass (~> 3.5, >= 3.5.5)
     securerandom (0.4.1)
+    shoulda-matchers (6.5.0)
+      activesupport (>= 5.2.0)
     sidekiq (8.0.4)
       connection_pool (>= 2.5.0)
       json (>= 2.9.0)
@@ -339,12 +349,14 @@ GEM
 PLATFORMS
   aarch64-linux
   arm64-darwin-24
+  x86_64-darwin-24
   x86_64-linux
 
 DEPENDENCIES
   bootsnap
   debug
   error_highlight (>= 0.4.0)
+  factory_bot_rails
   jbuilder
   mysql2
   niftany
@@ -352,6 +364,7 @@ DEPENDENCIES
   rails (~> 7.2.2, >= 7.2.2.1)
   rspec-rails
   rubocop-rails-omakase
+  shoulda-matchers
   sidekiq
   sprockets-rails
   stimulus-rails
