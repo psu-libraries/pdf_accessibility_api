@@ -2,7 +2,7 @@ require 'aws-sdk-s3'
 
 class S3Handler
   INPUT_PREFIX = 'pdf/'
-  OUTPUT_PREFIX = 'result/'
+  OUTPUT_PREFIX = 'result/COMPLIANT_'
 
   def initialize(object_key)
     @object_key = object_key
@@ -18,28 +18,30 @@ class S3Handler
 
   def upload_to_input(local_path)
     key = "#{INPUT_PREFIX}#{@object_key}"
-    bucket.object(key).upload_file(local_path)
-    key
+    @bucket.object(key)
+           .upload_file(local_path)
   end
 
-  def find_file(prefix: INPUT_PREFIX)
-    compliant_key = "#{OUPUT_PREFIX}COMPLIANT_#{@object_key}"
-    obj = @bucket.object(compliant_key)
-    obj.exists? ? obj : nil
-  end
-
-  def presigned_url_for_result(expires_in: 3600)
-    obj = find_result_file(@object_key)
+  def presigned_url_for_output(expires_in: 3600)
+    obj = find_file(prefix: OUTPUT_PREFIX)
     return nil unless obj
 
     obj.presigned_url(:get, expires_in: expires_in)
   end
 
-  def delete_file(prefix: INPUT_PREFIX)
-    obj = find_file(prefix: prefix)
-    return false unless obj
+  def delete_files
+    objs = [find_file(prefix: INPUT_PREFIX),
+            find_file(prefix: OUTPUT_PREFIX)].compact
+    return nil if objs.empty?
 
-    obj.delete
-    true
+    objs.each(&:delete)
   end
+
+  private
+
+    def find_file(prefix: INPUT_PREFIX)
+      compliant_key = "#{prefix}#{@object_key}"
+      obj = @bucket.object(compliant_key)
+      obj.exists? ? obj : nil
+    end
 end
