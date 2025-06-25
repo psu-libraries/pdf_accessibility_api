@@ -42,8 +42,8 @@ class S3Handler
   private
 
     def find_file(prefix: INPUT_PREFIX)
-      compliant_key = "#{prefix}#{@object_key}"
-      obj = @bucket.object(compliant_key)
+      key = "#{prefix}#{@object_key}"
+      obj = @bucket.object(key)
       obj.exists? ? obj : nil
     end
 end
