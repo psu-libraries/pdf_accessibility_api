@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'aws-sdk-s3'
 
 class S3Handler
@@ -19,7 +21,7 @@ class S3Handler
   def upload_to_input(local_path)
     key = "#{INPUT_PREFIX}#{@object_key}"
     @bucket.object(key)
-           .upload_file(local_path)
+      .upload_file(local_path)
   end
 
   def presigned_url_for_output(expires_in: 3600)

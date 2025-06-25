@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe S3Handler, type: :service do
@@ -19,11 +21,12 @@ RSpec.describe S3Handler, type: :service do
     end
 
     describe '#upload_to_input' do
-      it 'uploads a file to S3 input prefix' do
-        expect(bucket).to receive(:object).with("pdf/#{object_key}").and_return(s3_object)
-        expect(s3_object).to receive(:upload_file).with(local_path)
-        handler = S3Handler.new(object_key)
+      it 'uploads a file to S3 input directory' do
+        allow(bucket).to receive(:object).with("pdf/#{object_key}").and_return(s3_object)
+        allow(s3_object).to receive(:upload_file).with(local_path)
+        handler = described_class.new(object_key)
         handler.upload_to_input(local_path)
+        expect(s3_object).to have_received(:upload_file).with(local_path)
       end
     end
 
@@ -31,8 +34,8 @@ RSpec.describe S3Handler, type: :service do
       it 'returns a presigned url if output file exists' do
         allow(bucket).to receive(:object).with("result/COMPLIANT_#{object_key}").and_return(s3_object)
         allow(s3_object).to receive(:exists?).and_return(true)
-        expect(s3_object).to receive(:presigned_url).with(:get, expires_in: 3600).and_return('http://fake-url')
-        handler = S3Handler.new(object_key)
+        allow(s3_object).to receive(:presigned_url).with(:get, expires_in: 3600).and_return('http://fake-url')
+        handler = described_class.new(object_key)
         url = handler.presigned_url_for_output
         expect(url).to eq('http://fake-url')
       end
@@ -40,7 +43,7 @@ RSpec.describe S3Handler, type: :service do
       it 'returns nil if output file does not exist' do
         allow(bucket).to receive(:object).with("result/COMPLIANT_#{object_key}").and_return(s3_object)
         allow(s3_object).to receive(:exists?).and_return(false)
-        handler = S3Handler.new(object_key)
+        handler = described_class.new(object_key)
         expect(handler.presigned_url_for_output).to be_nil
       end
     end
@@ -53,37 +56,45 @@ RSpec.describe S3Handler, type: :service do
         allow(bucket).to receive(:object).with("result/COMPLIANT_#{object_key}").and_return(output_object)
         allow(input_object).to receive(:exists?).and_return(true)
         allow(output_object).to receive(:exists?).and_return(true)
-        expect(input_object).to receive(:delete)
-        expect(output_object).to receive(:delete)
-        handler = S3Handler.new(object_key)
+        allow(input_object).to receive(:delete)
+        allow(output_object).to receive(:delete)
+        handler = described_class.new(object_key)
         handler.delete_files
+        expect(input_object).to have_received(:delete)
+        expect(output_object).to have_received(:delete)
       end
 
       it 'returns nil if no files exist' do
         allow(bucket).to receive(:object).with("pdf/#{object_key}").and_return(s3_object)
         allow(bucket).to receive(:object).with("result/COMPLIANT_#{object_key}").and_return(s3_object)
         allow(s3_object).to receive(:exists?).and_return(false)
-        handler = S3Handler.new(object_key)
+        handler = described_class.new(object_key)
         expect(handler.delete_files).to be_nil
       end
     end
   end
 
   describe 'live S3 interactions' do
-    it 'uploads, retrieves presigned URL, and deletes files', :live_s3 do
-      file_path = Rails.root.join('spec', 'fixtures', 'files', 'test.pdf')
-      object_key = "test-#{SecureRandom.uuid}.pdf"
-      handler = S3Handler.new(object_key)
+    # This test requires AWS credentials and an S3 bucket to connect to
+    # It takes several minutes to complete, so it should be ran in isolation
+    it 'uploads file, retrieves presigned URL from output, and deletes files', :live_s3 do
+      file_path = Rails.root.join('spec', 'fixtures', 'files', 'testing.pdf')
+      object_key = "testing-#{SecureRandom.uuid}.pdf"
+      handler = described_class.new(object_key)
       handler.upload_to_input(file_path)
-      Timeout.timeout(6000) do
+      url = nil
+      Timeout.timeout(360) do
         loop do
-          url = S3Handler.new(object_key).presigned_url_for_result
-          handler.delete_files url if url
-          
+          url = described_class.new(object_key).presigned_url_for_output
+          break if url
+
           puts 'Waiting for processed file...'
-          sleep 1
+          sleep 15
         end
       end
+      expect(url).to match(%r{https://#{ENV.fetch('S3_BUCKET_NAME',
+                                                  nil)}.s3.amazonaws.com/result/COMPLIANT_#{object_key}})
+      handler.delete_files
     end
   end
 end
