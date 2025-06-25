@@ -1,0 +1,10 @@
+# AWS Credentials
+export AWS_ACCESS_KEY_ID="your-access-key-id"
+export AWS_SECRET_ACCESS_KEY="your-secret-access-key"
+export AWS_REGION="us-east-1"
+
+# Ignore AWS Config Files
+export AWS_SDK_CONFIG_OPT_OUT=true
+
+# S3 Bucket Info
+export S3_BUCKET_NAME="your-s3-bucket-name"
