@@ -1,9 +1,10 @@
 # Get values from vault
 
 export API_BEARER_TOKEN=
-export POSTGRES_DB=
-export POSTGRES_USER=
-export POSTGRES_PASSWORD=
-export POSTGRES_PORT=
-export POSTGRES+HOST=
+export MYSQL_DB=
+export MYSQL_USER=
+export MYSQL_PASSWORD=
+export MYSQL_PORT=
+export MYSQL_HOST=
+export RAILS_MAX_THREADS=
 export SIDEKIQ_MAX_RETRIES=
