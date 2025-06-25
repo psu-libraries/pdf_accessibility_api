@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe Job do
+RSpec.describe Job, type: :model do
   describe 'table' do
     it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
-    it { is_expected.to have_db_column(:uuid).of_type(:uuid).with_options(null: false) }
+    it { is_expected.to have_db_column(:uuid).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_column(:source_url).of_type(:text).with_options(null: false) }
     it { is_expected.to have_db_column(:status).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }

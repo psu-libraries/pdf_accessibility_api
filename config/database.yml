@@ -12,7 +12,7 @@
 
 default: &default
   adapter: mysql2
-  encoding: unicode
+  encoding: utf8mb4
   database: <%= ENV.fetch("MYSQL_DB", "pdf_accessibility_api") %>
   username: <%= ENV.fetch("MYSQL_USER", "pdf_accessibility_api") %>
   password: <%= ENV.fetch("MYSQL_PASSWORD", nil) %>

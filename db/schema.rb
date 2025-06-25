@@ -11,11 +11,8 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.2].define(version: 2025_06_25_150015) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
-  create_table "jobs", force: :cascade do |t|
-    t.uuid "uuid", null: false
+  create_table "jobs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "uuid", null: false
     t.text "source_url", null: false
     t.string "status", null: false
     t.datetime "created_at", null: false
