@@ -7,7 +7,7 @@ jobs:
         environment:
           RAILS_ENV: test
           MYSQL_PASSWORD: pdf_accessibility_api
-      - image: cimg/mariadb:11.4
+      - image: cimg/mariadb:11.7
         environment:
           MYSQL_ROOT_PASSWORD: pdf_accessibility_api
           MYSQL_USER: pdf_accessibility_api
