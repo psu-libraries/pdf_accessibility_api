@@ -1,21 +1,16 @@
 version: 2.1
 
-executors:
-  ruby-executor:
-    docker:
-      - image: cimg/ruby:3.4.1
-        environment:
-          RAILS_ENV: test
-      - image: cimg/postgres:15.2
-        environment:
-          POSTGRES_USER: pdf_accessibility_api
-          POSTGRES_DB: pdf_accessibility_api
-          POSTGRES_PASSWORD: pdf_accessibility_api
-    working_directory: ~/repo
-
 jobs:
   test:
-    executor: ruby-executor
+    docker:
+      - image: cimg/ruby:3.4.1
+      - image: cimg/mariadb:11.4
+        environment:
+          RAILS_ENV: test
+          MYSQL_ROOT_PASSWORD: pdf_accessibility_api
+          MYSQL_USER: pdf_accessibility_api
+          MYSQL_DATABASE: pdf_accessibility_api
+          MYSQL_PASSWORD: pdf_accessibility_api
     steps:
       - checkout
       - run:

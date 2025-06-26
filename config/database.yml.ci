@@ -1,3 +1,4 @@
-POSTGRES_USER: pdf_accessibility_api
-POSTGRES_DB: pdf_accessibility_api
-POSTGRES_PASSWORD: pdf_accessibility_api
+MYSQL_ROOT_PASSWORD: pdf_accessibility_api
+MYSQL_USER: pdf_accessibility_api
+MYSQL_DATABASE: pdf_accessibility_api
+MYSQL_PASSWORD: pdf_accessibility_api
