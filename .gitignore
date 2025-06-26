@@ -10,7 +10,7 @@
 # Ignore all environment files (except templates and examples).
 /.env*
 !/.env*.erb
-!.envrc.example
+!/.env*.sample
 
 # Ignore all logfiles and tempfiles.
 /log/*
