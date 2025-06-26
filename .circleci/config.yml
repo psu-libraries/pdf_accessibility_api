@@ -1,0 +1,42 @@
+version: 2.1
+
+executors:
+  ruby-executor:
+    docker:
+      - image: cimg/ruby:3.4.1
+        environment:
+          RAILS_ENV: test
+      - image: cimg/postgres:15.2
+        environment:
+          POSTGRES_USER: pdf_accessibility_api
+          POSTGRES_DB: pdf_accessibility_api
+          POSTGRES_PASSWORD: pdf_accessibility_api
+    working_directory: ~/repo
+
+jobs:
+  test:
+    executor: ruby-executor
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            gem install bundler -v "$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)"
+            bundle _$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)_ install
+      - run:
+          name: Set up database
+          command: |
+            cp config/database.yml.ci config/database.yml || true
+            bundle exec rails db:create db:schema:load --trace
+      - run:
+          name: "Lint"
+          command: bundle exec niftany
+      - run:
+          name: "RSpec"
+          command: bundle exec rspec
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
