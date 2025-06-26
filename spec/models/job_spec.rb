@@ -8,8 +8,11 @@ RSpec.describe Job do
     it { is_expected.to have_db_column(:uuid).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_column(:source_url).of_type(:text).with_options(null: false) }
     it { is_expected.to have_db_column(:status).of_type(:string).with_options(null: false) }
+    it { is_expected.to have_db_column(:api_user_id).of_type(:integer) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+
+    it { is_expected.to have_db_index(:api_user_id) }
   end
 
   describe 'factories' do
@@ -18,6 +21,10 @@ RSpec.describe Job do
 
   describe 'validations' do
     it { is_expected.to validate_inclusion_of(:status).in_array ['processing', 'completed', 'failed'] }
+  end
+
+  describe 'associations' do
+    it { is_expected.to belong_to(:api_user) }
   end
 
   describe '.statuses' do
