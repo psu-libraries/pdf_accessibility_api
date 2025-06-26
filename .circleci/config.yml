@@ -4,12 +4,14 @@ jobs:
   test:
     docker:
       - image: cimg/ruby:3.4.1
-      - image: cimg/mariadb:11.4
         environment:
           RAILS_ENV: test
+          MYSQL_PASSWORD: pdf_accessibility_api
+      - image: cimg/mariadb:11.4
+        environment:
           MYSQL_ROOT_PASSWORD: pdf_accessibility_api
           MYSQL_USER: pdf_accessibility_api
-          MYSQL_DB: pdf_accessibility_api
+          MYSQL_DATABASE: pdf_accessibility_api
           MYSQL_PASSWORD: pdf_accessibility_api
     steps:
       - checkout
