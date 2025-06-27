@@ -4,3 +4,6 @@ inherit_gem:
 Metrics/BlockLength:
   Exclude:
     - 'config/environments/development.rb'
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
