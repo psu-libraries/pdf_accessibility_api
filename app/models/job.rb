@@ -6,4 +6,6 @@ class Job < ApplicationRecord
   end
 
   validates :status, inclusion: { in: statuses }
+
+  belongs_to :api_user
 end
