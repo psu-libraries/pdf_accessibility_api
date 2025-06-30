@@ -22,7 +22,7 @@ RSpec.describe APIUser do
   end
 
   describe 'associations' do
-    it { is_expected.to have_many(:jobs) }
+    it { is_expected.to have_many(:jobs).dependent(:restrict_with_exception) }
   end
 
   describe 'creating a new API user' do
