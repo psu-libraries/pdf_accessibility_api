@@ -11,9 +11,11 @@ describe 'API V1 jobs', type: :request do
     context 'when given a valid API key' do
       context 'when given valid params' do
         it 'creates a record to track the job status' do
-          expect { post '/api/v1/jobs', params: { source_url: 'https://test.com/file' }, headers: { 'HTTP_X_API_KEY' => api_user.api_key } }.to(
-            change {  api_user.jobs.count }.by(1)
-          )
+          expect {
+ post '/api/v1/jobs', params: { source_url: 'https://test.com/file' },
+                      headers: { 'HTTP_X_API_KEY' => api_user.api_key } }.to(
+                        change { api_user.jobs.count }.by(1)
+                      )
 
           job = api_user.jobs.last
           expect(job.status).to eq 'processing'

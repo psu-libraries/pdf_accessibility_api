@@ -11,7 +11,6 @@ module API::V1
       RemediationJob.perform_later(job.uuid)
 
       render json: job, only: :uuid
-
     rescue ActiveRecord::RecordInvalid => e
       render json: { message: e.message, code: 422 }, status: :unprocessable_entity
     end
