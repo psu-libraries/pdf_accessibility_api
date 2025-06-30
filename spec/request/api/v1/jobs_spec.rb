@@ -6,6 +6,8 @@ describe 'API V1 jobs', type: :request do
   before { allow(RemediationJob).to receive(:perform_later) }
 
   let!(:api_user) { create(:api_user) }
+  let(:valid_headers) { { 'HTTP_X_API_KEY' => api_user.api_key } }
+  let(:valid_source_url) { 'https://test.com/file' }
 
   describe 'POST /api/v1/jobs' do
     context 'when given a valid API key' do
@@ -14,24 +16,24 @@ describe 'API V1 jobs', type: :request do
           expect {
             post(
               '/api/v1/jobs',
-              params: { source_url: 'https://test.com/file' },
+              params: { source_url: valid_source_url },
               headers: { 'HTTP_X_API_KEY' => api_user.api_key }
             )
           }.to(change { api_user.jobs.count }.by(1))
 
           job = api_user.jobs.last
           expect(job.status).to eq 'processing'
-          expect(job.source_url).to eq 'https://test.com/file'
+          expect(job.source_url).to eq valid_source_url
         end
 
         it 'enqueues a new job' do
-          post '/api/v1/jobs', params: { source_url: 'https://test.com/file' }, headers: { 'HTTP_X_API_KEY' => api_user.api_key }
+          post '/api/v1/jobs', params: { source_url: valid_source_url }, headers: valid_headers
 
           expect(RemediationJob).to have_received(:perform_later).with(api_user.jobs.last.uuid)
         end
 
         it 'returns an ok response with the job UUID' do
-          post '/api/v1/jobs', params: { source_url: 'https://test.com/file' }, headers: { 'HTTP_X_API_KEY' => api_user.api_key }
+          post '/api/v1/jobs', params: { source_url: valid_source_url }, headers: valid_headers
 
           expect(response).to be_ok
           parsed_response = JSON.parse(response.body)
@@ -41,7 +43,7 @@ describe 'API V1 jobs', type: :request do
 
       context 'when given invalid params' do
         it 'returns an unprocessable entity response' do
-          post '/api/v1/jobs', params: { source_url: 'bad url' }, headers: { 'HTTP_X_API_KEY' => api_user.api_key }
+          post '/api/v1/jobs', params: { source_url: 'bad url' }, headers: valid_headers
 
           expect(response).to be_unprocessable
           parsed_response = JSON.parse(response.body)
