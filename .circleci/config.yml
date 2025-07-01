@@ -1,0 +1,42 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: cimg/ruby:3.4.1
+        environment:
+          RAILS_ENV: test
+          MYSQL_PASSWORD: pdf_accessibility_api
+          REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+          REGISTRY_REPO: library/psulib_blacklight
+          GITHUB_USER: 'psu-stewardship-bot'
+          CONFIG_REPO: git@github.com:psu-libraries/pdf_accessibility_api.git
+      - image: cimg/mariadb:11.7
+        environment:
+          MYSQL_ROOT_PASSWORD: pdf_accessibility_api
+          MYSQL_USER: pdf_accessibility_api
+          MYSQL_DATABASE: pdf_accessibility_api_test
+          MYSQL_PASSWORD: pdf_accessibility_api
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            gem install bundler -v "$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)"
+            bundle _$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)_ install
+      - run:
+          name: Set up database
+          command: |
+            bundle exec rails db:create db:schema:load --trace
+      - run:
+          name: "Lint"
+          command: bundle exec niftany
+      - run:
+          name: "RSpec"
+          command: bundle exec rspec
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test

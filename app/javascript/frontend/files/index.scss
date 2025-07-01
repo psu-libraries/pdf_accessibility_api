@@ -1,0 +1,2 @@
+// Having an index file in a structure scss-lint is expecting, even if there is no content, keeps all niftany checks passing.
+// Without this familiar file structure, bundle exec scss-lint * is required, which is at odds with our other repos.
