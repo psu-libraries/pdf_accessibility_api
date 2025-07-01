@@ -20,7 +20,18 @@ RSpec.describe Job do
   end
 
   describe 'validations' do
+    subject(:job) { build(:job) }
+
     it { is_expected.to validate_inclusion_of(:status).in_array ['processing', 'completed', 'failed'] }
+
+    it 'validates the format of source_url' do
+      expect(job).not_to allow_value(nil).for(:source_url)
+      expect(job).not_to allow_value('').for(:source_url)
+      expect(job).not_to allow_value('invalid').for(:source_url)
+      expect(job).not_to allow_value('test.com/invalid').for(:source_url)
+
+      expect(job).to allow_value('https://test.com/file').for(:source_url)
+    end
   end
 
   describe 'associations' do
