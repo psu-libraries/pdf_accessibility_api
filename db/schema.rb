@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_26_151257) do
-  create_table "api_users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+ActiveRecord::Schema[7.2].define(version: 2025_07_03_162929) do
+  create_table "api_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "email"
     t.string "api_key", null: false
@@ -23,7 +23,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_26_151257) do
     t.index ["webhook_key"], name: "index_api_users_on_webhook_key", unique: true
   end
 
-  create_table "jobs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "jobs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "uuid", null: false
     t.text "source_url", null: false
     t.string "status", null: false
@@ -31,6 +31,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_26_151257) do
     t.datetime "updated_at", null: false
     t.bigint "api_user_id"
     t.index ["api_user_id"], name: "index_jobs_on_api_user_id"
+    t.index ["uuid"], name: "index_jobs_on_uuid"
   end
 
   add_foreign_key "jobs", "api_users"

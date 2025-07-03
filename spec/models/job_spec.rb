@@ -13,6 +13,7 @@ RSpec.describe Job do
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
     it { is_expected.to have_db_index(:api_user_id) }
+    it { is_expected.to have_db_index(:uuid) }
   end
 
   describe 'factories' do
