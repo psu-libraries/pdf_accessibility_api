@@ -3,6 +3,6 @@
 class RemediationJob < ApplicationJob
   # temporary stub
   def perform(_job_uuid)
-    true
+    nil
   end
 end
