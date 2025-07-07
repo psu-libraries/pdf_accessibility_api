@@ -20,7 +20,9 @@ jobs:
           MYSQL_DATABASE: pdf_accessibility_api_test
           MYSQL_PASSWORD: pdf_accessibility_api
     steps:
-    # setup_remote_docker here?
+      - setup_remote_docker:
+          version: docker24
+          docker_layer_caching: true
       - checkout
       - run:
           name: Install dependencies
