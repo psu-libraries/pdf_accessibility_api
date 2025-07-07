@@ -2,11 +2,15 @@
 
 require 'rails_helper'
 
+class Tempfile
+  include Down::NetHttp::DownloadedFile
+end
+
 RSpec.describe RemediationJob do
-  let!(:job) { create :job, source_url: 'https://test.com/file.pdf' }
+  let!(:job) { create(:job, source_url: 'https://test.com/file.pdf') }
   let(:file) {
-    double(
-      'tempfile',
+    instance_double(
+      Tempfile,
       close!: nil,
       original_filename: 'file.pdf',
       path: 'path/to/file'
@@ -72,7 +76,9 @@ RSpec.describe RemediationJob do
         expect(reloaded_job.output_url).to be_nil
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
         expect(reloaded_job.output_object_key).to be_nil
-        expect(reloaded_job.processing_error_message).to eq 'Failed to upload file to remediation input location:  upload error'
+        expect(reloaded_job.processing_error_message).to eq(
+          'Failed to upload file to remediation input location:  upload error'
+        )
       end
 
       it 'closes the temporarily downloaded file' do

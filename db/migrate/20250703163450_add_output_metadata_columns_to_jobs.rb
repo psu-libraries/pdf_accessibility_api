@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddOutputMetadataColumnsToJobs < ActiveRecord::Migration[7.2]
   def change
     change_table :jobs, bulk: true do

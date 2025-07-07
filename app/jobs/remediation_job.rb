@@ -26,15 +26,14 @@ class RemediationJob < ApplicationJob
     )
 
     RemediationStatusNotificationJob.perform_later(job_uuid)
-
   rescue Down::Error => e
     # We may want to retry the download depending on the more specific nature of the failure.
     record_failure(job, "Failed to download file from source URL:  #{e.message}")
   rescue S3Handler::Error => e
-    # We may want to retry the upload depending on the more specific nature of the failure. 
+    # We may want to retry the upload depending on the more specific nature of the failure.
     record_failure(job, "Failed to upload file to remediation input location:  #{e.message}")
   ensure
-    tempfile.close! if tempfile
+    tempfile&.close!
   end
 
   private
