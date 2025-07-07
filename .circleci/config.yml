@@ -35,13 +35,13 @@ jobs:
       - run:
           name: Set up database
           command: |
-            docker-compose run bundle exec rails db:create db:schema:load --trace
+            bundle exec rails db:create db:schema:load --trace
       - run:
           name: "Lint"
-          command: docker-compose run bundle exec niftany
+          command: bundle exec niftany
       - run:
           name: "RSpec"
-          command: docker-compose run bundle exec rspec
+          command: bundle exec rspec
 
 workflows:
   version: 2
