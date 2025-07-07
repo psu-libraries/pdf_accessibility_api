@@ -4,7 +4,6 @@ x-web_env: &web_env
       API_BEARER_TOKEN: 
       MYSQL_DB: pdf_accessibility_api
       MYSQL_USER: root
-      MYSQL_PASSWORD: root
       MYSQL_PORT: 3306
       MYSQL_HOST: db
 services:
@@ -28,38 +27,38 @@ services:
       - "3000:3000"
   db:
     environment:
-      MYSQL_ROOT_PASSWORD: nil
+      MYSQL_ROOT_PASSWORD: pdf_accessibility_api
       MYSQL_DATABASE: pdf_accessibility_api
       MYSQL_USER: pdf_accessibility_api
-      # MYSQL_PASSWORD: pdf_accessibility_api
+      MYSQL_PASSWORD: pdf_accessibility_api
     image: mariadb:10.4.6
     ports:
     - "3306:3306"
     volumes:
     - db-data:/var/lib/mysql
-  redis:
-    image: redis:7.0.12
-    volumes:
-    - redis-data:/data
-    ports:
-    - "6379:6379"
-  minio:
-    image: minio/minio:RELEASE.2021-03-17T02-33-02Z
-    container_name: minio
-    restart: always
-    volumes:
-    - minio-data:/data
-    environment:
-      MINIO_ACCESS_KEY:
-      MINIO_SECRET_KEY:
-      MINIO_ROOT_USER:
-      MINIO_ROOT_PASSWORD:
-    ports:
-    - ${MINIO_PORT:-9000}:9000 # API
-    entrypoint:
-    - /bin/sh
-    - -c
-    - mkdir -p /data/pdf_accessibility_api; minio --compat server --address ':9000' /data
+  # redis:
+  #   image: redis:7.0.12
+  #   volumes:
+  #   - redis-data:/data
+  #   ports:
+  #   - "6379:6379"
+  # minio:
+  #   image: minio/minio:RELEASE.2021-03-17T02-33-02Z
+  #   container_name: minio
+  #   restart: always
+  #   volumes:
+  #   - minio-data:/data
+  #   environment:
+  #     MINIO_ACCESS_KEY:
+  #     MINIO_SECRET_KEY:
+  #     MINIO_ROOT_USER:
+  #     MINIO_ROOT_PASSWORD:
+  #   ports:
+  #   - ${MINIO_PORT:-9000}:9000 # API
+  #   entrypoint:
+  #   - /bin/sh
+  #   - -c
+  #   - mkdir -p /data/pdf_accessibility_api; minio --compat server --address ':9000' /data
     
 networks:
   default:
