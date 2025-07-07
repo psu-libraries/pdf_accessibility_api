@@ -1,7 +1,6 @@
 FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20250131 AS base
 ARG UID=1000
 
-COPY bin/vaultshell /usr/local/bin/
 USER root
 RUN apt-get update && \
   apt-get install --no-install-recommends -y \
