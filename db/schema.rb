@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_03_162929) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_03_163450) do
   create_table "api_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -30,6 +30,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_03_162929) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "api_user_id"
+    t.datetime "finished_at"
+    t.text "output_url"
+    t.text "output_object_key"
+    t.text "processing_error_message"
     t.index ["api_user_id"], name: "index_jobs_on_api_user_id"
     t.index ["uuid"], name: "index_jobs_on_uuid"
   end

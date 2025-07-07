@@ -10,6 +10,7 @@ RSpec.describe S3Handler, type: :service do
     let(:s3_resource) { instance_double(Aws::S3::Resource) }
     let(:bucket) { instance_double(Aws::S3::Bucket) }
     let(:s3_object) { instance_double(Aws::S3::Object) }
+    let(:handler) { described_class.new(object_key) }
 
     before do
       allow(ENV).to receive(:fetch).with('AWS_REGION').and_return('us-east-1')
@@ -21,55 +22,80 @@ RSpec.describe S3Handler, type: :service do
     end
 
     describe '#upload_to_input' do
-      it 'uploads a file to S3 input directory' do
+      before do
         allow(bucket).to receive(:object).with("pdf/#{object_key}").and_return(s3_object)
         allow(s3_object).to receive(:upload_file).with(local_path)
-        handler = described_class.new(object_key)
+      end
+
+      it 'uploads a file to S3 input directory' do
         handler.upload_to_input(local_path)
         expect(s3_object).to have_received(:upload_file).with(local_path)
+      end
+
+      context 'when an error is raised during the upload' do
+        before { allow(s3_object).to receive(:upload_file).and_raise(Aws::Errors::ServiceError.new(nil, 'AWS error')) }
+
+        it 're-raises an S3Handler::Error' do
+          expect { handler.upload_to_input(local_path) }.to raise_error(S3Handler::Error, 'AWS error')
+        end
       end
     end
 
     describe '#presigned_url_for_output' do
-      it 'returns a presigned url if output file exists' do
+      before do
         allow(bucket).to receive(:object).with("result/COMPLIANT_#{object_key}").and_return(s3_object)
         allow(s3_object).to receive(:exists?).and_return(true)
+      end
+
+      it 'returns a presigned url if output file exists' do
         allow(s3_object).to receive(:presigned_url).with(:get, expires_in: 3600).and_return('http://fake-url')
-        handler = described_class.new(object_key)
         url = handler.presigned_url_for_output
         expect(url).to eq('http://fake-url')
       end
 
       it 'returns nil if output file does not exist' do
-        allow(bucket).to receive(:object).with("result/COMPLIANT_#{object_key}").and_return(s3_object)
         allow(s3_object).to receive(:exists?).and_return(false)
-        handler = described_class.new(object_key)
         expect(handler.presigned_url_for_output).to be_nil
+      end
+
+      context 'when an error is raised while retrieving the URL' do
+        before { allow(s3_object).to receive(:presigned_url).and_raise(Aws::Errors::ServiceError.new(nil, 'AWS error')) }
+
+        it 're-raises an S3Handler::Error' do
+          expect { handler.presigned_url_for_output }.to raise_error(S3Handler::Error, 'AWS error')
+        end
       end
     end
 
     describe '#delete_files' do
-      it 'deletes input and output files if they exist' do
-        input_object = instance_double(Aws::S3::Object)
-        output_object = instance_double(Aws::S3::Object)
+      let(:input_object) { instance_spy(Aws::S3::Object) }
+      let(:output_object) { instance_spy(Aws::S3::Object) }
+
+      before do
         allow(bucket).to receive(:object).with("pdf/#{object_key}").and_return(input_object)
         allow(bucket).to receive(:object).with("result/COMPLIANT_#{object_key}").and_return(output_object)
         allow(input_object).to receive(:exists?).and_return(true)
         allow(output_object).to receive(:exists?).and_return(true)
-        allow(input_object).to receive(:delete)
-        allow(output_object).to receive(:delete)
-        handler = described_class.new(object_key)
+      end
+
+      it 'deletes input and output files if they exist' do
         handler.delete_files
         expect(input_object).to have_received(:delete)
         expect(output_object).to have_received(:delete)
       end
 
       it 'returns nil if no files exist' do
-        allow(bucket).to receive(:object).with("pdf/#{object_key}").and_return(s3_object)
-        allow(bucket).to receive(:object).with("result/COMPLIANT_#{object_key}").and_return(s3_object)
-        allow(s3_object).to receive(:exists?).and_return(false)
-        handler = described_class.new(object_key)
+        allow(input_object).to receive(:exists?).and_return(false)
+        allow(output_object).to receive(:exists?).and_return(false)
         expect(handler.delete_files).to be_nil
+      end
+
+      context 'when an error is raised while deleting the files' do
+        before { allow(input_object).to receive(:delete).and_raise(Aws::Errors::ServiceError.new(nil, 'AWS error')) }
+
+        it 're-raises an S3Handler::Error' do
+          expect { handler.delete_files }.to raise_error(S3Handler::Error, 'AWS error')
+        end
       end
     end
   end
