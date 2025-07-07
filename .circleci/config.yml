@@ -35,7 +35,7 @@ jobs:
       - run:
           name: Set up database
           command: |
-            docker-compose bundle exec rails db:create db:schema:load --trace
+            docker-compose run bundle exec rails db:create db:schema:load --trace
       - run:
           name: "Lint"
           command: docker-compose run bundle exec niftany
