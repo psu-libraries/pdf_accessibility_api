@@ -19,6 +19,7 @@ jobs:
           MYSQL_USER: pdf_accessibility_api
           MYSQL_DATABASE: pdf_accessibility_api_test
           MYSQL_PASSWORD: pdf_accessibility_api
+      - image: redis:8.0.2
     steps:
       - setup_remote_docker:
           version: docker24

@@ -3,6 +3,8 @@
 require 'aws-sdk-s3'
 
 class S3Handler
+  class Error < RuntimeError; end
+
   INPUT_PREFIX = 'pdf/'
   OUTPUT_PREFIX = 'result/COMPLIANT_'
 
@@ -22,6 +24,8 @@ class S3Handler
     key = "#{INPUT_PREFIX}#{@object_key}"
     @bucket.object(key)
       .upload_file(local_path)
+  rescue Aws::Errors::ServiceError => e
+    raise Error.new(e)
   end
 
   def presigned_url_for_output(expires_in: 3600)
@@ -29,6 +33,8 @@ class S3Handler
     return nil unless obj
 
     obj.presigned_url(:get, expires_in: expires_in)
+  rescue Aws::Errors::ServiceError => e
+    raise Error.new(e)
   end
 
   def delete_files
@@ -37,6 +43,8 @@ class S3Handler
     return nil if objs.empty?
 
     objs.each(&:delete)
+  rescue Aws::Errors::ServiceError => e
+    raise Error.new(e)
   end
 
   private
