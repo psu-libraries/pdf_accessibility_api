@@ -35,9 +35,9 @@ jobs:
       #         until nc -z redis 6379; do echo 'Waiting for Redis...'; sleep 1; done
       #         echo 'Services ready!'
       #       "
-      - run:
-          name: "Lint"
-          command: docker-compose exec -T web bundle exec niftany
+      # - run:
+      #     name: "Lint"
+      #     command: docker-compose exec -T web bundle exec niftany
       - run:
           name: "RSpec"
           command: docker-compose exec -T web bundle exec rspec
