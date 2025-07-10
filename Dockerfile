@@ -4,11 +4,8 @@ ARG UID=1000
 USER root
 RUN apt-get update && \
   apt-get install --no-install-recommends -y \
-  shared-mime-info \
   libmariadb-dev \
-  mariadb-client \
-  ghostscript\
-  libreoffice && \
+  mariadb-client && \
   rm -rf /var/lib/apt/lists*
 
 RUN useradd -u $UID app -d /app
@@ -23,7 +20,6 @@ USER app
 # in the event that bundler runs outside of docker, we get in sync with it's bundler version
 RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
 RUN bundle config set path 'vendor/bundle'
-CMD sleep infinity
 RUN bundle install && \
   rm -rf /app/.bundle/cache && \
   rm -rf /app/vendor/bundle/ruby/*/cache
