@@ -22,6 +22,9 @@ jobs:
             gem install bundler -v "$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)"
             bundle _$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)_ install
       - run:
+          name: Debug check working dir
+          command: ls -la $PWD
+      - run:
           name: Build and run containers
           command: docker-compose up -d --build 
       - run:
