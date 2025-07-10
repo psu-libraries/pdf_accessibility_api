@@ -8,12 +8,14 @@ RUN apt-get update && \
   mariadb-client && \
   rm -rf /var/lib/apt/lists*
 
+WORKDIR /app
+
 RUN useradd -u $UID app -d /app
 RUN mkdir /app/tmp
-# adding this in attempts to see what happens with permissions
 RUN mkdir /tmp/app/
 RUN chown app:app /tmp/app && chmod 755 /tmp/app
 COPY Gemfile Gemfile.lock /app/
+COPY . .
 RUN chown -R app:app /app
 USER app
 

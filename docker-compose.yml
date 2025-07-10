@@ -21,9 +21,9 @@ services:
     volumes:
     - bundle-data:/app/vendor/bundle
     - node-data:/app/node_modules
-    - type: bind
-      source: ./
-      target: /app
+    # - type: bind
+    #   source: ./
+    #   target: /app
     ports:
       - "3000:3000"
   db:
