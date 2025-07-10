@@ -38,7 +38,7 @@ services:
     volumes:
     - db-data:/var/lib/mysql
   redis:
-    image: redis:7.0.12
+    image: redis:8.0.2
     command: redis-server --requirepass redispassword
     volumes:
     - redis-data:/data
