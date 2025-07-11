@@ -30,16 +30,12 @@ jobs:
       - run:
           name: Wait for database and redis to be up
           command: |
-            docker-compose exec -T web bash -c "
-            # Wait for MariaDB
+            docker-compose exec -T web
             until bash -c "echo > /dev/tcp/db/3306" 2>/dev/null; do
-              echo "Waiting for MariaDB..."
               sleep 1
             done
 
-            # Wait for Redis
             until bash -c "echo > /dev/tcp/redis/6379" 2>/dev/null; do
-              echo "Waiting for Redis..."
               sleep 1
             done
             "
