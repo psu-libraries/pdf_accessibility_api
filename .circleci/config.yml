@@ -27,18 +27,6 @@ jobs:
       - run:
           name: Build and run containers
           command: docker-compose up -d --build 
-      - run:
-          name: Wait for database and redis to be up
-          command: |
-            docker-compose exec -T web
-            until bash -c "echo > /dev/tcp/db/3306" 2>/dev/null; do
-              sleep 1
-            done
-
-            until bash -c "echo > /dev/tcp/redis/6379" 2>/dev/null; do
-              sleep 1
-            done
-            "
       # - run:
       #     name: "Lint"
       #     command: docker-compose exec -T web bundle exec niftany

@@ -12,6 +12,7 @@ services:
     user: 1000:1000
     depends_on:
       - db
+      - redis
     tty: true
     stdin_open: true
     <<: *web_env
