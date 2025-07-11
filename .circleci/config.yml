@@ -27,14 +27,22 @@ jobs:
       - run:
           name: Build and run containers
           command: docker-compose up -d --build 
-      # - run:
-      #     name: Wait for database and redis to be up
-      #     command: |
-      #       docker-compose exec -T web bash -c "
-      #         until nc -z db 3306; do echo 'Waiting for MariaDB...'; sleep 1; done
-      #         until nc -z redis 6379; do echo 'Waiting for Redis...'; sleep 1; done
-      #         echo 'Services ready!'
-      #       "
+      - run:
+          name: Wait for database and redis to be up
+          command: |
+            docker-compose exec -T web bash -c "
+            # Wait for MariaDB
+            until bash -c "echo > /dev/tcp/db/3306" 2>/dev/null; do
+              echo "Waiting for MariaDB..."
+              sleep 1
+            done
+
+            # Wait for Redis
+            until bash -c "echo > /dev/tcp/redis/6379" 2>/dev/null; do
+              echo "Waiting for Redis..."
+              sleep 1
+            done
+            "
       # - run:
       #     name: "Lint"
       #     command: docker-compose exec -T web bundle exec niftany
