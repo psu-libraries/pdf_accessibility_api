@@ -11,30 +11,28 @@ jobs:
           REGISTRY_REPO: library/psulib_blacklight
           GITHUB_USER: 'psu-stewardship-bot'
           CONFIG_REPO: git@github.com:psu-libraries/pdf_accessibility_api.git
-      - image: cimg/mariadb:11.7
-        environment:
-          MYSQL_ROOT_PASSWORD: pdf_accessibility_api
-          MYSQL_USER: pdf_accessibility_api
-          MYSQL_DATABASE: pdf_accessibility_api_test
-          MYSQL_PASSWORD: pdf_accessibility_api
-      - image: redis:8.0.2
     steps:
       - checkout
+      - setup_remote_docker:
+          version: docker24
+          docker_layer_caching: true
       - run:
           name: Install dependencies
           command: |
             gem install bundler -v "$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)"
             bundle _$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)_ install
       - run:
-          name: Set up database
-          command: |
-            bundle exec rails db:create db:schema:load --trace
+          name: Debug check working dir
+          command: ls -la $PWD
       - run:
-          name: "Lint"
-          command: bundle exec niftany
+          name: Build and run containers
+          command: docker-compose up -d --build 
+      # - run:
+      #     name: "Lint"
+      #     command: docker-compose exec -T web bundle exec niftany
       - run:
           name: "RSpec"
-          command: bundle exec rspec
+          command: docker-compose exec -T web bundle exec rspec
 
 workflows:
   version: 2
