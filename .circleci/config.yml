@@ -27,9 +27,9 @@ jobs:
       - run:
           name: Wait for mysql to be ready
           command: docker-compose exec web bash ./wait_for_db.sh
-      # - run:
-      #     name: "Lint"
-      #     command: docker-compose exec -T web bundle exec niftany
+      - run:
+          name: "Lint"
+          command: docker-compose exec -T web bundle exec niftany
       - run:
           name: "Run tests"
           command: RAILS_ENV=test docker-compose exec -it web bundle exec rspec
