@@ -34,23 +34,9 @@ CMD ["bin/startup"]
 FROM base AS dev
 
 USER root
-# RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-#     && echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list.d/google.list
 
 RUN apt-get update && apt-get install -y rsync \
     wget
-    # These are dependencies used in other repos...commented out til we need them
-    # x11vnc \
-    # fluxbox \
-    # sqlite3 \
-    # rsync \
-    # libsqlite3-dev \
-    # libnss3 \
-    # libdrm2 \
-    # libice6 \
-    # libsm6 \
-    # wmctrl \
-    # google-chrome-stable
 
 USER app
 RUN bundle config set path 'vendor/bundle'
