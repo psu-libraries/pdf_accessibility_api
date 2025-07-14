@@ -24,9 +24,9 @@ jobs:
       - run:
           name: Build and run containers
           command: docker-compose up -d --build 
-      # - run:
-      #     name: "Lint"
-      #     command: docker-compose exec -T web bundle exec niftany
+      - run:
+          name: "Lint"
+          command: docker-compose exec -T web bundle exec niftany
       - run:
           name: "RSpec"
           command: docker-compose run --rm -T web bundle exec rspec db:create db:schema:load
