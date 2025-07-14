@@ -18,7 +18,7 @@ default: &default
   username: <%= ENV.fetch("MYSQL_USER", "pdf_accessibility_api") %>
   password: <%= ENV.fetch("MYSQL_PASSWORD", "pdf_accessibility_api") %>
   port: <%= ENV.fetch("MYSQL_PORT", "3306") %>
-  host: <%= ENV.fetch("MYSQL_HOST", "127.0.0.1") %>
+  host: <%= ENV.fetch("MYSQL_HOST", "db") %>
 
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
