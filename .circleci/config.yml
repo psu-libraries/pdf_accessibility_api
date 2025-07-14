@@ -29,7 +29,7 @@ jobs:
       #     command: docker-compose exec -T web bundle exec niftany
       - run:
           name: "RSpec"
-          command: docker-compose run --rm -T web bundle exec rspec
+          command: docker-compose run --rm -T web bundle exec rspec db:create db:schema:load
 
 workflows:
   version: 2
