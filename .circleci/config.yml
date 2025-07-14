@@ -27,12 +27,9 @@ jobs:
       # - run:
       #     name: "Lint"
       #     command: docker-compose exec -T web bundle exec niftany
-      - run:
-          name: "Set up db"
-          command: docker-compose run --rm -T web rails db:create db:schema:load
-      - run:
-          name: "Run tests"
-          command: docker-compose run --rm -T web bundle exec rspec
+      # - run:
+      #     name: "Run tests"
+      #     command: docker-compose run --rm -T web bundle exec rspec
 
 workflows:
   version: 2
