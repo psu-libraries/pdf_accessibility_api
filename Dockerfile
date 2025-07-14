@@ -16,9 +16,6 @@ RUN mkdir /tmp/app/
 RUN chown app:app /tmp/app && chmod 755 /tmp/app
 COPY Gemfile Gemfile.lock /app/
 COPY . .
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
 RUN chown -R app:app /app
 USER app
 
