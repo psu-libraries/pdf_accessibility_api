@@ -16,9 +16,9 @@ default: &default
   collation: utf8mb4_general_ci
   database: <%= ENV.fetch("MYSQL_DB", "pdf_accessibility_api") %>
   username: <%= ENV.fetch("MYSQL_USER", "pdf_accessibility_api") %>
-  password: <%= ENV.fetch("MYSQL_PASSWORD", nil) %>
+  password: <%= ENV.fetch("MYSQL_PASSWORD", "pdf_accessibility_api") %>
   port: <%= ENV.fetch("MYSQL_PORT", "3306") %>
-  host: <%= ENV.fetch("MYSQL_HOST", "127.0.0.1") %>
+  host: <%= ENV.fetch("MYSQL_HOST", "db") %>
 
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
@@ -33,7 +33,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: pdf_accessibility_api_test
+  database: <%= ENV.fetch("MYSQL_DATABASE_TEST") { "etda_workflow_test" } %>
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is

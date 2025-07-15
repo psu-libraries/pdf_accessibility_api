@@ -1,69 +1,66 @@
-# syntax = docker/dockerfile:1
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20250131 AS base
+ARG UID=1000
 
-# This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
-# docker build -t my-app .
-# docker run -d -p 80:80 -p 443:443 --name my-app -e RAILS_MASTER_KEY=<value from config/master.key> my-app
+USER root
+RUN apt-get update && \
+  apt-get install --no-install-recommends -y \
+  libmariadb-dev \
+  mariadb-client && \
+  rm -rf /var/lib/apt/lists*
 
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=3.4.1
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+WORKDIR /app
 
-# Rails app lives here
-WORKDIR /rails
-
-# Install base packages
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips mariadb-client && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
-
-# Throw-away build stage to reduce size of final image
-FROM base AS build
-
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Install application gems
-COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
-
-# Copy application code
+RUN useradd -u $UID app -d /app
+RUN mkdir /app/tmp
+RUN mkdir /tmp/app/
+RUN chown app:app /tmp/app && chmod 755 /tmp/app
+COPY Gemfile Gemfile.lock /app/
 COPY . .
+RUN chown -R app:app /app
+USER app
 
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
+# in the event that bundler runs outside of docker, we get in sync with it's bundler version
+RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
+RUN bundle config set path 'vendor/bundle'
+RUN bundle install && \
+  rm -rf /app/.bundle/cache && \
+  rm -rf /app/vendor/bundle/ruby/*/cache
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
+COPY --chown=app . /app
 
+CMD ["bin/startup"]
 
+FROM base AS dev
 
-# Final stage for app image
-FROM base
+USER root
 
-# Copy built artifacts: gems, application
-COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-COPY --from=build /rails /rails
+RUN apt-get update && apt-get install -y rsync \
+    wget
 
-# Run and own only the runtime files as a non-root user for security
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER 1000:1000
+USER app
+RUN bundle config set path 'vendor/bundle'
 
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+# Final Target
+FROM base AS production
 
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD ["./bin/rails", "server"]
+# Clean up Bundle
+RUN bundle install --without development test && \
+  bundle clean && \
+  rm -rf /app/.bundle/cache && \
+  rm -rf /app/vendor/bundle/ruby/*/cache
+
+RUN RAILS_ENV=production \
+  NODE_ENV=production \
+  DEFAULT_URL_HOST=localhost \
+  SECRET_KEY_BASE=rails_bogus_key \
+  AWS_BUCKET=bucket \
+  AWS_ACCESS_KEY_ID=key \
+  AWS_SECRET_ACCESS_KEY=secret \
+  AWS_REGION=us-east-1 \
+  bundle exec rails assets:precompile && \
+  rm -rf /app/.cache/ && \
+  rm -rf /app/node_modules/.cache/ && \
+  rm -rf /app/tmp/
+
+CMD ["bin/startup"]
