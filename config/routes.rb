@@ -22,4 +22,9 @@ Rails.application.routes.draw do
       post '/jobs', to: 'jobs#create'
     end
   end
+
+  namespace :ui do
+    get '/new', to: 'jobs#new'
+    post '/create', to: 'jobs#create'
+  end
 end
