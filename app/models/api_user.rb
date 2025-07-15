@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class APIUser < ApplicationRecord
-  has_many :jobs, dependent: :restrict_with_exception
+  has_many :jobs, as: :owner, dependent: :restrict_with_exception
 
   before_create :set_keys
 
