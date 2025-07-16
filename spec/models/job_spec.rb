@@ -8,7 +8,8 @@ RSpec.describe Job do
     it { is_expected.to have_db_column(:uuid).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_column(:source_url).of_type(:text).with_options(null: false) }
     it { is_expected.to have_db_column(:status).of_type(:string).with_options(null: false) }
-    it { is_expected.to have_db_column(:api_user_id).of_type(:integer) }
+    it { is_expected.to have_db_column(:owner_id) }
+    it { is_expected.to have_db_column(:owner_type) }
     it { is_expected.to have_db_column(:finished_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:output_url).of_type(:text) }
     it { is_expected.to have_db_column(:output_object_key).of_type(:text) }
@@ -16,7 +17,7 @@ RSpec.describe Job do
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
-    it { is_expected.to have_db_index(:api_user_id) }
+    it { is_expected.to have_db_index([:owner_type, :owner_id]) }
     it { is_expected.to have_db_index(:uuid) }
   end
 
@@ -40,7 +41,7 @@ RSpec.describe Job do
   end
 
   describe 'associations' do
-    it { is_expected.to belong_to(:api_user) }
+    it { is_expected.to belong_to(:owner) }
   end
 
   describe '.statuses' do

@@ -5,6 +5,10 @@ Metrics/BlockLength:
   Exclude:
     - 'config/environments/development.rb'
 
+Rails/NotNullColumn:
+  Exclude:
+    - 'db/migrate/20250714203038_create_gui_users.rb'
+
 RSpec/MultipleMemoizedHelpers:
   Enabled: false
 

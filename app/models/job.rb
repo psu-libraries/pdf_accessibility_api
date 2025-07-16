@@ -8,5 +8,5 @@ class Job < ApplicationRecord
   validates :status, inclusion: { in: statuses }
   validates :source_url, format: { with: URI::RFC2396_PARSER.make_regexp }
 
-  belongs_to :api_user
+  belongs_to :owner, polymorphic: true
 end

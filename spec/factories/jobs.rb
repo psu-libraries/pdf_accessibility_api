@@ -5,6 +5,6 @@ FactoryBot.define do
     uuid { SecureRandom.uuid }
     source_url { 'https://test.com/url' }
     status { 'processing' }
-    api_user
+    owner factory: %i[api_user]
   end
 end
