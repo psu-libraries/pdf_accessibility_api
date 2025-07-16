@@ -9,4 +9,10 @@ class Job < ApplicationRecord
   validates :source_url, format: { with: URI::RFC2396_PARSER.make_regexp }
 
   belongs_to :owner, polymorphic: true
+
+  delegate :webhook_endpoint, :webhook_key, to: :owner, prefix: false
+
+  def completed?
+    status == 'completed'
+  end
 end

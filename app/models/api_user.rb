@@ -5,6 +5,9 @@ class APIUser < ApplicationRecord
 
   before_create :set_keys
 
+  validates :webhook_endpoint, presence: true
+  validates :webhook_endpoint, format: { with: URI::RFC2396_PARSER.make_regexp('https') }
+
   private
 
     def set_keys
