@@ -57,3 +57,5 @@ group :test do
   gem 'factory_bot_rails'
   gem 'shoulda-matchers'
 end
+
+gem 'rails_warden', '~> 0.6.0'
