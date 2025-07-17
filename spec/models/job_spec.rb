@@ -49,4 +49,27 @@ RSpec.describe Job do
       expect(described_class.statuses).to eq ['processing', 'completed', 'failed']
     end
   end
+
+  it { is_expected.to delegate_method(:webhook_endpoint).to(:owner) }
+  it { is_expected.to delegate_method(:webhook_key).to(:owner) }
+
+  describe '#completed?' do
+    let(:job) { described_class.new }
+
+    context 'when the job status is "completed"' do
+      before { job.status = 'completed' }
+
+      it 'returns true' do
+        expect(job.completed?).to be true
+      end
+    end
+
+    context 'when the job status is not "completed"' do
+      before { job.status = 'failed' }
+
+      it 'returns false' do
+        expect(job.completed?).to be false
+      end
+    end
+  end
 end

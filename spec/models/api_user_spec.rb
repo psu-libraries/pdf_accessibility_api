@@ -25,6 +25,21 @@ RSpec.describe APIUser do
     it { is_expected.to have_many(:jobs).dependent(:restrict_with_exception) }
   end
 
+  describe 'validations' do
+    subject(:user) { described_class.new }
+
+    it { is_expected.to validate_presence_of(:webhook_endpoint) }
+
+    it 'validates the format of webhook_endpoint' do
+      expect(user).not_to allow_value('').for(:webhook_endpoint)
+      expect(user).not_to allow_value('invalid').for(:webhook_endpoint)
+      expect(user).not_to allow_value('test.com/invalid').for(:webhook_endpoint)
+      expect(user).not_to allow_value('http://test.com/webhook').for(:webhook_endpoint)
+
+      expect(user).to allow_value('https://test.com/webhook').for(:webhook_endpoint)
+    end
+  end
+
   describe 'creating a new API user' do
     let(:api_user) { build(:api_user, api_key: nil, webhook_key: nil) }
 
