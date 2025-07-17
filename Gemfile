@@ -16,8 +16,8 @@ gem 'puma', '>= 5.0'
 gem 'stimulus-rails'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder'
-# Use Redis adapter to run Action Cable in production
-# gem "redis", ">= 4.0.1"
+# Use Redis adapter
+gem "redis", ">= 4.0.1"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mswin mswin64 mingw x64_mingw jruby]

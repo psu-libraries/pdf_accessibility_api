@@ -1,2 +1,0 @@
-:concurrency: 5
-:max_retries: <%= ENV.fetch("SIDEKIQ_MAX_RETRIES", 2) %>
