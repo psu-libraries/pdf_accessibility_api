@@ -7,4 +7,17 @@ FactoryBot.define do
     status { 'processing' }
     owner factory: %i[api_user]
   end
+
+  trait :gui_user_job do
+    owner factory: %i[gui_user]
+    source_url { nil }
+
+    after(:build) do |job|
+    job.file.attach(
+      io: File.open('spec/fixtures/files/testing.pdf'),
+      filename: 'testing.pdf',
+      content_type: 'text/pdf'
+     )
+    end
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_16_151725) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_17_160625) do
   create_table "active_storage_attachments", charset: "utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -59,7 +59,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_16_151725) do
 
   create_table "jobs", charset: "utf8mb4", force: :cascade do |t|
     t.string "uuid", null: false
-    t.text "source_url", null: false
+    t.text "source_url"
     t.string "status", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

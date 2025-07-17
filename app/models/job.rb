@@ -7,7 +7,13 @@ class Job < ApplicationRecord
   end
 
   validates :status, inclusion: { in: statuses }
-  validates :source_url, format: { with: URI::RFC2396_PARSER.make_regexp }
+  validate :has_file_or_source_url
 
   belongs_to :owner, polymorphic: true
+
+  def has_file_or_source_url
+    unless source_url.present? && !!source_url.match(URI::RFC2396_PARSER.make_regexp) || file.present?
+      errors.add(:base, 'Job must have either an attached file or a source url present')
+    end
+  end
 end

@@ -30,13 +30,28 @@ RSpec.describe Job do
 
     it { is_expected.to validate_inclusion_of(:status).in_array ['processing', 'completed', 'failed'] }
 
-    it 'validates the format of source_url' do
-      expect(job).not_to allow_value(nil).for(:source_url)
-      expect(job).not_to allow_value('').for(:source_url)
-      expect(job).not_to allow_value('invalid').for(:source_url)
-      expect(job).not_to allow_value('test.com/invalid').for(:source_url)
+    context 'when there is no file attached' do
+      it 'validates the format of source_url' do
+        expect(job.file.attached?).to eq(false)
+        [nil, '', 'invalid', 'test.com/invalid'].each do |url|
+          job.source_url = url
+          expect(job).not_to be_valid
+        end
+        job.source_url = 'https://test.com/file'
+        expect(job).to be_valid
+      end
+    end
 
-      expect(job).to allow_value('https://test.com/file').for(:source_url)
+    context 'when the source_url is nil' do
+      subject(:gui_job) {build(:job, :gui_user_job)}
+      it 'validates the presence of attached file' do
+        expect(gui_job.source_url).to be_nil
+        expect(gui_job.file.attached?).to eq(true)
+        expect(gui_job.valid?).to eq(true)
+
+        gui_job.file.purge
+        expect(gui_job.valid?).to eq(false)
+      end
     end
   end
 
