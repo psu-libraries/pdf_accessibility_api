@@ -9,11 +9,11 @@ Sidekiq.configure_server do |config|
   config.redis = { url: redis_url }
 
   # Set concurrency
-  config.options[:concurrency] = ENV.fetch("SIDEKIQ_CONCURRENCY", 5).to_i
+  config.options[:concurrency] = ENV.fetch('SIDEKIQ_CONCURRENCY', 5).to_i
 
   # Global default max retries for jobs (note: can be overridden per job class)
   Sidekiq.default_worker_options = {
-    'retry' => ENV.fetch("SIDEKIQ_MAX_RETRIES", 3).to_i
+    'retry' => ENV.fetch('SIDEKIQ_MAX_RETRIES', 3).to_i
   }
 end
 
