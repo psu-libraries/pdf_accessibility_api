@@ -2,13 +2,14 @@
 
 class Ui::JobsController < ApplicationController
   def new
-    # implement
+    @job = Job.new
   end
 
   def create
-    # TODO define current_gui_user
-    # TODO define source url
-    job = current_gui_user.jobs.build(job_params)
+    # TODO define current user (part of ticket #38)
+    job = current_user.jobs.build(job_params)
+    gui = GUIUser.new
+    job = gui.jobs.build(job_params)
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!
@@ -23,6 +24,6 @@ class Ui::JobsController < ApplicationController
   private
 
     def job_params
-      params.permit([:source_url])
+      params.require(:job).permit(:file, :source_url)
     end
 end

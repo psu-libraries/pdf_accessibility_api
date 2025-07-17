@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Job < ApplicationRecord
+  has_one_attached :file
   def self.statuses
     ['processing', 'completed', 'failed']
   end

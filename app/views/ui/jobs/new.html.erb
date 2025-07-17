@@ -9,11 +9,16 @@
   </div>
 
   <section>
-    <h3></h3>
-    <form>
-      <input>
-      <button></button>
-    </form>
+    <%= form_with model: @job, url: ui_create_path do |form| %>
+      <div>
+        <%= form.label :file %>
+        <%= form.file_field :file %>
+        <%= form.text_field :source_url%>
+      </div>
+      <div>
+        <%= form.submit 'Upload'%>
+      </div>
+    <% end %>
   </section>
 
   <section>
@@ -22,14 +27,9 @@
 </main>
 
 <aside>
-  <h2><%= I18n.t('about.heading')%></h2>
   <section>
     <h3><%= I18n.t('about.document_reqs.heading')%></h3>
     <p></p>
-  </section>
-
-  <section>
-    <h3></h3>
   </section>
 </aside>
 
