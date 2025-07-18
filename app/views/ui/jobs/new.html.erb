@@ -1,8 +1,12 @@
-<header>
-  <h1><%= I18n.t('ui_page.heading')%></h1>
+<header clas="header-mark">
+  <h1>
+    <a class="site-title" href="#">
+      <%= I18n.t('ui_page.heading')%>
+    </a>
+  </h1>
 </header>
 
-<main class="container">
+<main class="container-fluid">
   <div>
     <h2><%= I18n.t('ui_page.upload.heading')%></h2>
     <p><%= I18n.t('ui_page.upload.subheading')%></p>
@@ -10,27 +14,21 @@
 
   <section>
     <%= form_with model: @job, url: ui_create_path do |form| %>
-      <div>
         <%= form.label :file %>
         <%= form.file_field :file %>
-        <%= form.text_field :source_url%>
-      </div>
       <div>
         <%= form.submit 'Upload'%>
       </div>
     <% end %>
   </section>
 
-  <section>
+  <section class="uploaded-files">
     <p><%= I18n.t('ui_page.upload.no_file')%></p>
   </section>
 </main>
 
-<aside>
-  <section>
-    <h3><%= I18n.t('about.document_reqs.heading')%></h3>
-    <p></p>
-  </section>
-</aside>
 
-<footer></footer>
+<footer>
+  <h3><%= I18n.t('about.document_reqs.heading')%></h3>
+  <p></p>
+</footer>
