@@ -3,10 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe Job do
+  subject(:job) { build(:job) }
+  subject(:gui_job) {build(:job, :gui_user_job)}
   describe 'table' do
     it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
     it { is_expected.to have_db_column(:uuid).of_type(:string).with_options(null: false) }
-    it { is_expected.to have_db_column(:source_url).of_type(:text).with_options(null: false) }
+    it { is_expected.to have_db_column(:source_url).of_type(:text) }
     it { is_expected.to have_db_column(:status).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_column(:owner_id) }
     it { is_expected.to have_db_column(:owner_type) }
@@ -26,8 +28,6 @@ RSpec.describe Job do
   end
 
   describe 'validations' do
-    subject(:job) { build(:job) }
-
     it { is_expected.to validate_inclusion_of(:status).in_array ['processing', 'completed', 'failed'] }
 
     context 'when there is no file attached' do
@@ -43,7 +43,6 @@ RSpec.describe Job do
     end
 
     context 'when the source_url is nil' do
-      subject(:gui_job) {build(:job, :gui_user_job)}
       it 'validates the presence of attached file' do
         expect(gui_job.source_url).to be_nil
         expect(gui_job.file.attached?).to eq(true)
@@ -62,6 +61,28 @@ RSpec.describe Job do
   describe '.statuses' do
     it 'returns the array of valid status values' do
       expect(described_class.statuses).to eq ['processing', 'completed', 'failed']
+    end
+  end
+
+  describe '#uploaded_file_url' do
+    it 'returns nil when there is no file attached to the job' do
+      expect(job.uploaded_file_url).to be(nil)
+    end
+
+    it 'returns a url when there is attached file' do
+      gui_job.save!
+      expect(gui_job.uploaded_file_url).to include('testing.pdf')
+    end
+  end
+
+  describe '#uploaded_file_name' do
+    it 'returns nil when there is no file attached to the job' do
+      expect(job.uploaded_file_name).to be(nil)
+    end
+
+    it 'returns a url when there is attached file' do
+      gui_job.save!
+      expect(gui_job.uploaded_file_name).to eq('testing.pdf')
     end
   end
 end

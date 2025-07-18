@@ -16,7 +16,7 @@ FactoryBot.define do
     job.file.attach(
       io: File.open('spec/fixtures/files/testing.pdf'),
       filename: 'testing.pdf',
-      content_type: 'text/pdf'
+      content_type: 'application/pdf'
      )
     end
   end

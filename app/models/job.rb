@@ -11,6 +11,17 @@ class Job < ApplicationRecord
 
   belongs_to :owner, polymorphic: true
 
+  def uploaded_file_url
+    return nil unless file.present?
+    Rails.application.routes.url_helpers.rails_blob_path(file, only_path: true)
+  end
+
+  def uploaded_file_name
+    return nil unless file.present?
+    file.blob.filename.to_s
+  end
+
+  private
   def has_file_or_source_url
     unless source_url.present? && !!source_url.match(URI::RFC2396_PARSER.make_regexp) || file.present?
       errors.add(:base, 'Job must have either an attached file or a source url present')
