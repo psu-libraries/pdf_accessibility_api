@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Warden Http Header Authentication', type: :request do
-  context 'when whitelisted user' do
+  context 'when allowlisted user' do
     it 'returns 200 status' do
       pending('routes are not fully implemented yet')
       get 'ui/uploads', headers: { 'HTTP_X_AUTH_REQUEST_EMAIL' => 'test1@psu.edu' }
@@ -13,7 +13,7 @@ RSpec.describe 'Warden Http Header Authentication', type: :request do
     end
   end
 
-  context 'when user is not whitelisted' do
+  context 'when user is not allowlisted' do
     it 'returns 401 status and redirects to 401 page' do
       pending('routes are not fully implemented yet')
       get '/', headers: { 'HTTP_X_AUTH_REQUEST_EMAIL' => 'test2@psu.edu' }
