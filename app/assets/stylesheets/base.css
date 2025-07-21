@@ -2,9 +2,14 @@ header {
   padding: 3rem;
 }
 
+.header--nav-branding {
+  display: flex;
+}
+
 html {
   height: 100%;
 }
+
 body {
   min-height: 100%;
   display: flex;
@@ -19,10 +24,28 @@ main {
 
 h1 {
   font-size: 1.4rem;
+  color: white;
+  font-family: 'Open Sans', Helvetica, sans-serif;
 }
 
 .uploaded-files {
   margin-top: 5rem;
   padding: 1.5rem;
   border: 0.5px grey solid;
+  border-radius: 5px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.btn {
+  margin-top: 1rem;
 }

@@ -1,9 +1,14 @@
-<header clas="header-mark">
-  <h1>
-    <a class="site-title" href="#">
-      <%= I18n.t('ui_page.heading')%>
-    </a>
-  </h1>
+<header>
+  <div class='container-fluid'>
+    <div class='header--nav-branding'>
+      <%= image_tag('logo-penn_state_university_libraries.png', :alt => "Site logo") %>
+      <h1 class="header-mark--name-slogan">
+          <a href='/' class='site-title'>
+          <%= I18n.t('ui_page.heading')%>
+          </a>
+        </h1>
+    </div>
+  </div>
 </header>
 
 <main class="container-fluid">
@@ -14,16 +19,16 @@
 
   <section>
     <%= form_with model: @job, url: ui_create_path do |form| %>
-        <%= form.label :file %>
+        <%= form.label :file, class: "visually-hidden"%>
         <%= form.file_field :file %>
       <div>
-        <%= form.submit 'Upload'%>
+        <%= form.submit 'Upload', class: 'btn btn-primary' %>
       </div>
     <% end %>
   </section>
 
   <section class="uploaded-files">
-    <p><%= I18n.t('ui_page.upload.no_file')%></p>
+
   </section>
 </main>
 
