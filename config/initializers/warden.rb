@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 Rails.configuration.middleware.use RailsWarden::Manager do |manager|
-  manager.failure_app = ->(_env) { [401, { 'Content-Type' => 'text/plain' }, ['Unauthorized']] }
+  manager.failure_app = ->(_env) {
+    [401, { 'Content-Type' => 'application/json' }, [{ message: 'Not authorized', code: 401 }.to_json]]
+  }
 
   manager.default_strategies :http_header_auth
 end
