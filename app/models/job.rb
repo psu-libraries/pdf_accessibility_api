@@ -13,7 +13,7 @@ class Job < ApplicationRecord
 
   def uploaded_file_url
     return nil unless file.present?
-    Rails.application.routes.url_helpers.rails_blob_path(file, only_path: true)
+    Rails.application.routes.url_helpers.rails_blob_url(file, host: ENV['SITE_HOST'])
   end
 
   def uploaded_file_name

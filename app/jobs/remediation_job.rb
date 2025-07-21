@@ -6,10 +6,10 @@ class RemediationJob < ApplicationJob
   # The default 1-hour timeout is also arbitrary and should probably be adjusted.
   def perform(job_uuid, output_polling_timeout = 3600)
     job = Job.find_by!(uuid: job_uuid)
-    tempfile = Down.download(job.source_url)
-    object_key = "#{SecureRandom.hex(8)}_#{tempfile.original_filename}"
+    tempfile = Down.download(job.source_url) if job.source_url.present?
+    object_key = "#{SecureRandom.hex(8)}_#{get_file_name(job, tempfile)}"
     s3 = S3Handler.new(object_key)
-    s3.upload_to_input(tempfile.path)
+    s3.upload_to_input(get_file_path(job, tempfile))
 
     timer = 0
 
@@ -38,7 +38,8 @@ class RemediationJob < ApplicationJob
     # We may want to retry the upload depending on the more specific nature of the failure.
     record_failure_and_notify(job, "Failed to upload file to remediation input location:  #{e.message}")
   ensure
-    tempfile&.close!
+    tempfile&.close! if tempfile.present?
+    # Do we also want to run job.file.purge?
   end
 
   private
@@ -51,5 +52,15 @@ class RemediationJob < ApplicationJob
       )
 
       RemediationStatusNotificationJob.perform_later(job.uuid)
+    end
+
+    def get_file_name(job, tempfile=nil)
+      return tempfile.original_filename if tempfile.present?
+      return job.uploaded_file_name if job.file.attached?
+    end
+
+    def get_file_path(job, tempfile=nil)
+      return tempfile.path if tempfile.present?
+      return job.uploaded_file_url if job.file.attached?
     end
 end

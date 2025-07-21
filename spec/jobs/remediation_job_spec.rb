@@ -8,6 +8,7 @@ end
 
 RSpec.describe RemediationJob do
   let!(:job) { create(:job, source_url: 'https://test.com/file.pdf') }
+  let!(:gui_job) { create(:job, :gui_user_job) }
   let(:file) {
     instance_double(
       Tempfile,
@@ -26,33 +27,57 @@ RSpec.describe RemediationJob do
 
   before do
     allow(Down).to receive(:download).with('https://test.com/file.pdf').and_return file
-    allow(S3Handler).to receive(:new).with(/[a-f0-9]{16}_file\.pdf/).and_return s3
+    allow(S3Handler).to receive(:new).and_return s3
     allow(RemediationStatusNotificationJob).to receive(:perform_later)
   end
 
   describe '#perform' do
-    it "transfers the file from the given job's source URL to S3" do
-      described_class.perform_now(job.uuid)
-      expect(s3).to have_received(:upload_to_input).with('path/to/file')
+    context 'when the job has an attached ActiveStorage file' do
+      it "does not use Down to download file" do
+        described_class.perform_now(gui_job.uuid)
+        expect(Down).not_to have_received(:download)
+      end
+
+      it 'updates the status and metadata of the given job record' do
+        described_class.perform_now(gui_job.uuid)
+        reloaded_job = gui_job.reload
+        expect(reloaded_job.status).to eq 'completed'
+        expect(reloaded_job.output_url).to eq 'https://example.com/presigned-file-url'
+        expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
+        expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_testing\.pdf/
+      end
+
+      it 'queues up a notification about the status of the job' do
+        described_class.perform_now(gui_job.uuid)
+        expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(gui_job.uuid)
+      end
     end
 
-    it 'updates the status and metadata of the given job record' do
-      described_class.perform_now(job.uuid)
-      reloaded_job = job.reload
-      expect(reloaded_job.status).to eq 'completed'
-      expect(reloaded_job.output_url).to eq 'https://example.com/presigned-file-url'
-      expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-      expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_file\.pdf/
-    end
+    context 'when the job has a source url' do
+      it "transfers the file from the given job's source URL to S3" do
+        described_class.perform_now(job.uuid)
+        expect(s3).to have_received(:upload_to_input).with('path/to/file')
+      end
 
-    it 'queues up a notification about the status of the job' do
-      described_class.perform_now(job.uuid)
-      expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
-    end
+      it 'updates the status and metadata of the given job record' do
+        described_class.perform_now(job.uuid)
+        reloaded_job = job.reload
+        expect(reloaded_job.status).to eq 'completed'
+        expect(reloaded_job.output_url).to eq 'https://example.com/presigned-file-url'
+        expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
+        byebug
+        expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_file\.pdf/
+      end
 
-    it 'closes the temporarily downloaded file' do
-      described_class.perform_now(job.uuid)
-      expect(file).to have_received(:close!)
+      it 'queues up a notification about the status of the job' do
+        described_class.perform_now(job.uuid)
+        expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
+      end
+
+      it 'closes the temporarily downloaded file' do
+        described_class.perform_now(job.uuid)
+        expect(file).to have_received(:close!)
+      end
     end
 
     context 'when an output file is not produced before the timeout is exceeded' do
