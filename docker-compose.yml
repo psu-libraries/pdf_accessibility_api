@@ -1,7 +1,7 @@
 x-web_env: &web_env
   environment:
       REDIS_HOST: redis
-      REDIS_PASSWORD: redis_password
+      REDIS_PASSWORD: redispassword
       API_BEARER_TOKEN: 
       MYSQL_DB: pdf_accessibility_api
       MYSQL_USER: root
