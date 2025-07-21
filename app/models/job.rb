@@ -8,8 +8,12 @@ class Job < ApplicationRecord
 
   validates :status, inclusion: { in: statuses }
   validate :has_file_or_source_url
-
   belongs_to :owner, polymorphic: true
+    delegate :webhook_endpoint, :webhook_key, to: :owner, prefix: false
+
+  def completed?
+    status == 'completed'
+  end
 
   def uploaded_file_url
     return nil unless file.present?

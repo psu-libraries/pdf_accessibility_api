@@ -21,6 +21,8 @@ RSpec.describe Job do
 
     it { is_expected.to have_db_index([:owner_type, :owner_id]) }
     it { is_expected.to have_db_index(:uuid) }
+    it { is_expected.to delegate_method(:webhook_endpoint).to(:owner) }
+    it { is_expected.to delegate_method(:webhook_key).to(:owner) }
   end
 
   describe 'factories' do
@@ -83,6 +85,26 @@ RSpec.describe Job do
     it 'returns a url when there is attached file' do
       gui_job.save!
       expect(gui_job.uploaded_file_name).to eq('testing.pdf')
+    end
+  end
+
+  describe '#completed?' do
+    let(:job) { described_class.new }
+
+    context 'when the job status is "completed"' do
+      before { job.status = 'completed' }
+
+      it 'returns true' do
+        expect(job.completed?).to be true
+      end
+    end
+
+    context 'when the job status is not "completed"' do
+      before { job.status = 'failed' }
+
+      it 'returns false' do
+        expect(job.completed?).to be false
+      end
     end
   end
 end

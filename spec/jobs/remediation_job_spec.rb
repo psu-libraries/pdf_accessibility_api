@@ -65,7 +65,6 @@ RSpec.describe RemediationJob do
         expect(reloaded_job.status).to eq 'completed'
         expect(reloaded_job.output_url).to eq 'https://example.com/presigned-file-url'
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        byebug
         expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_file\.pdf/
       end
 
