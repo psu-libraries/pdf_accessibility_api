@@ -36,7 +36,7 @@
     <% if @current_user.jobs.empty? %>
       <p><%= I18n.t('ui_page.upload.no_file')%></p>
     <% else %>
-      <p> Recently uploaded files</p>
+      <h3> Recently uploaded files</h3>
       <ul>
         <% current_user.jobs.each do |j| %>
           <li><%= j.file.blob.filename.to_s if j.file.present? %></li>
@@ -44,10 +44,16 @@
       </ul>
     <% end %>
   </section>
+
+  <section class='requirements'>
+    <h3><%= I18n.t('ui_page.document_reqs.heading')%></h3>
+    <ul>
+      <li><%= I18n.t('ui_page.document_reqs.req1')%></li>
+      <li><%= I18n.t('ui_page.document_reqs.req2')%></li>
+    </ul>
+  </section>
 </main>
 
 
 <footer>
-  <h3><%= I18n.t('about.document_reqs.heading')%></h3>
-  <p></p>
 </footer>

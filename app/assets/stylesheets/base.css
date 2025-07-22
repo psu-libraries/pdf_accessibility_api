@@ -31,7 +31,7 @@ h1 {
 .uploaded-files {
   margin-top: 5rem;
   padding: 1.5rem;
-  border: 0.5px grey solid;
+  border: 0.5px lightgrey solid;
   border-radius: 5px;
 }
 
@@ -54,4 +54,8 @@ h1 {
   padding: 1.5em 0 1.5em 0;
   color: darkred;
   font-weight: 700;
+}
+
+.requirements {
+  margin-top: 2rem;
 }

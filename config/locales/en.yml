@@ -6,18 +6,9 @@ en:
       subheading: Click 'Browse' to select your document
       no_file: No file uploaded yet
       error: Something went wrong with this upload.
-
-  about:
-    heading: About this solution
     document_reqs:
       heading: Document Requirements
-      req1:
-      req2:
-      req3:
-      req4:
-      req5:
-      req6:
-      req7:
-      req8:
-    resources:
-      available_resources:
+      req1: Uploaded file must be a pdf
+      req2: File size cannot not exceed n MB
+      
+
