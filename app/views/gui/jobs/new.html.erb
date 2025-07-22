@@ -1,0 +1,59 @@
+<header>
+  <div class='container-fluid'>
+    <div class='header--nav-branding'>
+      <%= image_tag('logo-penn_state_university_libraries.png', :alt => "Site logo") %>
+      <h1 class="header-mark--name-slogan">
+          <a href='/' class='site-title'>
+          <%= I18n.t('ui_page.heading')%>
+          </a>
+        </h1>
+    </div>
+  </div>
+</header>
+
+<main class="container-fluid">
+    <% flash.each do |_, msg| %>
+    <div class='alert'>
+      <%= msg %>
+    </div>
+  <% end %>
+  <div>
+    <h2><%= I18n.t('ui_page.upload.heading')%></h2>
+    <p><%= I18n.t('ui_page.upload.subheading')%></p>
+  </div>
+
+  <section>
+    <%= form_with model: @job, url: gui_create_path do |form| %>
+        <%= form.label :file, class: "visually-hidden"%>
+        <%= form.file_field :file, required: true %>
+      <div>
+        <%= form.submit 'Upload', class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="uploaded-files">
+    <% if @current_user.jobs.empty? %>
+      <p><%= I18n.t('ui_page.upload.no_file')%></p>
+    <% else %>
+      <h3> Recently uploaded files</h3>
+      <ul>
+        <% current_user.jobs.each do |j| %>
+          <li><%= j.file.blob.filename.to_s if j.file.present? %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+
+  <section class='requirements'>
+    <h3><%= I18n.t('ui_page.document_reqs.heading')%></h3>
+    <ul>
+      <li><%= I18n.t('ui_page.document_reqs.req1')%></li>
+      <li><%= I18n.t('ui_page.document_reqs.req2')%></li>
+    </ul>
+  </section>
+</main>
+
+
+<footer>
+</footer>
