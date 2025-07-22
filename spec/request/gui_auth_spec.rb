@@ -5,21 +5,19 @@ require 'rails_helper'
 RSpec.describe 'Warden Http Header Authentication', type: :request do
   context 'when allowlisted user' do
     it 'returns 200 status' do
-      pending('routes are not fully implemented yet')
-      get 'gui/uploads', headers: { 'HTTP_X_AUTH_REQUEST_EMAIL' => 'test1@psu.edu' }
-      expect(request.path).to eq '/'
+      get '/gui/new', headers: { 'HTTP_X_AUTH_REQUEST_EMAIL' => 'test1@psu.edu' }
+      expect(request.path).to eq '/gui/new'
       expect(response).to have_http_status :ok
-      expect(response.body).to include 'Search'
+      expect(response.body).to include I18n.t('ui_page.heading')
     end
   end
 
   context 'when user is not allowlisted' do
     it 'returns 401 status and redirects to 401 page' do
-      pending('routes are not fully implemented yet')
-      get '/', headers: { 'HTTP_X_AUTH_REQUEST_EMAIL' => 'test2@psu.edu' }
+      get '/gui/new', headers: { 'HTTP_X_AUTH_REQUEST_EMAIL' => 'test2@psu.edu' }
       expect(request.path).to eq '/unauthenticated'
       expect(response).to have_http_status :unauthorized
-      expect(response.body).to include 'Unauthorized'
+      expect(response.body).to include 'Not authorized'
     end
   end
 end

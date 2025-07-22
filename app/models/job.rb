@@ -18,7 +18,7 @@ class Job < ApplicationRecord
   def uploaded_file_url
     return nil if file.blank?
 
-    Rails.application.routes.url_helpers.rails_blob_url(file, host: ENV.fetch('SITE_HOST', nil))
+    Rails.application.routes.url_helpers.rails_blob_url(file, host: ENV.fetch('SITE_HOST', ''))
   end
 
   def uploaded_file_name
@@ -31,7 +31,7 @@ class Job < ApplicationRecord
 
     def has_file_or_source_url?
       unless (source_url.present? && !!source_url.match(URI::RFC2396_PARSER.make_regexp)) || file.present?
-        errors.add(:base, 'Job must have either an attached file or a source url present')
+        errors.add(:base, 'Job must have either an attached file or a valid source url present')
       end
     end
 end
