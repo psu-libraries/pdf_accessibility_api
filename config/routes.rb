@@ -17,6 +17,10 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
+  namespace :ui do
+    resources :jobs, only: [:index, :show]
+  end
+
   namespace :api do
     namespace :v1 do
       post '/jobs', to: 'jobs#create'
