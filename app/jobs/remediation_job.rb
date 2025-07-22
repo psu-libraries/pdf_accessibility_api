@@ -29,7 +29,7 @@ class RemediationJob < ApplicationJob
       finished_at: Time.zone.now,
       output_url: output_url,
       output_object_key: object_key,
-      output_url_expires_at: Time.zone.now + PRESIGNED_URL_EXPIRES_IN.seconds
+      output_url_expires_at: PRESIGNED_URL_EXPIRES_IN.seconds.from_now
     )
 
     RemediationStatusNotificationJob.perform_later(job_uuid)
