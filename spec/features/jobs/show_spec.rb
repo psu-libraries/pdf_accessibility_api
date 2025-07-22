@@ -1,59 +1,61 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.feature "Jobs show", type: :feature do
+RSpec.feature 'Jobs show' do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let(:job_attrs) do
     {
-      source_url: "https://example.com/file1.pdf",
-      output_object_key: "file1.pdf",
-      uuid: "abc123",
+      source_url: 'https://example.com/file1.pdf',
+      output_object_key: 'file1.pdf',
+      uuid: 'abc123',
       created_at: Time.zone.local(2024, 7, 22, 10, 30),
       finished_at: Time.zone.local(2024, 7, 22, 11, 0),
-      status: "completed",
+      status: 'completed',
       owner: gui_user
     }
   end
 
-  scenario "shows all job metadata and download link when output_url is present" do
-    job = create(:job, job_attrs.merge(output_url: "http://example.com/result1.pdf"))
+  scenario 'shows all job metadata and download link when output_url is present' do
+    job = create(:job, job_attrs.merge(output_url: 'http://example.com/result1.pdf'))
     visit job_path(job)
 
-    expect(page).to have_content("Job Details")
-    expect(page).to have_content("file1.pdf")
-    expect(page).to have_content("abc123")
-    expect(page).to have_content("Jul 22, 2024 10:30 AM")
-    expect(page).to have_content("Jul 22, 2024 11:00 AM")
-    expect(page).to have_content("Completed")
-    expect(page).to have_link("Click to download", href: "http://example.com/result1.pdf")
-    expect(page).to have_content("Errors:")
-    expect(page).to have_content("None")
-    expect(page).to have_link("<< Jobs List", href: jobs_path)
+    expect(page).to have_content('Job Details')
+    expect(page).to have_content('file1.pdf')
+    expect(page).to have_content('abc123')
+    expect(page).to have_content('Jul 22, 2024 10:30 AM')
+    expect(page).to have_content('Jul 22, 2024 11:00 AM')
+    expect(page).to have_content('Completed')
+    expect(page).to have_link('Click to download', href: 'http://example.com/result1.pdf')
+    expect(page).to have_content('Errors:')
+    expect(page).to have_content('None')
+    expect(page).to have_link('<< Jobs List', href: jobs_path)
   end
 
   scenario "shows 'Expired' if output_url_expires_at is in the past and no output_url" do
     job = Job.create!(job_attrs.merge(output_url: nil, output_url_expires_at: 1.hour.ago))
     visit job_path(job)
 
-    expect(page).to have_content("Download: Expired")
+    expect(page).to have_content('Download: Expired')
   end
 
   scenario "shows 'Not available' if no output_url and output_url_expires_at is nil or in the future" do
     job = Job.create!(job_attrs.merge(output_url: nil, output_url_expires_at: 1.hour.from_now))
     visit job_path(job)
 
-    expect(page).to have_content("Download: Not available")
+    expect(page).to have_content('Download: Not available')
 
     job2 = Job.create!(job_attrs.merge(output_url: nil, output_url_expires_at: nil))
     visit job_path(job2)
 
-    expect(page).to have_content("Download: Not available")
+    expect(page).to have_content('Download: Not available')
   end
 
-  scenario "shows error message if present" do
-    job = Job.create!(job_attrs.merge(processing_error_message: "Something went wrong"))
+  scenario 'shows error message if present' do
+    job = Job.create!(job_attrs.merge(processing_error_message: 'Something went wrong'))
     visit job_path(job)
 
-    expect(page).to have_content("Errors:")
-    expect(page).to have_content("Something went wrong")
+    expect(page).to have_content('Errors:')
+    expect(page).to have_content('Something went wrong')
   end
 end
