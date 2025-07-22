@@ -72,9 +72,9 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  # Set authorized user in header for feature tests
-  # This will likely stop working when we start
-  # using real webdrivers
+  # Set authorized user in header for feature tests. This will likely
+  # stop working when we start using real webdrivers, so
+  # we'll need to come up with another solution then.
   config.before(:each, type: :feature) do
     page.driver.header('X_AUTH_REQUEST_EMAIL', 'test1@psu.edu')
   end
