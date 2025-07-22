@@ -54,13 +54,15 @@ class RemediationJob < ApplicationJob
       RemediationStatusNotificationJob.perform_later(job.uuid)
     end
 
-    def get_file_name(job, tempfile=nil)
+    def get_file_name(job, tempfile = nil)
       return tempfile.original_filename if tempfile.present?
-      return job.uploaded_file_name if job.file.attached?
+
+      job.uploaded_file_name if job.file.attached?
     end
 
-    def get_file_path(job, tempfile=nil)
+    def get_file_path(job, tempfile = nil)
       return tempfile.path if tempfile.present?
-      return job.uploaded_file_url if job.file.attached?
+
+      job.uploaded_file_url if job.file.attached?
     end
 end

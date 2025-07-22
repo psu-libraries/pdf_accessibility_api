@@ -33,7 +33,7 @@ RSpec.describe RemediationJob do
 
   describe '#perform' do
     context 'when the job has an attached ActiveStorage file' do
-      it "does not use Down to download file" do
+      it 'does not use Down to download file' do
         described_class.perform_now(gui_job.uuid)
         expect(Down).not_to have_received(:download)
       end

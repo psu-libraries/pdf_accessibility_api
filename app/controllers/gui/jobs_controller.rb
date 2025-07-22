@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Ui::JobsController < GUIAuthController
+class GUI::JobsController < GUIAuthController
   add_flash_types :info, :error, :warning
   def new
     @current_user = current_user
@@ -8,15 +8,13 @@ class Ui::JobsController < GUIAuthController
   end
 
   def create
-    raise ActiveRecord::RecordInvalid
     job = current_user.jobs.build(job_params)
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!
-
     RemediationJob.perform_later(job.uuid)
     redirect_to action: 'new'
-  rescue ActiveRecord::RecordInvalid => e
+  rescue ActiveRecord::RecordInvalid
     flash[:alert] = I18n.t('ui_page.upload.error')
     redirect_to action: 'new'
   end
@@ -24,6 +22,6 @@ class Ui::JobsController < GUIAuthController
   private
 
     def job_params
-      params.require(:job).permit(:file, :source_url)
+      params.require(:job).permit(:file)
     end
 end

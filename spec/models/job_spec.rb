@@ -3,8 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Job do
-  subject(:job) { build(:job) }
-  subject(:gui_job) {build(:job, :gui_user_job)}
+  subject(:gui_job) { build(:job, :gui_user_job) }
+
+  let(:job) { build(:job) }
+
   describe 'table' do
     it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
     it { is_expected.to have_db_column(:uuid).of_type(:string).with_options(null: false) }
@@ -34,7 +36,7 @@ RSpec.describe Job do
 
     context 'when there is no file attached' do
       it 'validates the format of source_url' do
-        expect(job.file.attached?).to eq(false)
+        expect(job.file.attached?).to be(false)
         [nil, '', 'invalid', 'test.com/invalid'].each do |url|
           job.source_url = url
           expect(job).not_to be_valid
@@ -47,11 +49,11 @@ RSpec.describe Job do
     context 'when the source_url is nil' do
       it 'validates the presence of attached file' do
         expect(gui_job.source_url).to be_nil
-        expect(gui_job.file.attached?).to eq(true)
-        expect(gui_job.valid?).to eq(true)
+        expect(gui_job.file.attached?).to be(true)
+        expect(gui_job.valid?).to be(true)
 
         gui_job.file.purge
-        expect(gui_job.valid?).to eq(false)
+        expect(gui_job.valid?).to be(false)
       end
     end
   end
@@ -68,7 +70,7 @@ RSpec.describe Job do
 
   describe '#uploaded_file_url' do
     it 'returns nil when there is no file attached to the job' do
-      expect(job.uploaded_file_url).to be(nil)
+      expect(job.uploaded_file_url).to be_nil
     end
 
     it 'returns a url when there is attached file' do
@@ -79,7 +81,7 @@ RSpec.describe Job do
 
   describe '#uploaded_file_name' do
     it 'returns nil when there is no file attached to the job' do
-      expect(job.uploaded_file_name).to be(nil)
+      expect(job.uploaded_file_name).to be_nil
     end
 
     it 'returns a url when there is attached file' do

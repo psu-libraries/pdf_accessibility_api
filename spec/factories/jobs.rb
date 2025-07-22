@@ -13,11 +13,11 @@ FactoryBot.define do
     source_url { nil }
 
     after(:build) do |job|
-    job.file.attach(
-      io: File.open('spec/fixtures/files/testing.pdf'),
-      filename: 'testing.pdf',
-      content_type: 'application/pdf'
-     )
+      job.file.attach(
+        io: File.open('spec/fixtures/files/testing.pdf'),
+        filename: 'testing.pdf',
+        content_type: 'application/pdf'
+      )
     end
   end
 end
