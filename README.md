@@ -16,10 +16,10 @@ Run `direnv allow` to export the values
 ### Docker
 To build the image and run necessary containers:
 
- 1. `docker-compose up --build`
+ 1. `docker compose up --build`
  2. Check it out at `localhost:3000` in your browser
 
  ### Running tests
  To run test within the container
- 1. `docker-compose exec web bash`
+ 1. `docker compose exec web bash`
  2. `RAILS_ENV=test bundle exec rspec`
