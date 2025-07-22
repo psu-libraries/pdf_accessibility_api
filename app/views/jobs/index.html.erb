@@ -9,7 +9,7 @@
   <tbody>
     <% @jobs.each do |job| %>
       <tr>
-        <td><%= link_to job.output_object_key, ui_job_path(job) %></td>
+        <td><%= link_to job.output_object_key, job_path(job) %></td>
         <td><%= job.created_at.strftime("%b %e, %Y %l:%M %p") %></td>
         <td><%= job.status %></td>
       </tr>
