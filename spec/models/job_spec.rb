@@ -14,6 +14,7 @@ RSpec.describe Job do
     it { is_expected.to have_db_column(:output_url).of_type(:text) }
     it { is_expected.to have_db_column(:output_object_key).of_type(:text) }
     it { is_expected.to have_db_column(:processing_error_message).of_type(:text) }
+    it { is_expected.to have_db_column(:output_url_expires_at).of_type(:datetime).with_options(null: true) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
