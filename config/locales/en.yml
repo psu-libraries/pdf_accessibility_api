@@ -5,6 +5,7 @@ en:
       heading: Remediate a PDF Document
       subheading: Click 'Browse' to select your document
       no_file: No file uploaded yet
+      error: Something went wrong with this upload.
 
   about:
     heading: About this solution

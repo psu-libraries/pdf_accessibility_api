@@ -49,3 +49,9 @@ h1 {
 .btn {
   margin-top: 1rem;
 }
+
+.alert {
+  padding: 1.5em 0 1.5em 0;
+  color: darkred;
+  font-weight: 700;
+}

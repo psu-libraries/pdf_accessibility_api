@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-class Ui::JobsController < ApplicationController
+class Ui::JobsController < GUIAuthController
+  add_flash_types :info, :error, :warning
   def new
+    @current_user = current_user
     @job = Job.new
   end
 
   def create
-    # TODO define current user (part of ticket #38)
+    raise ActiveRecord::RecordInvalid
     job = current_user.jobs.build(job_params)
-    gui = GUIUser.new
-    job = gui.jobs.build(job_params)
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!
 
     RemediationJob.perform_later(job.uuid)
-
-    render json: job, only: :uuid
+    redirect_to action: 'new'
   rescue ActiveRecord::RecordInvalid => e
-    render json: { message: e.message, code: 422 }, status: :unprocessable_entity
+    flash[:alert] = I18n.t('ui_page.upload.error')
+    redirect_to action: 'new'
   end
 
   private

@@ -12,6 +12,11 @@
 </header>
 
 <main class="container-fluid">
+    <% flash.each do |_, msg| %>
+    <div class='alert'>
+      <%= msg %>
+    </div>
+  <% end %>
   <div>
     <h2><%= I18n.t('ui_page.upload.heading')%></h2>
     <p><%= I18n.t('ui_page.upload.subheading')%></p>
@@ -28,7 +33,16 @@
   </section>
 
   <section class="uploaded-files">
-
+    <% if @current_user.jobs.empty? %>
+      <p><%= I18n.t('ui_page.upload.no_file')%></p>
+    <% else %>
+      <p> Recently uploaded files</p>
+      <ul>
+        <% current_user.jobs.each do |j| %>
+          <li><%= j.file.blob.filename.to_s if j.file.present? %></li>
+        <% end %>
+      </ul>
+    <% end %>
   </section>
 </main>
 
