@@ -11,8 +11,12 @@ services:
   web:
     user: 1000:1000
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
     tty: true
     stdin_open: true
     <<: *web_env
@@ -24,6 +28,23 @@ services:
     - node-data:/app/node_modules
     ports:
       - "3000:3000"
+    healthcheck:
+      test: curl -f http://localhost:3000/
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+  worker:
+    user: 1000:1000
+    depends_on:
+      web:
+        condition: service_healthy
+    <<: *web_env
+    build:
+      context: .
+      target: dev-worker
+    volumes:
+      - worker-bundle-data:/app/vendor/bundle
   db:
     environment:
       MYSQL_ROOT_PASSWORD: pdf_accessibility_api
@@ -35,6 +56,12 @@ services:
     - "3306:3306"
     volumes:
     - db-data:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h localhost -u root --password=$$MYSQL_ROOT_PASSWORD
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   redis:
     image: redis:8.0.2
     command: redis-server --requirepass redispassword
@@ -69,6 +96,7 @@ networks:
 volumes:
   redis-data:
   bundle-data:
+  worker-bundle-data:
   node-data:
   minio-data:
   db-data:
