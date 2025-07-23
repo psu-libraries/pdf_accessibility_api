@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require 'sidekiq/web'
+require 'sidekiq_web_constraint'
 
 Rails.application.routes.draw do
-  mount Sidekiq::Web => '/sidekiq'
+  mount Sidekiq::Web => '/sidekiq', :constraints => SidekiqWebConstraint.new
+  get '/sidekiq', to: redirect('/'), constraints: ->(req) { !SidekiqWebConstraint.new.matches?(req) }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
