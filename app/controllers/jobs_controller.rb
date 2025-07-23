@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class GUI::JobsController < GUIAuthController
+class JobsController < GUIAuthController
   add_flash_types :info, :error, :warning
   def new
     @current_user = current_user

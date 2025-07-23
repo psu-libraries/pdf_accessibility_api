@@ -45,7 +45,7 @@ describe 'Gui jobs', type: :request do
       post(
         '/gui/create', headers: valid_headers, params: { job: { file: file_upload } }
       )
-      expect(response).to redirect_to(gui_new_path)
+      expect(response).to redirect_to(job_path(job.id))
     end
 
     context 'when an error occurs' do

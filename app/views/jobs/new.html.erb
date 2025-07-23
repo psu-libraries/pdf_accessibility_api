@@ -23,7 +23,7 @@
   </div>
 
   <section>
-    <%= form_with model: @job, url: gui_create_path do |form| %>
+    <%= form_with model: @job, url: jobs_path do |form| %>
         <%= form.label :file, class: "visually-hidden" %>
         <%= form.file_field :file, required: true %>
       <div>
