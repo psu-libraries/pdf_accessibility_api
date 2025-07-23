@@ -39,7 +39,7 @@ RSpec.feature 'Jobs show' do
     expect(page).to have_content('Download: Expired')
   end
 
-  scenario "shows 'Not available' if no output_url" do
+  it "shows 'Not available' if no output_url" do
     job = Job.create!(job_attrs.merge(output_url: nil, output_url_expires_at: 1.hour.from_now))
     visit job_path(job)
 
@@ -51,7 +51,7 @@ RSpec.feature 'Jobs show' do
     expect(page).to have_content('Download: Not available')
   end
 
-  scenario 'shows error message if present' do
+  it 'shows error message if present' do
     job = Job.create!(job_attrs.merge(processing_error_message: 'Something went wrong'))
     visit job_path(job)
 
