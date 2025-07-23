@@ -43,6 +43,8 @@ RSpec.describe RemediationJob do
       expect(reloaded_job.output_url).to eq 'https://example.com/presigned-file-url'
       expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
       expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_file\.pdf/
+      expect(reloaded_job.output_url_expires_at).to be_within(1.minute)
+        .of(RemediationJob::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
     end
 
     it 'queues up a notification about the status of the job' do
@@ -66,6 +68,7 @@ RSpec.describe RemediationJob do
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
         expect(reloaded_job.output_object_key).to be_nil
         expect(reloaded_job.processing_error_message).to eq 'Timed out waiting for output file'
+        expect(reloaded_job.output_url_expires_at).to be_nil
       end
 
       it 'queues up a notification about the status of the job' do
@@ -92,6 +95,7 @@ RSpec.describe RemediationJob do
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
         expect(reloaded_job.output_object_key).to be_nil
         expect(reloaded_job.processing_error_message).to eq 'Failed to download file from source URL:  download error'
+        expect(reloaded_job.output_url_expires_at).to be_nil
       end
 
       it 'queues up a notification about the status of the job' do
@@ -115,6 +119,7 @@ RSpec.describe RemediationJob do
         expect(reloaded_job.processing_error_message).to eq(
           'Failed to upload file to remediation input location:  upload error'
         )
+        expect(reloaded_job.output_url_expires_at).to be_nil
       end
 
       it 'queues up a notification about the status of the job' do
