@@ -21,10 +21,17 @@ class JobsController < GUIAuthController
     redirect_to action: 'new'
   end
 
+  def index
+    @jobs = current_user.jobs.order(created_at: :desc)
+  end
+
+  def show
+    @job = current_user.jobs.find(params[:id])
+  end
 
   private
 
-    def job_params
-      params.permit(:file)
-    end
+  def job_params
+    params.permit(:file)
+  end
 end

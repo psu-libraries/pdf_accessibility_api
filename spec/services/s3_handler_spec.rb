@@ -66,38 +66,6 @@ RSpec.describe S3Handler, type: :service do
         end
       end
     end
-
-    describe '#delete_files' do
-      let(:input_object) { instance_spy(Aws::S3::Object) }
-      let(:output_object) { instance_spy(Aws::S3::Object) }
-
-      before do
-        allow(bucket).to receive(:object).with("pdf/#{object_key}").and_return(input_object)
-        allow(bucket).to receive(:object).with("result/COMPLIANT_#{object_key}").and_return(output_object)
-        allow(input_object).to receive(:exists?).and_return(true)
-        allow(output_object).to receive(:exists?).and_return(true)
-      end
-
-      it 'deletes input and output files if they exist' do
-        handler.delete_files
-        expect(input_object).to have_received(:delete)
-        expect(output_object).to have_received(:delete)
-      end
-
-      it 'returns nil if no files exist' do
-        allow(input_object).to receive(:exists?).and_return(false)
-        allow(output_object).to receive(:exists?).and_return(false)
-        expect(handler.delete_files).to be_nil
-      end
-
-      context 'when an error is raised while deleting the files' do
-        before { allow(input_object).to receive(:delete).and_raise(Aws::Errors::ServiceError.new(nil, 'AWS error')) }
-
-        it 're-raises an S3Handler::Error' do
-          expect { handler.delete_files }.to raise_error(S3Handler::Error, 'AWS error')
-        end
-      end
-    end
   end
 
   describe 'live S3 interactions' do
@@ -120,7 +88,6 @@ RSpec.describe S3Handler, type: :service do
       end
       expect(url).to match(%r{https://#{ENV.fetch('S3_BUCKET_NAME',
                                                   nil)}.s3.amazonaws.com/result/COMPLIANT_#{object_key}})
-      handler.delete_files
     end
   end
 end

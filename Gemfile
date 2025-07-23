@@ -45,6 +45,9 @@ group :development, :test do
 
   gem 'rspec-rails'
 
+  # Use Capybara for feature/system tests
+  gem 'capybara'
+
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem 'rubocop-rails-omakase', require: false
 end
