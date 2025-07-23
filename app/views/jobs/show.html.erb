@@ -8,9 +8,11 @@
   <li><strong>Status:</strong> <%= @job.status.humanize %></li>
 
   <% if @job.output_url.present? %>
-    <li><strong>Download:</strong> <a href="<%= @job.output_url %>">Click to download</a></li>
-  <% elsif @job.output_url_expires_at.present? && @job.output_url_expires_at < Time.zone.now %>
-    <li><strong>Download:</strong> Expired</li>
+    <% if @job.output_url_expired? %>
+      <li><strong>Download:</strong> Expired</li>
+    <% else %>
+      <li><strong>Download:</strong> <a href="<%= @job.output_url %>">Click to download</a></li>
+    <% end %>
   <% else %>
     <li><strong>Download:</strong> Not available</li>
   <% end %>

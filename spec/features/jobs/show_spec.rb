@@ -16,7 +16,7 @@ RSpec.feature 'Jobs show' do
     }
   end
 
-  scenario 'shows all job metadata and download link when output_url is present' do
+  it 'shows all job metadata and download link when output_url is present' do
     job = create(:job, job_attrs.merge(output_url: 'http://example.com/result1.pdf'))
     visit job_path(job)
 
@@ -32,14 +32,14 @@ RSpec.feature 'Jobs show' do
     expect(page).to have_link('<< Jobs List', href: jobs_path)
   end
 
-  scenario "shows 'Expired' if output_url_expires_at is in the past and no output_url" do
-    job = Job.create!(job_attrs.merge(output_url: nil, output_url_expires_at: 1.hour.ago))
+  it "shows 'Expired' if output_url is present and output_url_expired? is true" do
+    job = Job.create!(job_attrs.merge(output_url: 'http://example.com/result1.pdf', output_url_expires_at: 1.hour.ago))
     visit job_path(job)
 
     expect(page).to have_content('Download: Expired')
   end
 
-  scenario "shows 'Not available' if no output_url and output_url_expires_at is nil or in the future" do
+  scenario "shows 'Not available' if no output_url" do
     job = Job.create!(job_attrs.merge(output_url: nil, output_url_expires_at: 1.hour.from_now))
     visit job_path(job)
 
