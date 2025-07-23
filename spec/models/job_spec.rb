@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Job do
-  subject(:gui_job) { build(:job, :gui_user_job) }
+  let(:gui_job) { build(:job, :gui_user_job) }
 
   let(:job) { build(:job) }
 
@@ -33,10 +33,10 @@ RSpec.describe Job do
 
   describe 'validations' do
     it { is_expected.to validate_inclusion_of(:status).in_array ['processing', 'completed', 'failed'] }
+    # is expected to validate present of source_url when ljaf
 
-    context 'when there is no file attached' do
+    context 'when the owner is an APIUSer' do
       it 'validates the format of source_url' do
-        expect(job.file.attached?).to be(false)
         [nil, '', 'invalid', 'test.com/invalid'].each do |url|
           job.source_url = url
           expect(job).not_to be_valid
@@ -46,14 +46,10 @@ RSpec.describe Job do
       end
     end
 
-    context 'when the source_url is nil' do
-      it 'validates the presence of attached file' do
-        expect(gui_job.source_url).to be_nil
-        expect(gui_job.file.attached?).to be(true)
-        expect(gui_job.valid?).to be(true)
-
-        gui_job.file.purge
-        expect(gui_job.valid?).to be(false)
+    context 'when the owner is a GUIUser' do
+      it 'does not validate for source_url' do
+        expect(gui_job.source_url).to eq(nil)
+        expect(gui_job).to be_valid
       end
     end
   end
@@ -65,28 +61,6 @@ RSpec.describe Job do
   describe '.statuses' do
     it 'returns the array of valid status values' do
       expect(described_class.statuses).to eq ['processing', 'completed', 'failed']
-    end
-  end
-
-  describe '#uploaded_file_url' do
-    it 'returns nil when there is no file attached to the job' do
-      expect(job.uploaded_file_url).to be_nil
-    end
-
-    it 'returns a url when there is attached file' do
-      gui_job.save!
-      expect(gui_job.uploaded_file_url).to include('testing.pdf')
-    end
-  end
-
-  describe '#uploaded_file_name' do
-    it 'returns nil when there is no file attached to the job' do
-      expect(job.uploaded_file_name).to be_nil
-    end
-
-    it 'returns a url when there is attached file' do
-      gui_job.save!
-      expect(gui_job.uploaded_file_name).to eq('testing.pdf')
     end
   end
 

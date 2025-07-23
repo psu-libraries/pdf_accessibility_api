@@ -8,20 +8,23 @@ class JobsController < GUIAuthController
   end
 
   def create
-    job = current_user.jobs.build(job_params)
+    job = current_user.jobs.build
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!
-    RemediationJob.perform_later(job.uuid)
-    redirect_to action: 'new'
-  rescue ActiveRecord::RecordInvalid
-    flash[:alert] = I18n.t('ui_page.upload.error')
+    uploaded_file = params[:file]
+    RemediationJob.perform_later(job.uuid, file_path: uploaded_file.path, original_filename: uploaded_file.original_filename)
+
+    redirect_to jobs_path, notice: "File uploaded!"
+  rescue ActiveRecord::RecordInvalid => e
+    flash[:alert] = I18n.t('ui_page.upload.error') + e.message
     redirect_to action: 'new'
   end
+
 
   private
 
     def job_params
-      params.require(:job).permit(:file)
+      params.permit(:file)
     end
 end

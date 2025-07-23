@@ -2,18 +2,19 @@
 
 class RemediationJob < ApplicationJob
   OUTPUT_POLLING_INTERVAL = 10 # This value was picked somewhat arbitrarily. We may want to adjust.
+  PRESIGNED_URL_EXPIRES_IN = 3600
 
   # The default 1-hour timeout is also arbitrary and should probably be adjusted.
   def perform(job_uuid, output_polling_timeout = 3600)
     job = Job.find_by!(uuid: job_uuid)
-    tempfile = Down.download(job.source_url) if job.source_url.present?
-    object_key = "#{SecureRandom.hex(8)}_#{get_file_name(job, tempfile)}"
+    tempfile = Down.download(job.source_url)
+    object_key = "#{SecureRandom.hex(8)}_#{tempfile.original_filename}"
     s3 = S3Handler.new(object_key)
-    s3.upload_to_input(get_file_path(job, tempfile))
+    s3.upload_to_input(tempfile.path)
 
     timer = 0
 
-    until output_url = s3.presigned_url_for_output
+    until output_url = s3.presigned_url_for_output(expires_in: PRESIGNED_URL_EXPIRES_IN)
       sleep OUTPUT_POLLING_INTERVAL
       timer += OUTPUT_POLLING_INTERVAL
 
@@ -27,7 +28,8 @@ class RemediationJob < ApplicationJob
       status: 'completed',
       finished_at: Time.zone.now,
       output_url: output_url,
-      output_object_key: object_key
+      output_object_key: object_key,
+      output_url_expires_at: PRESIGNED_URL_EXPIRES_IN.seconds.from_now
     )
 
     RemediationStatusNotificationJob.perform_later(job_uuid)
@@ -38,31 +40,15 @@ class RemediationJob < ApplicationJob
     # We may want to retry the upload depending on the more specific nature of the failure.
     record_failure_and_notify(job, "Failed to upload file to remediation input location:  #{e.message}")
   ensure
-    tempfile&.close! if tempfile.present?
-    # Do we also want to run job.file.purge?
+    tempfile&.close!
   end
-
   private
-
     def record_failure_and_notify(job, message)
       job.update(
         status: 'failed',
         finished_at: Time.zone.now,
         processing_error_message: message
       )
-
       RemediationStatusNotificationJob.perform_later(job.uuid)
-    end
-
-    def get_file_name(job, tempfile = nil)
-      return tempfile.original_filename if tempfile.present?
-
-      job.uploaded_file_name if job.file.attached?
-    end
-
-    def get_file_path(job, tempfile = nil)
-      return tempfile.path if tempfile.present?
-
-      job.uploaded_file_url if job.file.attached?
     end
 end

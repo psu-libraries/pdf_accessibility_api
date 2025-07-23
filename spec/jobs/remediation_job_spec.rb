@@ -32,27 +32,6 @@ RSpec.describe RemediationJob do
   end
 
   describe '#perform' do
-    context 'when the job has an attached ActiveStorage file' do
-      it 'does not use Down to download file' do
-        described_class.perform_now(gui_job.uuid)
-        expect(Down).not_to have_received(:download)
-      end
-
-      it 'updates the status and metadata of the given job record' do
-        described_class.perform_now(gui_job.uuid)
-        reloaded_job = gui_job.reload
-        expect(reloaded_job.status).to eq 'completed'
-        expect(reloaded_job.output_url).to eq 'https://example.com/presigned-file-url'
-        expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_testing\.pdf/
-      end
-
-      it 'queues up a notification about the status of the job' do
-        described_class.perform_now(gui_job.uuid)
-        expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(gui_job.uuid)
-      end
-    end
-
     context 'when the job has a source url' do
       it "transfers the file from the given job's source URL to S3" do
         described_class.perform_now(job.uuid)
