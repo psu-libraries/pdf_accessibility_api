@@ -1,16 +1,3 @@
-<header>
-  <div class='container-fluid'>
-    <div class='header--nav-branding'>
-      <%= image_tag('logo-penn_state_university_libraries.png', :alt => "Site logo") %>
-      <h1 class="header-mark--name-slogan">
-          <a href='/' class='site-title'>
-          <%= I18n.t('ui_page.heading') %>
-          </a>
-        </h1>
-    </div>
-  </div>
-</header>
-
 <main class="container-fluid">
   <% flash.each do |_, msg| %>
     <div class='alert'>
@@ -33,5 +20,3 @@
   </section>
 </main>
 
-<footer>
-</footer>

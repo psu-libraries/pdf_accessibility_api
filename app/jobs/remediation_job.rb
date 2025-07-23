@@ -42,7 +42,9 @@ class RemediationJob < ApplicationJob
   ensure
     tempfile&.close!
   end
+
   private
+
     def record_failure_and_notify(job, message)
       job.update(
         status: 'failed',

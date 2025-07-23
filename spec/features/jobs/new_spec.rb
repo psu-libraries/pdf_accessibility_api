@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.feature 'New job' do
-  let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
-
   it 'shows upload link and submit button' do
     visit new_job_path
 
@@ -18,14 +16,14 @@ RSpec.feature 'New job' do
     # end
   end
 
-  context 'if the user has no recent jobs' do
+  context 'when the user has no recent jobs' do
     it 'displays the no recent jobs methods' do
-          visit new_job_path
-          expect(page).to have_content(I18n.t('ui_page.upload.no_file'))
+      visit new_job_path
+      expect(page).to have_content(I18n.t('ui_page.upload.no_file'))
     end
   end
 
-  context 'if the user has displayed a recent job' do
+  context 'when the user has displayed a recent job' do
     it 'displays the recent files that had jobs created for them'
   end
 

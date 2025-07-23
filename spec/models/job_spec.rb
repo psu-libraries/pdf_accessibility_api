@@ -49,7 +49,7 @@ RSpec.describe Job do
 
     context 'when the owner is a GUIUser' do
       it 'does not validate for source_url' do
-        expect(gui_job.source_url).to eq(nil)
+        expect(gui_job.source_url).to be_nil
         expect(gui_job).to be_valid
       end
     end

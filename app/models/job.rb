@@ -6,7 +6,7 @@ class Job < ApplicationRecord
   end
 
   validates :status, inclusion: { in: statuses }
-  validates :source_url, presence: true, if > { owner_type == 'APIUser' }
+  validates :source_url, presence: true, if: -> { owner_type == 'APIUser' }
   belongs_to :owner, polymorphic: true
   delegate :webhook_endpoint, :webhook_key, to: :owner, prefix: false
 
