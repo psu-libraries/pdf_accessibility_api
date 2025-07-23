@@ -2,7 +2,7 @@
 
 class RemediationJob < ApplicationJob
   OUTPUT_POLLING_INTERVAL = 10 # This value was picked somewhat arbitrarily. We may want to adjust.
-  PRESIGNED_URL_EXPIRES_IN = 3600
+  PRESIGNED_URL_EXPIRES_IN = 84_000
 
   # The default 1-hour timeout is also arbitrary and should probably be adjusted.
   def perform(job_uuid, output_polling_timeout = 3600)
