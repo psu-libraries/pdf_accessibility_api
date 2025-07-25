@@ -1,11 +1,10 @@
 en:
-  ui_page:
-    heading: PDF Accessibility Remediation
-    upload:
-      heading: Remediate a PDF Document
-      subheading: Click 'Browse' to select your document
-      no_file: No file uploaded yet
-      error: Something went wrong with this upload.
-      success: File uploaded!
+  heading: PDF Accessibility Remediation
+  upload:
+    heading: Remediate a PDF Document
+    subheading: Click 'Browse' to select your document
+    no_file: No file uploaded yet
+    error: File must be present
+    success: File uploaded!
       
 

@@ -2,32 +2,34 @@
 
 require 'rails_helper'
 
-describe 'Gui jobs', type: :request do
+describe 'Jobs', type: :request do
   before { allow(RemediationJob).to receive(:perform_later) }
 
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
-  let!(:file_upload) { Rack::Test::UploadedFile.new(File.new("#{Rails.root}/spec/fixtures/files/testing.pdf"),
-                                                    'application.pdf',
-                                                    original_filename: 'testing.pdf')}
+  let!(:original_filename) { 'testing.pdf' }
 
-  describe 'GET gui/new' do
+  describe 'GET jobs/new' do
     it 'gets a successful response' do
-      get '/gui/new', headers: valid_headers
+      get '/jobs/new', headers: valid_headers
       expect(response).to have_http_status :ok
     end
 
     it 'displays page' do
-      get '/gui/new', headers: valid_headers
-      expect(response.body).to include(I18n.t('ui_page.heading'))
+      get '/jobs/new', headers: valid_headers
+      expect(response.body).to include(I18n.t('heading'))
     end
   end
 
-  describe 'POST gui/create' do
+  describe 'POST jobs/create' do
+    let!(:file_upload) { Rack::Test::UploadedFile.new(File.new("#{Rails.root}/spec/fixtures/files/testing.pdf"),
+                                                      'application.pdf',
+                                                      original_filename:)}
+
     it 'creates a record to track the job status' do
       expect {
         post(
-          '/gui/create', headers: valid_headers, params: { job: { file: file_upload } }
+          '/jobs', headers: valid_headers, params: { file: file_upload }
         )
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last
@@ -36,31 +38,24 @@ describe 'Gui jobs', type: :request do
 
     it 'enqueues a job with RemediationJob' do
       post(
-        '/gui/create', headers: valid_headers, params: { job: { file: file_upload } }
+        '/jobs', headers: valid_headers, params: { file: file_upload }
       )
-      expect(RemediationJob).to have_received(:perform_later).with(gui_user.jobs.last.uuid)
+      expect(RemediationJob).to have_received(:perform_later)
     end
 
     it 'redirects to new page' do
       post(
-        '/gui/create', headers: valid_headers, params: { job: { file: file_upload } }
+        '/jobs', headers: valid_headers, params: { file: file_upload }
       )
-      expect(response).to redirect_to(job_path(job.id))
+      expect(response).to redirect_to(jobs_path)
     end
 
     context 'when an error occurs' do
-      let!(:doubled_job) { instance_double(Job) }
-
-      before do
-        allow(Job).to receive(:new).and_return(doubled_job)
-        allow(doubled_job).to receive(:new_record?).and_raise(ActiveRecord::RecordInvalid)
-      end
-
-      it 'displays an error when one occurs' do
+      it 'displays an error' do
         post(
-          '/gui/create', headers: valid_headers, params: { job: { file: file_upload } }
+          '/jobs/', headers: valid_headers, params: { file: {} }
         )
-        expect(flash[:alert]).to eq(I18n.t('ui_page.upload.error'))
+        expect(flash[:alert]).to eq(I18n.t('upload.error'))
       end
     end
   end

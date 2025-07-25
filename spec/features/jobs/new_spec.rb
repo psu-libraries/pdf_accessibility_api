@@ -3,34 +3,24 @@
 require 'rails_helper'
 
 RSpec.feature 'New job' do
-  it 'shows upload link and submit button' do
+  it 'shows content and submit button' do
     visit new_job_path
-
-    # within '#jobs-table' do
-    #   expect(page).to have_link('file1.pdf', href: job_path(job_completed))
-    #   expect(page).to have_link('file2.pdf', href: job_path(job_processing))
-    #   expect(page).to have_content('completed')
-    #   expect(page).to have_content('processing')
-    #   expect(page).to have_content('Jul 22, 2024 10:30 AM')
-    #   expect(page).to have_content('Jul 21, 2024 9:00 AM')
-    # end
+    expect(page).to have_content(I18n.t('heading'))
+    expect(page).to have_content(I18n.t('upload.heading'))
+    expect(page).to have_button('Upload')
   end
 
-  context 'when the user has no recent jobs' do
-    it 'displays the no recent jobs methods' do
-      visit new_job_path
-      expect(page).to have_content(I18n.t('ui_page.upload.no_file'))
-    end
-  end
-
-  context 'when the user has displayed a recent job' do
-    it 'displays the recent files that had jobs created for them'
-  end
-
-  it 'redirects to the job show page for a new job when one is create' do
+  it 'requires a file to be uploaded to submit' do
     visit new_job_path
-    # upload
-    click_link 'Submit'
-    expect(page).to have_current_path(job_path(job_completed))
+    click_button 'Upload'
+    expect(page).to have_content(I18n.t('upload.error'))
+  end
+
+  it 'redirects to the job show page for a new job when one is created' do
+    visit new_job_path
+    attach_file('./spec/fixtures/files/testing.pdf')
+    click_button 'Upload'
+    sleep 1
+    expect(page).to have_current_path(jobs_path)
   end
 end

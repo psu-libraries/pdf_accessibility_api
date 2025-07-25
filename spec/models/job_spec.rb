@@ -34,7 +34,6 @@ RSpec.describe Job do
 
   describe 'validations' do
     it { is_expected.to validate_inclusion_of(:status).in_array ['processing', 'completed', 'failed'] }
-    # is expected to validate present of source_url when ljaf
 
     context 'when the owner is an APIUSer' do
       it 'validates the format of source_url' do
