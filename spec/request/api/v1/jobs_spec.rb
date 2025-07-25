@@ -47,9 +47,7 @@ describe 'API V1 jobs', type: :request do
 
           expect(response).to be_unprocessable
           parsed_response = JSON.parse(response.body)
-          expect(parsed_response['message']).to eq(
-            'Validation failed: Source url is invalid'
-          )
+          expect(parsed_response['message']).to eq 'Validation failed: Source url is invalid'
           expect(parsed_response['code']).to eq 422
         end
       end

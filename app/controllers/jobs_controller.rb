@@ -16,14 +16,14 @@ class JobsController < GUIAuthController
   end
 
   def create
-    form = UploadForm.new(upload_form_params)
+    uploaded_file = params[:file]
+    form = UploadForm.new(file: uploaded_file)
     form.validate!
 
     job = current_user.jobs.build
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!
-    uploaded_file = params[:file]
     RemediationJob.perform_later(job.uuid, file_path: uploaded_file.path,
                                            original_filename: uploaded_file.original_filename)
 
@@ -35,10 +35,4 @@ class JobsController < GUIAuthController
     flash[:alert] = "Exception: #{e.message}"
     redirect_to action: 'new'
   end
-
-  private
-
-    def upload_form_params
-      params.permit(:file)
-    end
 end

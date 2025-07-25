@@ -51,6 +51,7 @@ class RemediationJob < ApplicationJob
         finished_at: Time.zone.now,
         processing_error_message: message
       )
+
       RemediationStatusNotificationJob.perform_later(job.uuid)
     end
 end
