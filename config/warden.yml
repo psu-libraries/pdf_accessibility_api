@@ -1,6 +1,7 @@
 default: &default
    remote_user_header: <%= ENV.fetch("REMOTE_USER_HEADER", "HTTP_X_AUTH_REQUEST_EMAIL") %>
    authorized_users: <%= ENV.fetch("AUTHORIZED_USERS", "esd122@psu.edu,smm5878@psu.edu,ajk5603@psu.edu,jml8735@psu.edu,test1@psu.edu") %>
+   sidekiq_users: <%= ENV.fetch("SIDEKIQ_USERS", "esd122@psu.edu,smm5878@psu.edu,ajk5603@psu.edu,jml8735@psu.edu,test1@psu.edu") %>
 
 development:
    <<: *default
