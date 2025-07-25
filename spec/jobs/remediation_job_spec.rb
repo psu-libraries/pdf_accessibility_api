@@ -26,35 +26,37 @@ RSpec.describe RemediationJob do
 
   before do
     allow(Down).to receive(:download).with('https://test.com/file.pdf').and_return file
-    allow(S3Handler).to receive(:new).with(/[a-f0-9]{16}_file\.pdf/).and_return s3
+    allow(S3Handler).to receive(:new).and_return s3
     allow(RemediationStatusNotificationJob).to receive(:perform_later)
   end
 
   describe '#perform' do
-    it "transfers the file from the given job's source URL to S3" do
-      described_class.perform_now(job.uuid)
-      expect(s3).to have_received(:upload_to_input).with('path/to/file')
-    end
+    context 'when the job has a source url' do
+      it "transfers the file from the given job's source URL to S3" do
+        described_class.perform_now(job.uuid)
+        expect(s3).to have_received(:upload_to_input).with('path/to/file')
+      end
 
-    it 'updates the status and metadata of the given job record' do
-      described_class.perform_now(job.uuid)
-      reloaded_job = job.reload
-      expect(reloaded_job.status).to eq 'completed'
-      expect(reloaded_job.output_url).to eq 'https://example.com/presigned-file-url'
-      expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-      expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_file\.pdf/
-      expect(reloaded_job.output_url_expires_at).to be_within(1.minute)
-        .of(RemediationJob::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
-    end
+      it 'updates the status and metadata of the given job record' do
+        described_class.perform_now(job.uuid)
+        reloaded_job = job.reload
+        expect(reloaded_job.status).to eq 'completed'
+        expect(reloaded_job.output_url).to eq 'https://example.com/presigned-file-url'
+        expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
+        expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_file\.pdf/
+        expect(reloaded_job.output_url_expires_at).to be_within(1.minute)
+          .of(RemediationJob::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
+      end
 
-    it 'queues up a notification about the status of the job' do
-      described_class.perform_now(job.uuid)
-      expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
-    end
+      it 'queues up a notification about the status of the job' do
+        described_class.perform_now(job.uuid)
+        expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
+      end
 
-    it 'closes the temporarily downloaded file' do
-      described_class.perform_now(job.uuid)
-      expect(file).to have_received(:close!)
+      it 'closes the temporarily downloaded file' do
+        described_class.perform_now(job.uuid)
+        expect(file).to have_received(:close!)
+      end
     end
 
     context 'when an output file is not produced before the timeout is exceeded' do

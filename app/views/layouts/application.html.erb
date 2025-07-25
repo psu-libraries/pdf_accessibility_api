@@ -4,6 +4,7 @@
     <title><%= content_for(:title) || "Pdf Accessibility Api" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= stylesheet_link_tag 'https://assets.libraries.psu.edu/psulib_base/dist/peripheral/peripheral.min.css', media: 'all', crossorigin: 'anonymous' %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -17,6 +18,20 @@
   </head>
 
   <body>
+    <header>
+      <div class='container-fluid'>
+        <div class='header--nav-branding'>
+          <%= image_tag('logo-penn_state_university_libraries.png', :alt => "Site logo") %>
+          <h1 class="header-mark--name-slogan">
+              <a href='/' class='site-title'>
+              <%= I18n.t('heading') %>
+              </a>
+            </h1>
+        </div>
+      </div>
+    </header>
     <%= yield %>
+    <footer>
+    </footer>
   </body>
 </html>
