@@ -94,7 +94,7 @@ RSpec.describe RemediationJob do
       let(:output_url) { nil }
 
       it 'updates the status and metadata of the given job record' do
-        described_class.perform_now(job.uuid, 1)
+        described_class.perform_now(job.uuid, output_polling_timeout: 1)
         reloaded_job = job.reload
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.output_url).to be_nil
@@ -105,12 +105,12 @@ RSpec.describe RemediationJob do
       end
 
       it 'queues up a notification about the status of the job' do
-        described_class.perform_now(job.uuid, 1)
+        described_class.perform_now(job.uuid, output_polling_timeout: 1)
         expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
       end
 
       it 'closes the temporarily downloaded file' do
-        described_class.perform_now(job.uuid, 1)
+        described_class.perform_now(job.uuid, output_polling_timeout: 1)
         expect(file).to have_received(:close!)
       end
     end
