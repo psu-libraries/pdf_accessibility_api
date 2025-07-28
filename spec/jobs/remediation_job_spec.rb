@@ -31,6 +31,7 @@ RSpec.describe RemediationJob do
     allow(Down).to receive(:download).with('https://test.com/file.pdf').and_return file
     allow(S3Handler).to receive(:new).and_return s3
     allow(RemediationStatusNotificationJob).to receive(:perform_later)
+    allow(File).to receive(:delete).with(file_path)
   end
 
   describe '#perform' do
@@ -87,6 +88,10 @@ RSpec.describe RemediationJob do
         expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_testing\.pdf/
         expect(reloaded_job.output_url_expires_at).to be_within(1.minute)
           .of(RemediationJob::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
+      end
+
+      it 'calls File.delete on the given path' do
+        expect(File).to have_received(:delete).with(file_path)
       end
     end
 

@@ -8,10 +8,12 @@ class RemediationJob < ApplicationJob
   def perform(job_uuid, output_polling_timeout: 3600, file_path: nil, original_filename: nil)
     job = Job.find_by!(uuid: job_uuid)
     tempfile = Down.download(job.source_url) if job.source_url.present?
+    filename = tempfile&.original_filename || original_filename
+    path = tempfile&.path || file_path
 
-    object_key = "#{SecureRandom.hex(8)}_#{get_filename(tempfile:, original_filename:)}"
+    object_key = "#{SecureRandom.hex(8)}_#{filename}"
     s3 = S3Handler.new(object_key)
-    s3.upload_to_input(get_file_path(tempfile:, file_path:))
+    s3.upload_to_input(path)
 
     timer = 0
 
@@ -41,7 +43,8 @@ class RemediationJob < ApplicationJob
     # We may want to retry the upload depending on the more specific nature of the failure.
     record_failure_and_notify(job, "Failed to upload file to remediation input location:  #{e.message}")
   ensure
-    tempfile&.close! if tempfile.present?
+    tempfile&.close!
+    File.delete(file_path) if File.exist?(file_path.to_s)
   end
 
   private
@@ -54,17 +57,5 @@ class RemediationJob < ApplicationJob
       )
 
       RemediationStatusNotificationJob.perform_later(job.uuid)
-    end
-
-    def get_filename(tempfile: nil, original_filename: nil)
-      return tempfile.original_filename if tempfile.present?
-
-      original_filename
-    end
-
-    def get_file_path(tempfile: nil, file_path: nil)
-      return tempfile.path if tempfile.present?
-
-      file_path
     end
 end

@@ -28,6 +28,7 @@ class JobsController < GUIAuthController
                                            original_filename: uploaded_file.original_filename)
 
     redirect_to jobs_path, notice: I18n.t('upload.success')
+    uploaded_file.close
   rescue ActiveModel::ValidationError
     flash[:alert] = I18n.t('upload.error')
     redirect_to action: 'new'
