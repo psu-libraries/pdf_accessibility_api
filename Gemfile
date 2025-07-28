@@ -66,4 +66,4 @@ end
 
 gem 'rails_warden', '~> 0.6.0'
 
-gem "bugsnag", "~> 6.28"
+gem 'bugsnag', '~> 6.28'
