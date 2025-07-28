@@ -28,7 +28,7 @@ gem 'bootsnap', require: false
 gem 'sidekiq'
 
 # Aws S3 SDK for Ruby
-gem 'aws-sdk-s3', '~> 1.0'
+gem 'aws-sdk-s3', '~> 1.194'
 
 # Temporary file downloads over HTTP
 gem 'down'
