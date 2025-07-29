@@ -4,6 +4,11 @@ orbs:
   docker: circleci/docker@2.8.2
   browser-tools: circleci/browser-tools@1.5.2
 
+parameters:
+  CI_UTILS_IMAGE_TAG:
+    type: string
+    default: "v4.3.0"
+
 commands:
 
   clone-pdfapi-config:
