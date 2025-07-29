@@ -5,6 +5,14 @@ Metrics/BlockLength:
   Exclude:
     - 'config/environments/development.rb'
 
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/jobs/remediation_job.rb'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'app/jobs/remediation_job.rb'
+
 Rails/NotNullColumn:
   Exclude:
     - 'db/migrate/20250714203038_create_gui_users.rb'
