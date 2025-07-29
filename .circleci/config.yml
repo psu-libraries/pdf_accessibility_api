@@ -136,7 +136,6 @@ jobs:
           name: "Run tests"
           command: RAILS_ENV=test docker-compose exec -it web bundle exec rspec
 
-
   publish:
     executor:
       name: docker/docker
