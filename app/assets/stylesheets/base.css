@@ -1,0 +1,61 @@
+header {
+  padding: 3rem;
+}
+
+.header--nav-branding {
+  display: flex;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding-top: 4rem;
+  padding-bottom: 10rem;
+}
+
+h1 {
+  font-size: 1.4rem;
+  color: white;
+  font-family: 'Open Sans', Helvetica, sans-serif;
+}
+
+.uploaded-files {
+  margin-top: 5rem;
+  padding: 1.5rem;
+  border: 0.5px lightgrey solid;
+  border-radius: 5px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.btn {
+  margin-top: 1rem;
+}
+
+.alert {
+  padding: 1.5em 0 1.5em 0;
+  color: darkred;
+  font-weight: 700;
+}
+
+.requirements {
+  margin-top: 2rem;
+}
