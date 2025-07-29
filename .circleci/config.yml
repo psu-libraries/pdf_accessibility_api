@@ -10,7 +10,6 @@ parameters:
     default: "v4.3.0"
 
 commands:
-
   clone-pdfapi-config:
     steps:
       - add_ssh_keys
@@ -32,6 +31,14 @@ commands:
               TAG="${SLUG}--$CIRCLE_SHA1"
             fi
             echo "export TAG=$TAG" >> "$BASH_ENV"
+
+executors:
+  ci-utils:
+    parameters:
+      image_tag:
+        type: string
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:<< parameters.image_tag >>
 
 jobs:
 
