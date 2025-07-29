@@ -240,4 +240,11 @@ workflows:
               only:
                 - main
                 - /preview\/.*/                 
-      - test
+      - test:
+          context:
+            - org-global
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/
