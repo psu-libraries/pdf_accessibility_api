@@ -237,6 +237,10 @@ workflows:
           name: release-image
           requires:
             - build-and-push
+      - test-application:
+          context:
+            - org-global
+          name: test-application
 
   version: 2
   pdf_accessibility_api:
