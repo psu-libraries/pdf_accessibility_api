@@ -206,40 +206,53 @@ workflows:
   docker_push:
     jobs:
       - build-and-push:
-          name: build-and-push
-          context: [org-global]
+          context:
+            - org-global
           filters:
             branches:
               only:
                 - jimtest
+          name: build-and-push
+          requires:
+            - test-application
       - deploy-application:
-          name: deploy-preview
-          context: [org-global]
-          requires: [build-and-push]
+          context:
+            - org-global
           filters:
             branches:
               only:
+                - jimtest
                 - /preview\/.*/
+          name: deploy-image
+          requires:
+            - build-and-push
       - release-image:
-          name: release-image
-          context: [org-global]
+          context:
+            - org-global
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+.*/
             branches:
               ignore: /.*/
+          name: release-image
+          requires:
+            - build-and-push
+      - test-application:
+          context:
+            - org-global
+          name: test-application
 
   version: 2
   pdf_accessibility_api:
     jobs:
       - publish:
-          context: 
+          context:
             - org-global
           filters:
             branches:
               only:
                 - main
-                - /preview\/.*/                 
+                - /preview\/.*/
       - test:
           context:
             - org-global
