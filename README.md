@@ -47,12 +47,10 @@ The GUI is still a work in progress, but its main components are:
 ### Set Headers
 
 To authenticate locally you will need to mock the remote user header (e.g., `HTTP_X_AUTH_REQUEST_EMAIL`).  
-You can do this using a browser extension such as [ModHeader](https://modheader.com/) or [Requestly](https://requestly.io/):
+You can do this using a modify-header browser extension such as [ModHeader](https://modheader.com/) or [Requestly](https://requestly.io/):
 
 - Add a request header:  
   `HTTP_X_AUTH_REQUEST_EMAIL: your-email@psu.edu`
-
-This will allow you to simulate authentication as an authorized user.
 
 ### Docker
 
