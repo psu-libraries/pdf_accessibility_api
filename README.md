@@ -5,7 +5,7 @@
 
 ## Purpose
 
-The PDF Accessibility API is a Rails application for interfacing with the [PDF_Accessibility](https://github.com/psu-libraries/PDF_Accessibility) application, which provides accessibility remediation for PDFs. The `pdf_accessibility_api` has two major components: the API and the GUI.
+The PDF Accessibility API is a Rails application for interfacing with the [PDF_Accessibility](https://github.com/psu-libraries/PDF_Accessibility) application, which provides accessibility remediation for PDFs. The PDF Accessibility API has two major components: the API and the GUI.
 
 ## API
 
