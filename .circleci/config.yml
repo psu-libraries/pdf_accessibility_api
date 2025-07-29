@@ -228,3 +228,15 @@ workflows:
               only: /^v\d+\.\d+\.\d+.*/
             branches:
               ignore: /.*/
+
+  version: 2
+  pdf_accessibility_api:
+    jobs:
+      - publish:
+          context: 
+            - org-global
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/  
