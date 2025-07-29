@@ -223,7 +223,6 @@ workflows:
       - release-image:
           name: release-image
           context: [org-global]
-          to_tag: "<< pipeline.git.tag >>"
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+.*/
