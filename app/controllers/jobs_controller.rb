@@ -24,11 +24,11 @@ class JobsController < GUIAuthController
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!
+    uploaded_file.close
     RemediationJob.perform_later(job.uuid, file_path: uploaded_file.path,
                                            original_filename: uploaded_file.original_filename)
 
     redirect_to jobs_path, notice: I18n.t('upload.success')
-    uploaded_file.close
   rescue ActiveModel::ValidationError
     flash[:alert] = I18n.t('upload.error')
     redirect_to action: 'new'
