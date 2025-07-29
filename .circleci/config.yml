@@ -65,9 +65,6 @@ jobs:
           tag: $TAG
 
   deploy-application:
-    parameters:
-      version:
-        type: string
     executor:
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
@@ -199,7 +196,6 @@ workflows:
       - build-and-push:
           name: build-and-push
           context: [org-global]
-          version: "<< pipeline.git.revision >>"
           filters:
             branches:
               only:
@@ -207,7 +203,6 @@ workflows:
       - deploy-application:
           name: deploy-preview
           context: [org-global]
-          version: "<< pipeline.git.revision >>"
           requires: [build-and-push]
           filters:
             branches:
@@ -216,7 +211,6 @@ workflows:
       - release-image:
           name: release-image
           context: [org-global]
-          from_tag: "<< pipeline.git.revision >>"
           to_tag: "<< pipeline.git.tag >>"
           filters:
             tags:
