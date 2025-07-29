@@ -46,16 +46,22 @@ The GUI is still a work in progress, but its main components are:
 
 ### Set Headers
 
-Mock the remote user headers using a modify-header plugin within your browser.
+To authenticate locally you will need to mock the remote user header (e.g., `HTTP_X_AUTH_REQUEST_EMAIL`).  
+You can do this using a browser extension such as [ModHeader](https://modheader.com/) or [Requestly](https://requestly.io/):
 
-## Docker
+- Add a request header:  
+  `HTTP_X_AUTH_REQUEST_EMAIL: your-email@psu.edu`
+
+This will allow you to simulate authentication as an authorized user.
+
+### Docker
 
 To build the image and run the necessary containers:
 
 1. `docker-compose up --build`
 2. Visit [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Running Tests
+  
+### Running Tests
 
 To run tests within the container:
 
