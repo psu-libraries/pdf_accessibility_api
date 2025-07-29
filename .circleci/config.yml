@@ -239,4 +239,5 @@ workflows:
             branches:
               only:
                 - main
-                - /preview\/.*/  
+                - /preview\/.*/                 
+      - test
