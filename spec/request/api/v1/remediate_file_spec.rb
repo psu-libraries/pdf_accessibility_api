@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-def with_modified_env(options = {}, &block)
-  ClimateControl.modify(options, &block)
+def with_modified_env(options = {}, &)
+  ClimateControl.modify(options, &)
 end
 
 describe 'requesting a file remediation via the API', type: :request do
