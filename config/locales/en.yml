@@ -6,3 +6,7 @@ en:
     no_file: No file uploaded yet
     error: File must be present
     success: File uploaded!
+  footer:
+    heading: PDF Accessibility Remediation
+    description: ''
+    copyright_statement: 'Copyright © 2025 The Pennsylvania State University'
