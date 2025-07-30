@@ -33,6 +33,10 @@ FROM base AS dev-worker
 
 CMD ["bundle", "exec", "sidekiq"]
 
+FROM base AS dev-mock-remediation-tool
+
+CMD ["bin/mock_remediation_tool"]
+
 FROM base AS dev
 
 USER root

@@ -30,6 +30,9 @@ services:
     volumes:
     - bundle-data:/app/vendor/bundle
     - node-data:/app/node_modules
+    - type: bind
+      source: ./
+      target: /app
     ports:
       - "3000:3000"
     healthcheck:
@@ -49,6 +52,17 @@ services:
       target: dev-worker
     volumes:
       - worker-bundle-data:/app/vendor/bundle
+  mock_remediation_tool:
+    user: 1000:1000
+    depends_on:
+      web:
+        condition: service_healthy
+    <<: *web_env
+    build:
+      context: .
+      target: dev-mock-remediation-tool
+    volumes:
+      - mock-remediation-tool-bundle-data:/app/vendor/bundle
   db:
     environment:
       MYSQL_ROOT_PASSWORD: pdf_accessibility_api
@@ -80,10 +94,10 @@ services:
     volumes:
     - minio-data:/data
     environment:
-      MINIO_ACCESS_KEY:
-      MINIO_SECRET_KEY:
-      MINIO_ROOT_USER:
-      MINIO_ROOT_PASSWORD:
+      MINIO_ACCESS_KEY: pdf_accessibility_api
+      MINIO_SECRET_KEY: pdf_accessibility_api
+      MINIO_ROOT_USER: pdf_accessibility_api
+      MINIO_ROOT_PASSWORD: pdf_accessibility_api
     ports:
     - ${MINIO_PORT:-9000}:9000 # API
     entrypoint:
@@ -101,6 +115,7 @@ volumes:
   redis-data:
   bundle-data:
   worker-bundle-data:
+  mock-remediation-tool-bundle-data:
   node-data:
   minio-data:
   db-data:

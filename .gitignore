@@ -34,3 +34,7 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Docker sync ignores
+.bash_history
+.irb_history

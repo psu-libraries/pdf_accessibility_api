@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+require_relative "../config/boot"
+require_relative "../app/services/s3_handler"
+require 'aws-sdk-s3'
+require 'logger'
+
+s3_client = Aws::S3::Client.new(
+  credentials: Aws::Credentials.new(
+      'pdf_accessibility_api',
+      'pdf_accessibility_api'
+    ),
+  endpoint: 'http://minio:9000'
+)
+
+s3 = Aws::S3::Resource.new(client: s3_client)
+
+bucket = s3.bucket('pdf_accessibility_api')
+
+$stdout.sync = true
+logger = Logger.new($stdout)
+
+logger.info "Mock PDF remediation tool running..."
+loop do
+  bucket.objects.select { |o| o.key !~/result\/COMPLIANT/ }.each do |o|
+    filename = o.key.gsub(S3Handler::INPUT_PREFIX, "")
+    result_key = "#{S3Handler::OUTPUT_PREFIX}#{filename}"
+
+    unless bucket.objects.detect { |o| o.key == result_key }
+      o.copy_to(bucket: "pdf_accessibility_api", key: result_key)
+    end
+  end
+
+  sleep 1
+end
