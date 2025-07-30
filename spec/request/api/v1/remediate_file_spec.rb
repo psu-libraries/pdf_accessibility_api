@@ -33,7 +33,8 @@ describe 'requesting a file remediation via the API', type: :request do
         S3_ENDPOINT: 'http://minio:9000',
         S3_BUCKET_NAME: 'pdf_accessibility_api',
         AWS_ACCESS_KEY_ID: 'pdf_accessibility_api',
-        AWS_SECRET_ACCESS_KEY: 'pdf_accessibility_api'
+        AWS_SECRET_ACCESS_KEY: 'pdf_accessibility_api',
+        AWS_REGION: 'none'
       }
     ) do
       post(
