@@ -24,18 +24,18 @@ describe 'requesting a file remediation via the API', type: :request do
   end
 
   it 'processes the file and sends a webhook notification' do
-    original_bucket_name = ENV.fetch('S3_BUCKET_NAME', nil)
-    original_key_id = ENV.fetch('AWS_ACCESS_KEY_ID', nil)
-    original_key = ENV.fetch('AWS_SECRET_ACCESS_KEY', nil)
-    ENV['S3_BUCKET_NAME'] = 'pdf_accessibility_api'
-    ENV['AWS_ACCESS_KEY_ID'] = 'pdf_accessibility_api'
-    ENV['AWS_SECRET_ACCESS_KEY'] = 'pdf_accessibility_api'
-
     # We have a separate test that specifically exercies our connection to the AWS S3
     # bucket used by the real remediation tool. Here we're testing our API workflow
     # without depending on the real S3 bucket by substituting in MinIO and a trivial
     # script that doubles for the remediation tool behavior.
-    with_modified_env S3_ENDPOINT: 'http://minio:9000' do
+    with_modified_env(
+      {
+        S3_ENDPOINT: 'http://minio:9000',
+        S3_BUCKET_NAME: 'pdf_accessibility_api',
+        AWS_ACCESS_KEY_ID: 'pdf_accessibility_api',
+        AWS_SECRET_ACCESS_KEY: 'pdf_accessibility_api'
+      }
+    ) do
       post(
         '/api/v1/jobs',
         params: {
@@ -55,9 +55,5 @@ describe 'requesting a file remediation via the API', type: :request do
       "{\"event_type\":\"job.succeeded\",\"job\":{\"uuid\":\"#{job.uuid}\"," \
       "\"status\":\"completed\",\"output_url\":#{job.output_url.to_json}}}"
     )
-
-    ENV['S3_BUCKET_NAME'] = original_bucket_name
-    ENV['AWS_ACCESS_KEY_ID'] = original_key_id
-    ENV['AWS_SECRET_ACCESS_KEY'] = original_key
   end
 end
