@@ -11,6 +11,10 @@ jobs:
           REGISTRY_REPO: library/psulib_blacklight
           GITHUB_USER: 'psu-stewardship-bot'
           CONFIG_REPO: git@github.com:psu-libraries/pdf_accessibility_api.git
+          S3_ENDPOINT: http://minio:9000
+          S3_BUCKET_NAME: pdf_accessibility_api
+          AWS_ACCESS_KEY_ID: pdf_accessibility_api
+          AWS_SECRET_ACCESS_KEY: pdf_accessibility_api
     steps:
       - checkout
       - setup_remote_docker:
