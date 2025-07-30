@@ -4,15 +4,31 @@
       <th>File Name</th>
       <th>Started At</th>
       <th>Status</th>
+      <th>Download (for testing, remove before merging)</th>
+      <th>Errors (for testing, remove before merging)</th>
     </tr>
   </thead>
   <tbody>
     <% @jobs.each do |job| %>
-      <tr>
+           
+ <tr data-controller="job" 
+        data-job-id="<%= job.id %>"
+        data-job-status="<%= job.status %>"
+        data-job-finished-at="<%= job.finished_at %>"
+        data-job-output-url="<%= job.output_url %>"
+        data-job-output-url-expired="<%= job.output_url_expired? %>"
+        data-job-processing-error-message="<%= job.processing_error_message %>"
+        id="<%= dom_id job %>"
+      >
         <td><%= link_to job.output_object_key, job_path(job) %></td>
-        <td><%= job.created_at.strftime("%b %e, %Y %l:%M %p") %></td>
-        <td><%= job.status %></td>
-      </tr>
+        <td><%= job.created_at.strftime("%b %e, %Y %l:%M %p") %>
+            <span data-target="job.finishedAt"></span>
+        </td>
+        <td><span data-target="job.status"></span></td>
+        <td><span data-job-target="downloadLink"></span>
+<span data-target="job.processingErrorMessage"></span></td>
+      </tr> 
+
     <% end %>
   </tbody>
 </table>

@@ -4,6 +4,7 @@ require 'sidekiq/web'
 require 'sidekiq_web_constraint'
 
 Rails.application.routes.draw do
+  mount ActionCable.server => '/cable'
   mount Sidekiq::Web => '/sidekiq', :constraints => SidekiqWebConstraint.new
   get '/sidekiq', to: ->(_env) {
     [

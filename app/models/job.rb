@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Job < ApplicationRecord
+  after_commit :broadcast_to_job_channel
+
   def self.statuses
     ['processing', 'completed', 'failed']
   end
@@ -19,4 +21,17 @@ class Job < ApplicationRecord
   def output_url_expired?
     output_url_expires_at.present? && output_url_expires_at < Time.zone.now
   end
+
+  private
+
+     def broadcast_to_job_channel
+      print('Broadcasting to JobChannel: TESTING BROADCAST METHOD') #remove
+      print("SELF: #{self.inspect}") #remove
+      JobChannel.broadcast_to(self, {
+        status: status,
+        output_url: output_url,
+        finished_at: finished_at,
+        processing_error_message: processing_error_message
+      })
+     end
 end
