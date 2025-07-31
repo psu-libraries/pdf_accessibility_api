@@ -1,9 +1,5 @@
 header {
-  padding: 3rem;
-}
-
-.header--nav-branding {
-  display: flex;
+  padding: 1.5rem 0 1.5rem 0;
 }
 
 html {
@@ -58,4 +54,8 @@ h1 {
 
 .requirements {
   margin-top: 2rem;
+}
+
+#jobs-table {
+  width: 75%;
 }
