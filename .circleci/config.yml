@@ -96,6 +96,7 @@ jobs:
             cd pdfapi-config
             ./bin/generate_application
 
+  # TODO: test this job
   release-image:
     executor:
       name: ci-utils
@@ -116,6 +117,8 @@ jobs:
             cd pdf_accessibility_api
             ./bin/pr-release clusters/prod/manifests/prod.yaml
 
+  # TODO: pass image via persist_to_workspace as in etda_workflow?
+  #       use docker run instead of docker-compose exec
   test-application:
     docker:
       - image: cimg/ruby:3.4.1
