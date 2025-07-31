@@ -78,4 +78,8 @@ RSpec.configure do |config|
   config.before(:each, type: :feature) do
     page.driver.header('X_AUTH_REQUEST_EMAIL', 'test1@psu.edu')
   end
+
+  config.after(:suite) do
+    FileUtils.rm_rf(Rails.root.join('tmp', 'storage'))
+  end
 end

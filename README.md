@@ -23,3 +23,4 @@ To build the image and run necessary containers:
  To run test within the container
  1. `docker-compose exec web bash`
  2. `RAILS_ENV=test bundle exec rspec`
+ 

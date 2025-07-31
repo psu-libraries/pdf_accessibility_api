@@ -1,21 +1,22 @@
-<h1>Job Details</h1>
+<main class='container-fluid'>
+  <h2>Job Details</h2>
+  <ul data-controller="job" 
+          data-job-id="<%= @job.id %>"
+          data-job-status="<%= @job.status %>"
+          data-job-finished-at="<%= @job.finished_at %>"
+          data-job-output-url="<%= @job.output_url %>"
+          data-job-output-url-expired="<%= @job.output_url_expired? %>"
+          data-job-processing-error-message="<%= @job.processing_error_message %>"
+          id="<%= dom_id @job %>"
+        >
+    <li><strong>File Name:</strong> <%= @job.output_object_key %></li>
+    <li><strong>Job ID:</strong> <%= @job.uuid %></li>
+    <li><strong>Started At:</strong> <%= @job.created_at.strftime("%b %e, %Y %l:%M %p") if @job.created_at %></li>
+    <li><strong>Finished At:</strong> <span data-target="job.finishedAt"></span></li>
+    <li><strong>Status:</strong> <span data-target="job.status"></span></li>
+    <li><strong>Download:</strong> <span data-target="job.downloadLink"></span></li>
+    <li><strong>Errors:</strong> <span data-target="job.processingErrorMessage"></span></li>
+  </ul>
 
-<ul  data-controller="job" 
-        data-job-id="<%= @job.id %>"
-        data-job-status="<%= @job.status %>"
-        data-job-finished-at="<%= @job.finished_at %>"
-        data-job-output-url="<%= @job.output_url %>"
-        data-job-output-url-expired="<%= @job.output_url_expired? %>"
-        data-job-processing-error-message="<%= @job.processing_error_message %>"
-        id="<%= dom_id @job %>"
-      >
-  <li><strong>File Name:</strong> <%= @job.output_object_key %></li>
-  <li><strong>Job ID:</strong> <%= @job.uuid %></li>
-  <li><strong>Started At:</strong> <%= @job.created_at.strftime("%b %e, %Y %l:%M %p") if @job.created_at %></li>
-  <li><strong>Finished At:</strong> <span data-target="job.finishedAt"></span></li>
-  <li><strong>Status:</strong> <span data-target="job.status"></span></li>
-  <li><strong>Download:</strong> <span data-target="job.downloadLink"></span></li>
-  <li><strong>Errors:</strong> <span data-target="job.processingErrorMessage"></span></li>
-</ul>
-
-<%= link_to '<< Jobs List', jobs_path %>
+  <%= link_to '<< Jobs List', jobs_path %>
+</main>

@@ -8,8 +8,7 @@ class Job < ApplicationRecord
   end
 
   validates :status, inclusion: { in: statuses }
-  validates :source_url, format: { with: URI::RFC2396_PARSER.make_regexp }
-
+  validates :source_url, format: { with: URI::RFC2396_PARSER.make_regexp }, if: -> { owner_type == 'APIUser' }
   belongs_to :owner, polymorphic: true
 
   delegate :webhook_endpoint, :webhook_key, to: :owner, prefix: false

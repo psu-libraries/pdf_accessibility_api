@@ -5,12 +5,15 @@ class RemediationJob < ApplicationJob
   PRESIGNED_URL_EXPIRES_IN = 84_000
 
   # The default 1-hour timeout is also arbitrary and should probably be adjusted.
-  def perform(job_uuid, output_polling_timeout = 3600)
+  def perform(job_uuid, output_polling_timeout: 3600, file_path: nil, original_filename: nil)
     job = Job.find_by!(uuid: job_uuid)
-    tempfile = Down.download(job.source_url)
-    object_key = "#{SecureRandom.hex(8)}_#{tempfile.original_filename}"
+    tempfile = Down.download(job.source_url) if job.source_url.present?
+    filename = tempfile&.original_filename || original_filename
+    path = tempfile&.path || file_path
+
+    object_key = "#{SecureRandom.hex(8)}_#{filename}"
     s3 = S3Handler.new(object_key)
-    s3.upload_to_input(tempfile.path)
+    s3.upload_to_input(path)
 
     timer = 0
 
@@ -41,6 +44,7 @@ class RemediationJob < ApplicationJob
     record_failure_and_notify(job, "Failed to upload file to remediation input location:  #{e.message}")
   ensure
     tempfile&.close!
+    File.delete(file_path) if File.exist?(file_path.to_s)
   end
 
   private

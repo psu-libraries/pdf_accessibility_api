@@ -1,34 +1,44 @@
-<table id='jobs-table'>
-  <thead>
-    <tr>
-      <th>File Name</th>
-      <th>Started At</th>
-      <th>Status</th>
-      <th>Download (for testing, remove before merging)</th>
-      <th>Errors (for testing, remove before merging)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @jobs.each do |job| %>
-           
- <tr data-controller="job" 
-        data-job-id="<%= job.id %>"
-        data-job-status="<%= job.status %>"
-        data-job-finished-at="<%= job.finished_at %>"
-        data-job-output-url="<%= job.output_url %>"
-        data-job-output-url-expired="<%= job.output_url_expired? %>"
-        data-job-processing-error-message="<%= job.processing_error_message %>"
-        id="<%= dom_id job %>"
-      >
-        <td><%= link_to job.output_object_key, job_path(job) %></td>
-        <td><%= job.created_at.strftime("%b %e, %Y %l:%M %p") %>
-            <span data-target="job.finishedAt"></span>
-        </td>
-        <td><span data-target="job.status"></span></td>
-        <td><span data-job-target="downloadLink"></span>
-<span data-target="job.processingErrorMessage"></span></td>
-      </tr> 
+<main class='container-fluid'>
+  <% flash.each do |_, msg| %>
+    <div class='alert'>
+      <%= msg %>
+    </div>
+  <% end %>
+  <table id='jobs-table'>
+    <thead>
+      <tr>
+        <th>File Name</th>
+        <th>Started At</th>
+        <th>Status</th>
+        <th>Download (for testing, remove before merging)</th>
+        <th>Errors (for testing, remove before merging)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @jobs.each do |job| %>
+            
+  <tr data-controller="job" 
+          data-job-id="<%= job.id %>"
+          data-job-status="<%= job.status %>"
+          data-job-finished-at="<%= job.finished_at %>"
+          data-job-output-url="<%= job.output_url %>"
+          data-job-output-url-expired="<%= job.output_url_expired? %>"
+          data-job-processing-error-message="<%= job.processing_error_message %>"
+          id="<%= dom_id job %>"
+        >
+          <td><%= link_to job.output_object_key, job_path(job) %></td>
+          <td><%= job.created_at.strftime("%b %e, %Y %l:%M %p") %>
+              <span data-target="job.finishedAt"></span>
+          </td>
+          <td><span data-target="job.status"></span></td>
+          <td><span data-job-target="downloadLink"></span>
+  <span data-target="job.processingErrorMessage"></span></td>
+        </tr> 
 
-    <% end %>
-  </tbody>
-</table>
+      <% end %>
+    </tbody>
+  </table>
+  <div class='mt-4'>
+    <%= link_to I18n.t('index.link_to_upload'), new_job_path %>
+  </div>
+</main>
