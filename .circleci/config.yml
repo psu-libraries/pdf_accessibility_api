@@ -96,8 +96,6 @@ jobs:
             cd pdfapi-config
             ./bin/generate_application
 
-  # TODO: write tag-image script
-  #       write pr-release script
   release-image:
     executor:
       name: ci-utils
