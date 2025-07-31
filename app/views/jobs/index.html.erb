@@ -1,20 +1,28 @@
 <main class='container-fluid'>
-<table id='jobs-table'>
-  <thead>
-    <tr>
-      <th>File Name</th>
-      <th>Started At</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @jobs.each do |job| %>
+  <% flash.each do |_, msg| %>
+    <div class='alert'>
+      <%= msg %>
+    </div>
+  <% end %>
+  <table id='jobs-table'>
+    <thead>
       <tr>
-        <td><%= link_to job.output_object_key, job_path(job) %></td>
-        <td><%= job.created_at.strftime("%b %e, %Y %l:%M %p") %></td>
-        <td><%= job.status %></td>
+        <th>File Name</th>
+        <th>Started At</th>
+        <th>Status</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @jobs.each do |job| %>
+        <tr>
+          <td><%= link_to job.output_object_key, job_path(job) %></td>
+          <td><%= job.created_at.strftime("%b %e, %Y %l:%M %p") %></td>
+          <td><%= job.status %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class='mt-4'>
+    <%= link_to I18n.t('index.link_to_upload'), new_job_path %>
+  </div>
 </main>

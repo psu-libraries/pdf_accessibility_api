@@ -6,6 +6,8 @@ en:
     no_file: No file uploaded yet
     error: File must be present
     success: File uploaded!
+  index:
+    link_to_upload: Upload a new PDF
   footer:
     heading: PDF Accessibility Remediation
     description: ''
