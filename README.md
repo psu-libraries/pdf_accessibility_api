@@ -5,7 +5,13 @@
 
 ## Purpose
 
-The PDF Accessibility API is a Rails application for interfacing with the [PDF_Accessibility](https://github.com/psu-libraries/PDF_Accessibility) application, which provides accessibility remediation for PDFs. At its core, the PDF Accessibility API is an interface to an S3 bucket with an input directory — where the API places files to be processed by the PDF_Accessibility application — and an output directory — where the PDF_Accessibility application places the processed files to be retrieved.  The PDF Accessibility API is just an intermediary to send and retrieve those files for clients.  It has two major components: the API and the GUI.
+The PDF Accessibility API is a Rails application for interfacing with the [PDF_Accessibility](https://github.com/psu-libraries/PDF_Accessibility) application, which provides accessibility remediation for PDFs.
+
+At its core, the PDF Accessibility API is an interface to an S3 bucket with:
+- an input directory, where the API places files to be processed by the PDF_Accessibility application
+- an output directory, where the PDF_Accessibility application places the processed files to be retrieved
+
+The PDF Accessibility API acts as an intermediary to send and retrieve those files for clients. It has two major components: the API and the GUI.
 
 ## API
 
