@@ -74,6 +74,7 @@ jobs:
           image: $REGISTRY_REPO
           registry: $REGISTRY_HOST
           tag: $TAG
+          extra_build_args: "--target production"
           use-buildkit: true
       - docker/push:
           image: $REGISTRY_REPO
