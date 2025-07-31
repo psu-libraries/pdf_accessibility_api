@@ -2,7 +2,6 @@
 
 require 'swagger_helper'
 
-# rubocop:disable RSpec/EmptyExampleGroup
 RSpec.describe 'API::V1::Jobs' do
   path '/api/v1/jobs' do
     post 'Creates a job' do
@@ -61,4 +60,3 @@ RSpec.describe 'API::V1::Jobs' do
     end
   end
 end
-# rubocop:enable RSpec/EmptyExampleGroup
