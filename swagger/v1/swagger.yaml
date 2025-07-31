@@ -1,0 +1,78 @@
+---
+openapi: 3.0.1
+info:
+  title: PDF Accessibility API
+  version: v1
+  description: "This API provides an endpoint for submitting a PDF for remediation
+    and \na webhook service for retrieving the remediated version of the PDF.\nAuthentication
+    is handled via API keys. Only authorized users may access endpoints.\n"
+  contact:
+    name: Penn State University Libraries
+    url: https://libraries.psu.edu
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      description: API key required in the X-API-KEY header
+security:
+- ApiKeyAuth: []
+paths:
+  "/api/v1/jobs":
+    post:
+      summary: Creates a job
+      tags:
+      - Jobs
+      security:
+      - ApiKeyAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: job created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    example: 123e4567-e89b-12d3-a456-426614174000
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not authorized
+                  code:
+                    type: integer
+                    example: 401
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation failed: Source url is invalid'
+                  code:
+                    type: integer
+                    example: 422
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source_url:
+                  type: string
+                  format: uri
+                  example: https://example.com/file.pdf
+              required:
+              - source_url
