@@ -23,6 +23,9 @@ RSpec/MultipleMemoizedHelpers:
 RSpec/NestedGroups:
   Enabled: false
 
+# Rubocop doesn't seem to understand the rswag DSL
+# Exclude the rswag spec file from RSpec/EmptyExampleGroup and
+# be careful because the unsafe autocorrect will delete everything
 RSpec/EmptyExampleGroup:
   Exclude:
     - 'spec/requests/api/v1/api-docs/jobs_spec.rb'
