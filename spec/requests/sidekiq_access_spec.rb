@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Sidekiq Access Constraint', type: :request do
+RSpec.describe 'Sidekiq Access Constraint' do
   it 'allows access for authorized user' do
     get '/sidekiq', headers: { 'HTTP_X_AUTH_REQUEST_EMAIL' => 'test1@psu.edu' }
 

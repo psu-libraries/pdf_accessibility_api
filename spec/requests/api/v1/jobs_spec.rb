@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'API V1 jobs', type: :request do
+describe 'API V1 jobs' do
   before { allow(RemediationJob).to receive(:perform_later) }
 
   let!(:api_user) { create(:api_user) }
@@ -36,7 +36,7 @@ describe 'API V1 jobs', type: :request do
           post '/api/v1/jobs', params: { source_url: valid_source_url }, headers: valid_headers
 
           expect(response).to be_ok
-          parsed_response = JSON.parse(response.body)
+          parsed_response = response.parsed_body
           expect(parsed_response['uuid']).to eq api_user.jobs.last.uuid
         end
       end
@@ -46,7 +46,7 @@ describe 'API V1 jobs', type: :request do
           post '/api/v1/jobs', params: { source_url: 'bad url' }, headers: valid_headers
 
           expect(response).to be_unprocessable
-          parsed_response = JSON.parse(response.body)
+          parsed_response = response.parsed_body
           expect(parsed_response['message']).to eq 'Validation failed: Source url is invalid'
           expect(parsed_response['code']).to eq 422
         end
@@ -58,7 +58,7 @@ describe 'API V1 jobs', type: :request do
         post '/api/v1/jobs', headers: { 'HTTP_X_API_KEY' => 'bad_api_key' }
 
         expect(response).to be_unauthorized
-        parsed_response = JSON.parse(response.body)
+        parsed_response = response.parsed_body
         expect(parsed_response['message']).to eq 'Not authorized'
         expect(parsed_response['code']).to eq 401
       end

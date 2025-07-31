@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'Jobs', type: :request do
+describe 'Jobs' do
   before { allow(RemediationJob).to receive(:perform_later) }
 
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
