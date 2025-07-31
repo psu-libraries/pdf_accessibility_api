@@ -38,6 +38,8 @@ paths:
                   uuid:
                     type: string
                     example: 123e4567-e89b-12d3-a456-426614174000
+                required:
+                - uuid
         '401':
           description: unauthorized
           content:
@@ -47,10 +49,13 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Not authorized
+                    example: Not Authorized
                   code:
                     type: integer
                     example: 401
+                required:
+                - message
+                - code
         '422':
           description: invalid request
           content:
@@ -60,10 +65,13 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'Validation failed: Source url is invalid'
+                    example: 'Validation failed: Source url can''t be blank'
                   code:
                     type: integer
                     example: 422
+                required:
+                - message
+                - code
       requestBody:
         content:
           application/json:

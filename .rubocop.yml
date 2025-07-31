@@ -22,3 +22,11 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/NestedGroups:
   Enabled: false
+
+RSpec/EmptyExampleGroup:
+  Exclude:
+    - 'spec/requests/api/v1/api-docs/jobs_spec.rb'
+
+RSpec/VariableName:
+  Exclude:
+    - 'spec/requests/api/v1/api-docs/jobs_spec.rb'
