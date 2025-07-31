@@ -37,7 +37,6 @@ gem 'down'
 gem 'faraday'
 
 # RSwag for API documentation
-gem 'rswag-api'
 gem 'rswag-ui'
 
 group :development, :test do
