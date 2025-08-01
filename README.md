@@ -1,15 +1,49 @@
-# README
+# PDF Accessibility API
 
 * Ruby version: 3.4.1
-* Rails 7.2
+* Rails version: 7.2
 
-## Purpose
-https://github.com/psu-libraries/pdf_accessibility_api/issues/1
-
-## External Dependencies:
+## External Dependencies
 - MariaDB
 - Redis
 - MinIO (for automated testing) or [PDF Processing AWS Infrastructure](https://github.com/psu-libraries/PDF_Accessibility)
+
+## Purpose
+
+The PDF Accessibility API is a Rails application for interfacing with the [PDF_Accessibility](https://github.com/psu-libraries/PDF_Accessibility) application, which provides accessibility remediation for PDFs.
+
+At its core, the PDF Accessibility API is an interface to an S3 bucket with:
+- an input directory, where the API places files to be processed by the PDF_Accessibility application
+- an output directory, where the PDF_Accessibility application places the processed files to be retrieved
+
+The PDF Accessibility API acts as an intermediary to send and retrieve those files for clients. It has two major components: the API and the GUI.
+
+## API
+
+Refer to the Swagger documentation for endpoint details and usage. (Add link to API docs here.)
+
+We use an `APIUser` model to store metadata for our API users and their associated clients/systems. A developer with console access must manually add `APIUser` records. Each `APIUser` requires:
+
+- An `api_key` for authentication and authorization.
+- The client's `webhook_endpoint`, where the PDF Accessibility API will send its final request when remediation is complete.
+- The client's `webhook_key` for authenticating with the client system when the final webhook request is sent.
+- An `email` and `name` to help identify the user.
+
+## GUI
+
+The GUI is still a work in progress, but its main components are:
+
+- `/jobs` — a list of your jobs.
+- `/jobs/new` — the page for uploading a file to remediate.
+- `/jobs/{id}` — detailed information about a job (linked from `/jobs`).
+- `/sidekiq` — Sidekiq interface.
+
+### Authentication and Authorization
+
+- The application uses a remote user header (default: `HTTP_X_AUTH_REQUEST_EMAIL`) to determine the current user, typically set by Azure.
+- The list of users authorized to access the application is controlled by the `AUTHORIZED_USERS` environment variable (comma-separated emails).
+- Access to the Sidekiq web UI is controlled by the `SIDEKIQ_USERS` environment variable.
+- You can customize the remote user header and user lists via environment variables or `config/warden.yml`.
 
 ## Development Setup
 
@@ -23,6 +57,14 @@ If you're going to run the web application and/or background worker outside of D
 
 If you're going to run the application and its dependencies with Docker Compose, then most of the configuration is already handled in the `docker-compose.yml` file. However, you'll still need to provide your configuration for the AWS integration. This is done by creating a `.env.dev` file in the project root directory using `.env.dev.sample` as a template and filling in the values for your IAM Access Key and the name of the S3 bucket used by the remediation tool.
 
+### Set Headers
+
+To authenticate locally you will need to mock the remote user header (e.g., `HTTP_X_AUTH_REQUEST_EMAIL`).  
+You can do this using a modify-header browser extension such as [ModHeader](https://modheader.com/) or [Requestly](https://requestly.io/):
+
+- Add a request header:  
+  `HTTP_X_AUTH_REQUEST_EMAIL: your-email@psu.edu`
+
 ### Docker
 
 #### Running the application and dependencies
@@ -31,7 +73,7 @@ To build the image and run necessary containers:
  1. `docker compose --env-file .env.dev up --build`
  2. If everything starts up correctly, the Rails app will be running at `http://localhost:3000`
 
- #### Running tests
- To run the tests within the container:
- 1. `docker compose exec web bash`
- 2. `RAILS_ENV=test bundle exec rspec`
+#### Running tests
+To run the tests within the container:
+1. `docker compose exec web bash`
+2. `RAILS_ENV=test bundle exec rspec`

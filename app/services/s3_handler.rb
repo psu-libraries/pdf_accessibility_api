@@ -44,16 +44,6 @@ class S3Handler
     raise Error.new(e)
   end
 
-  def delete_files
-    objs = [find_file(prefix: INPUT_PREFIX),
-            find_file(prefix: OUTPUT_PREFIX)].compact
-    return nil if objs.empty?
-
-    objs.each(&:delete)
-  rescue Aws::Errors::ServiceError => e
-    raise Error.new(e)
-  end
-
   private
 
     def find_file(prefix: INPUT_PREFIX)
