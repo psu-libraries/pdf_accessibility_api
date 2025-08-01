@@ -1,5 +1,7 @@
+@import 'variables';
+
 header {
-  padding: 1.5rem 0 1.5rem 0;
+  padding: 1.5rem;
 }
 
 html {
@@ -7,39 +9,31 @@ html {
 }
 
 body {
-  min-height: 100%;
   display: flex;
   flex-direction: column;
+  min-height: 100%;
 }
 
 main {
   flex: 1;
-  padding-top: 4rem;
   padding-bottom: 10rem;
+  padding-top: 4rem;
 }
 
 h1 {
-  font-size: 1.4rem;
-  color: white;
   font-family: 'Open Sans', Helvetica, sans-serif;
-}
-
-.uploaded-files {
-  margin-top: 5rem;
-  padding: 1.5rem;
-  border: 0.5px lightgrey solid;
-  border-radius: 5px;
+  font-size: 1.4rem;
 }
 
 .visually-hidden {
-  position: absolute;
-  width: 1px;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
   height: 1px;
-  padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 
 .btn {
@@ -47,15 +41,15 @@ h1 {
 }
 
 .alert {
-  padding: 1.5em 0 1.5em 0;
-  color: darkred;
+  color: $error;
   font-weight: 700;
+  padding: 1.5em 0;
 }
 
 .requirements {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
-#jobs-table {
+.jobs-table {
   width: 75%;
 }
