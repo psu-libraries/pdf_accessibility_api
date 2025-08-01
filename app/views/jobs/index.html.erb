@@ -10,8 +10,8 @@
         <th>File Name</th>
         <th>Started At</th>
         <th>Status</th>
-        <th>Download (for testing, remove before merging)</th>
-        <th>Errors (for testing, remove before merging)</th>
+        <th class='d-none'>Download (for testing, remove before merging)</th>
+        <th class='d-none'>Errors (for testing, remove before merging)</th>
       </tr>
     </thead>
     <tbody>
@@ -30,8 +30,8 @@
               <span data-target="job.finishedAt"></span>
           </td>
           <td><span data-target="job.status"></span></td>
-          <td><span data-job-target="downloadLink"></span>
-  <span data-target="job.processingErrorMessage"></span></td>
+          <td><span data-job-target="downloadLink" class='d-none'></span>
+  <span data-target="job.processingErrorMessage" class='d-none'></span></td>
         </tr>
 
       <% end %>
