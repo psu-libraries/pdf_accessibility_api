@@ -27,11 +27,11 @@
           id="<%= dom_id job %>">
           <td><%= link_to job.output_object_key, job_path(job) %></td>
           <td><%= job.created_at.strftime("%b %e, %Y %l:%M %p") %>
-              <span data-target="job.finishedAt"></span>
+              <span data-job-target="finishedAt"></span>
           </td>
-          <td><span data-target="job.status"></span></td>
+          <td><span data-job-target="status"></span></td>
           <td><span data-job-target="downloadLink" class='d-none'></span>
-  <span data-target="job.processingErrorMessage" class='d-none'></span></td>
+          <span data-job-target="processingErrorMessage"></span></td>
         </tr>
 
       <% end %>
