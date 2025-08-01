@@ -55,8 +55,6 @@ If you're going to run the web application and/or background worker outside of D
 2. Fill in the template with the appropriate values for any integrated services that you'll be running locally, and your values for the AWS integration.
 3. Run `direnv allow` to export the values (If you do not have direnv, it can be installed with Homebrew on Mac).
 
-If you're going to run the application and its dependencies with Docker Compose, then most of the configuration is already handled in the `docker-compose.yml` file. However, you'll still need to provide your configuration for the AWS integration. This is done by creating a `.env.dev` file in the project root directory using `.env.dev.sample` as a template and filling in the values for your IAM Access Key and the name of the S3 bucket used by the remediation tool.
-
 ### Set Headers
 
 To authenticate locally you will need to mock the remote user header (e.g., `HTTP_X_AUTH_REQUEST_EMAIL`).  
@@ -70,7 +68,7 @@ You can do this using a modify-header browser extension such as [ModHeader](http
 #### Running the application and dependencies
 To build the image and run necessary containers:
 
- 1. `docker compose --env-file .env.dev up --build`
+ 1. `docker compose up --build`
  2. If everything starts up correctly, the Rails app will be running at `http://localhost:3000`
 
 #### Running tests
