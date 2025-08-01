@@ -17,7 +17,7 @@ describe 'API V1 jobs', type: :request do
             post(
               '/api/v1/jobs',
               params: { source_url: valid_source_url },
-              headers: { 'HTTP_X_API_KEY' => api_user.api_key }
+              headers: valid_headers
             )
           }.to(change { api_user.jobs.count }.by(1))
 

@@ -29,7 +29,13 @@ RUN bundle install && \
 
 COPY --chown=app . /app
 
-CMD ["bin/startup"]
+FROM base AS dev-worker
+
+CMD ["bundle", "exec", "sidekiq"]
+
+FROM base AS dev-mock-remediation-tool
+
+CMD ["bin/mock_remediation_tool"]
 
 FROM base AS dev
 
@@ -40,6 +46,8 @@ RUN apt-get update && apt-get install -y rsync \
 
 USER app
 RUN bundle config set path 'vendor/bundle'
+
+CMD ["bin/startup"]
 
 # Final Target
 FROM base AS production

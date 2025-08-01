@@ -3,6 +3,11 @@
 * Ruby version: 3.4.1
 * Rails version: 7.2
 
+## External Dependencies
+- MariaDB
+- Redis
+- MinIO (for automated testing) or [PDF Processing AWS Infrastructure](https://github.com/psu-libraries/PDF_Accessibility)
+
 ## Purpose
 
 The PDF Accessibility API is a Rails application for interfacing with the [PDF_Accessibility](https://github.com/psu-libraries/PDF_Accessibility) application, which provides accessibility remediation for PDFs.
@@ -40,15 +45,15 @@ The GUI is still a work in progress, but its main components are:
 - Access to the Sidekiq web UI is controlled by the `SIDEKIQ_USERS` environment variable.
 - You can customize the remote user header and user lists via environment variables or `config/warden.yml`.
 
-## Setup
+## Development Setup
 
-### Environment Variables
+### Configuration via environment variables
+The Rails application needs to be configured with settings and secrets for the various other services on which it depends. This is all handled by setting the appropriate variables in the environment. In your development environment, you'll be running most of those dependencies locally, so you'll either configure the Rails app to work with your local setup, or you'll run everything with the pre-configured Docker Compose setup. However, we aren't able to run the tool that does the actual PDF remediation work locally. For the test environment, we'll be simulating the remediation tool using a local instance of MinIO, but if you want to be able to run the real remediation workflow end-to-end in your development environment, then you'll need to obtain the settings and secrets needed for remotely integrating with the real tool (which is hosted in AWS). These settings consist of individual IAM Access Key credentials and the name of the S3 bucket where the files going through the remediation workflow are stored.
 
-1. Create an `.envrc` file in the project's root directory and add environment variables.
-2. Use the `.envrc.sample` file as a template for which variables to include.
-3. Get the values from Vault.
-4. Run `direnv allow` to export the values.  
-   (If you do not have direnv, use Homebrew to install it: `brew install direnv`.)
+You'll need to set multiple configuration variables in your environment before running your local setup or Docker Compose setup.  An easy way to manage this is:
+1. Create an `.envrc` file in the project's root directory using the `.envrc.sample` file that is checked in with the source code as a template.
+2. Fill in the template with the appropriate values for any integrated services that you'll be running locally, and your values for the AWS integration.
+3. Run `direnv allow` to export the values (If you do not have direnv, it can be installed with Homebrew on Mac).
 
 ### Set Headers
 
@@ -60,14 +65,13 @@ You can do this using a modify-header browser extension such as [ModHeader](http
 
 ### Docker
 
-To build the image and run the necessary containers:
+#### Running the application and dependencies
+To build the image and run necessary containers:
 
-1. `docker-compose up --build`
-2. Visit [http://localhost:3000](http://localhost:3000) in your browser.
-  
-### Running Tests
+ 1. `docker compose up --build`
+ 2. If everything starts up correctly, the Rails app will be running at `http://localhost:3000`
 
-To run tests within the container:
-
-1. `docker-compose exec web bash`
+#### Running tests
+To run the tests within the container:
+1. `docker compose exec web bash`
 2. `RAILS_ENV=test bundle exec rspec`
