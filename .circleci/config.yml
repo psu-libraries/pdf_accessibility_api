@@ -247,9 +247,4 @@ workflows:
       - test-application:
           context:
             - org-global
-          filters:
-            branches:
-              only:
-                - main
-                - /preview\/.*/
           name: test-application
