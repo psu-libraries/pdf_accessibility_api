@@ -54,6 +54,10 @@ default: &default
   # Here, you can set different asset_host per environment. Note that
   # SHAKAPACKER_ASSET_HOST will override both configurations.
   # asset_host: custom-path
+  extensions:
+    - .js
+    - .css
+    - .scss
 
 development:
   <<: *default
