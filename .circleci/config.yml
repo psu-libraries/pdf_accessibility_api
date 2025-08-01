@@ -125,7 +125,7 @@ jobs:
           RAILS_ENV: test
           MYSQL_PASSWORD: pdf_accessibility_api
           REGISTRY_HOST: harbor.k8s.libraries.psu.edu
-          REGISTRY_REPO: library/psulib_blacklight
+          REGISTRY_REPO: library/pdf_accessibility_api
           GITHUB_USER: 'psu-stewardship-bot'
           CONFIG_REPO: git@github.com:psu-libraries/pdf_accessibility_api.git
     steps:
