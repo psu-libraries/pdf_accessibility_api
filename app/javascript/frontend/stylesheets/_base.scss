@@ -1,0 +1,55 @@
+@import 'variables';
+
+header {
+  padding: 1.5rem;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+main {
+  flex: 1;
+  padding-bottom: 10rem;
+  padding-top: 4rem;
+}
+
+h1 {
+  font-family: 'Open Sans', Helvetica, sans-serif;
+  font-size: 1.4rem;
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.btn {
+  margin-top: 1rem;
+}
+
+.alert {
+  color: $error;
+  font-weight: 700;
+  padding: 1.5em 0;
+}
+
+.requirements {
+  margin-top: 1rem;
+}
+
+.jobs-table {
+  width: 75%;
+}
