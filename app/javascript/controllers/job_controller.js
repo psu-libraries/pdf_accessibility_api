@@ -11,11 +11,9 @@ import consumer from '../channels/consumer'
        { channel: 'JobChannel', id: id },
        {
          connected: () => {
-            console.log('Connected to JobChannel with ID:', id) //remove
            this.renderResult()
          },
          received: (data) => {
-              console.log('Received data:', data)
            this.updateResult(data)
          }
        }
@@ -23,21 +21,32 @@ import consumer from '../channels/consumer'
    }
 
    updateResult (data) {
-    console.log('Updating result with data:', data) //remove
-     this.data.set('status', data.status)
-     this.data.set('finishedAt', data.finished_at)
-     this.data.set('outputUrl', data.output_url)
-     this.data.set('outputUrlExpired', data.output_url_expired)
-     this.data.set('processingErrorMessage', data.processing_error_message)
+     this.data.set('status', data.status || '')
+     this.data.set('finishedAt', data.finished_at || '')
+     this.data.set('outputUrl', data.output_url || '')
+     this.data.set('outputUrlExpired', data.output_url_expired || 'false')
+     this.data.set('processingErrorMessage', data.processing_error_message || '')
      this.renderResult()
    }
 
    renderResult () {
-    console.log('Rendering result with data:', this.data.get('status'), this.data.get('finishedAt')) //remove
      this.statusTarget.textContent = this.data.get('status')
-     this.finishedAtTarget.textContent = this.data.get('finishedAt') || ''
+     this.renderFinishedAt()
      this.renderOutputUrl()
      this.renderErrorMessage()
+   }
+
+   renderFinishedAt () {
+     const finishedAt = this.data.get('finishedAt')
+
+     this.finishedAtTarget.textContent = finishedAt.toLocaleString('en-US', {
+       month: 'short',
+       day: 'numeric',
+       year: 'numeric',
+       hour: 'numeric',
+       minute: '2-digit',
+       hour12: true
+     }) || ''
    }
 
    renderOutputUrl () {

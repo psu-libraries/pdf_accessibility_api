@@ -24,11 +24,10 @@ class Job < ApplicationRecord
   private
 
     def broadcast_to_job_channel
-      print('Broadcasting to JobChannel: TESTING BROADCAST METHOD') # remove
-      print("SELF: #{inspect}") # remove
       JobChannel.broadcast_to(self, {
                                 status: status,
                                 output_url: output_url,
+                                output_url_expired: output_url_expired?,
                                 finished_at: finished_at,
                                 processing_error_message: processing_error_message
                               })
