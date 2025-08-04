@@ -112,7 +112,7 @@ RSpec.describe 'API::V1::Jobs' do
   end
 
   # Invisible character added to trick RSwag into treating this as a new path.
-  path "https://example.com/your/webhook​" do
+  path 'https://example.com/your/webhook​' do
     post 'Job failed webhook notification' do
       tags 'Webhook'
       consumes 'application/json'
