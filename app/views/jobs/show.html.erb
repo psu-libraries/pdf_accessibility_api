@@ -1,29 +1,31 @@
-<h1>Job Details</h1>
+<main class='container-fluid'>
+  <h2>Job Details</h2>
 
-<ul>
-  <li><strong>File Name:</strong> <%= @job.output_object_key %></li>
-  <li><strong>Job ID:</strong> <%= @job.uuid %></li>
-  <li><strong>Started At:</strong> <%= @job.created_at.strftime("%b %e, %Y %l:%M %p") if @job.created_at %></li>
-  <li><strong>Finished At:</strong> <%= @job.finished_at.strftime("%b %e, %Y %l:%M %p") if @job.finished_at %></li>
-  <li><strong>Status:</strong> <%= @job.status.humanize %></li>
+  <ul>
+    <li><strong>File Name:</strong> <%= @job.output_object_key %></li>
+    <li><strong>Job ID:</strong> <%= @job.uuid %></li>
+    <li><strong>Started At:</strong> <%= @job.created_at.strftime("%b %e, %Y %l:%M %p") if @job.created_at %></li>
+    <li><strong>Finished At:</strong> <%= @job.finished_at.strftime("%b %e, %Y %l:%M %p") if @job.finished_at %></li>
+    <li><strong>Status:</strong> <%= @job.status.humanize %></li>
 
-  <% if @job.output_url.present? %>
-    <% if @job.output_url_expired? %>
-      <li><strong>Download:</strong> Expired</li>
+    <% if @job.output_url.present? %>
+      <% if @job.output_url_expired? %>
+        <li><strong>Download:</strong> Expired</li>
+      <% else %>
+        <li><strong>Download:</strong> <a href="<%= @job.output_url %>">Click to download</a></li>
+      <% end %>
     <% else %>
-      <li><strong>Download:</strong> <a href="<%= @job.output_url %>">Click to download</a></li>
+      <li><strong>Download:</strong> Not available</li>
     <% end %>
-  <% else %>
-    <li><strong>Download:</strong> Not available</li>
-  <% end %>
 
-  <li><strong>Errors:</strong><br>
-    <% if @job.processing_error_message.present? %>
-      <pre><%= @job.processing_error_message %></pre>
-    <% else %>
-      None
-    <% end %>
-  </li>
-</ul>
+    <li><strong>Errors:</strong><br>
+      <% if @job.processing_error_message.present? %>
+        <pre><%= @job.processing_error_message %></pre>
+      <% else %>
+        None
+      <% end %>
+    </li>
+  </ul>
 
-<%= link_to '<< Jobs List', jobs_path %>
+  <%= link_to '<< Jobs List', jobs_path %>
+</main>

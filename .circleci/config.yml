@@ -74,6 +74,7 @@ jobs:
           image: $REGISTRY_REPO
           registry: $REGISTRY_HOST
           tag: $TAG
+          extra_build_args: "--target production"
           use-buildkit: true
       - docker/push:
           image: $REGISTRY_REPO
@@ -96,8 +97,6 @@ jobs:
             cd pdfapi-config
             ./bin/generate_application
 
-  # TODO: write tag-image script
-  #       write pr-release script
   release-image:
     executor:
       name: ci-utils
@@ -126,63 +125,7 @@ jobs:
           RAILS_ENV: test
           MYSQL_PASSWORD: pdf_accessibility_api
           REGISTRY_HOST: harbor.k8s.libraries.psu.edu
-          REGISTRY_REPO: library/psulib_blacklight
-          GITHUB_USER: 'psu-stewardship-bot'
-          CONFIG_REPO: git@github.com:psu-libraries/pdf_accessibility_api.git
-    steps:
-      - checkout
-      - setup_remote_docker:
-          version: docker24
-          docker_layer_caching: true
-      - run:
-          name: Install dependencies
-          command: |
-            gem install bundler -v "$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)"
-            bundle _$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)_ install
-      - run:
-          name: Build and run containers
-          command: docker-compose up -d --build
-      - run:
-          name: Wait for mysql to be ready
-          command: docker-compose exec web bash ./wait_for_db.sh
-      - run:
-          name: "Lint"
-          command: docker-compose exec -T web bundle exec niftany
-      - run:
-          name: "Run tests"
-          command: RAILS_ENV=test docker-compose exec -it web bundle exec rspec
-
-  publish:
-    executor:
-      name: docker/docker
-      tag: "3.8"
-    steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - checkout
-      - docker/check:
-          registry: harbor.k8s.libraries.psu.edu
-      - docker/build:
-          image: library/pdf_accessibility_api
-          registry: harbor.k8s.libraries.psu.edu
-          use-buildkit: true
-          extra_build_args: "--target production"
-      - docker/push:
-          digest-path: /tmp/digest.txt
-          image: library/pdf_accessibility_api
-          registry: harbor.k8s.libraries.psu.edu
-      - run:
-          command: |
-            echo "Digest is: $(</tmp/digest.txt)"
-
-  test:
-    docker:
-      - image: cimg/ruby:3.4.1
-        environment:
-          RAILS_ENV: test
-          MYSQL_PASSWORD: pdf_accessibility_api
-          REGISTRY_HOST: harbor.k8s.libraries.psu.edu
-          REGISTRY_REPO: library/psulib_blacklight
+          REGISTRY_REPO: library/pdf_accessibility_api
           GITHUB_USER: 'psu-stewardship-bot'
           CONFIG_REPO: git@github.com:psu-libraries/pdf_accessibility_api.git
     steps:
@@ -248,9 +191,4 @@ workflows:
       - test-application:
           context:
             - org-global
-          filters:
-            branches:
-              only:
-                - main
-                - /preview\/.*/
           name: test-application
