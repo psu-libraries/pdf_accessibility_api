@@ -151,29 +151,6 @@ jobs:
           name: "Run tests"
           command: RAILS_ENV=test docker-compose exec -it web bundle exec rspec
 
-  publish:
-    executor:
-      name: docker/docker
-      tag: "3.8"
-    steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - checkout
-      - docker/check:
-          registry: harbor.k8s.libraries.psu.edu
-      - docker/build:
-          image: library/pdf_accessibility_api
-          registry: harbor.k8s.libraries.psu.edu
-          use-buildkit: true
-          extra_build_args: "--target production"
-      - docker/push:
-          digest-path: /tmp/digest.txt
-          image: library/pdf_accessibility_api
-          registry: harbor.k8s.libraries.psu.edu
-      - run:
-          command: |
-            echo "Digest is: $(</tmp/digest.txt)"
-
 workflows:
 
   docker_push:
