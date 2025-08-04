@@ -37,8 +37,8 @@ gem 'down'
 gem 'faraday'
 
 # RSwag for API documentation
-gem 'rswag-ui'
 gem 'rswag-api'
+gem 'rswag-ui'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
