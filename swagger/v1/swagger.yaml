@@ -16,8 +16,6 @@ components:
       name: X-API-KEY
       in: header
       description: API key required in the X-API-KEY header
-security:
-- ApiKeyAuth: []
 paths:
   "/api/v1/jobs":
     post:
@@ -26,7 +24,13 @@ paths:
       - Jobs
       security:
       - ApiKeyAuth: []
-      parameters: []
+      parameters:
+      - name: X-API-KEY
+        in: header
+        description: API key for authentication
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: job created
@@ -84,3 +88,80 @@ paths:
                   example: https://example.com/file.pdf
               required:
               - source_url
+  https://example.com/your/webhook:
+    post:
+      summary: Job succeeded webhook notification
+      tags:
+      - Webhook
+      description: Webhook notification sent to your webhook endpoint when a job is
+        successfully processed
+      parameters:
+      - name: X-API-KEY
+        in: header
+        description: Webhook key for authentication
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: "------"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_type:
+                  type: string
+                  example: job.succeeded
+                job:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+                      example: 123e4567-e89b-12d3-a456-426614174000
+                    status:
+                      type: string
+                      example: completed
+                    output_url:
+                      type: string
+                      format: uri
+                      example: https://example.com/output.pdf
+  https://example.com/your/webhook​:
+    post:
+      summary: Job failed webhook notification
+      tags:
+      - Webhook
+      description: Webhook notification sent to your webhook endpoint when a job is
+        failed
+      parameters:
+      - name: X-API-KEY
+        in: header
+        description: Webhook key for authentication
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: "------"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_type:
+                  type: string
+                  example: job.failed
+                job:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+                      example: 123e4567-e89b-12d3-a456-426614174000
+                    status:
+                      type: string
+                      example: failed
+                    processing_error_message:
+                      type: string
+                      example: An error occurred during processing

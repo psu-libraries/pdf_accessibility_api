@@ -14,4 +14,7 @@ Rswag::Ui.configure do |c|
   # Add Basic Auth in case your API is private
   # c.basic_auth_enabled = true
   # c.basic_auth_credentials 'username', 'password'
+
+  # Disable "Try it out" feature
+  c.config_object['supportedSubmitMethods'] = []
 end
