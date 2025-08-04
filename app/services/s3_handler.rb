@@ -10,13 +10,20 @@ class S3Handler
 
   def initialize(object_key)
     @object_key = object_key
-    @s3 = Aws::S3::Resource.new(
-      region: ENV.fetch('AWS_REGION'),
+    client_options = {
       credentials: Aws::Credentials.new(
         ENV.fetch('AWS_ACCESS_KEY_ID'),
         ENV.fetch('AWS_SECRET_ACCESS_KEY')
       )
-    )
+    }
+    if ENV['S3_ENDPOINT'].present?
+      client_options[:endpoint] = ENV['S3_ENDPOINT']
+    else
+      client_options[:region] = ENV.fetch('AWS_REGION')
+    end
+
+    s3_client = Aws::S3::Client.new(client_options)
+    @s3 = Aws::S3::Resource.new(client: s3_client)
     @bucket = @s3.bucket(ENV.fetch('S3_BUCKET_NAME'))
   end
 
