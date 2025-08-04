@@ -4,8 +4,8 @@ info:
   title: PDF Accessibility API
   version: v1
   description: "This API provides an endpoint for submitting a PDF for remediation
-    and \na webhook service for retrieving the remediated version of the PDF.\nAuthentication
-    is handled via API keys. Only authorized users may access endpoints.\n"
+    and \na webhook service for retrieving the remediated version of the PDF.\n\nAuthentication
+    is handled via API keys.\n"
   contact:
     name: Penn State University Libraries
     url: https://libraries.psu.edu

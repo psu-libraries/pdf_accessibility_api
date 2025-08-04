@@ -23,7 +23,8 @@ RSpec.configure do |config|
         description: <<~DESC,
           This API provides an endpoint for submitting a PDF for remediation and#{' '}
           a webhook service for retrieving the remediated version of the PDF.
-          Authentication is handled via API keys. Only authorized users may access endpoints.
+
+          Authentication is handled via API keys.
         DESC
         contact: {
           name: 'Penn State University Libraries',
