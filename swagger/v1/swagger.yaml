@@ -93,8 +93,12 @@ paths:
       summary: Job succeeded webhook notification
       tags:
       - Webhook
-      description: Webhook notification sent to your webhook endpoint when a job is
-        successfully processed
+      description: |
+        This is the webhook notification sent to your webhook endpoint when a job succeeds and finishes processing.
+
+        Your webhook key will be provided in the headers (X-API-KEY) for you to authenticate the request.
+
+        The body of the request is described below.
       parameters:
       - name: X-API-KEY
         in: header
@@ -103,7 +107,7 @@ paths:
         schema:
           type: string
       responses:
-        '200':
+        "---":
           description: "------"
       requestBody:
         content:
@@ -132,8 +136,12 @@ paths:
       summary: Job failed webhook notification
       tags:
       - Webhook
-      description: Webhook notification sent to your webhook endpoint when a job is
-        failed
+      description: |
+        This is the webhook notification sent to your webhook endpoint when a job fails to process.
+
+        Your webhook key will be provided in the headers (X-API-KEY) for you to authenticate the request.
+
+        The body of the request is described below.
       parameters:
       - name: X-API-KEY
         in: header
@@ -142,7 +150,7 @@ paths:
         schema:
           type: string
       responses:
-        '200':
+        "---":
           description: "------"
       requestBody:
         content:

@@ -66,11 +66,20 @@ RSpec.describe 'API::V1::Jobs' do
     end
   end
 
+  # Below describes the webhook notifications.  There are two definitions: one for job success and one for job failure.
+  # This is not standard RSwag usage, and likely not OAS 3.0+ compliant, but it works for now.
+  # TODO: Find some other way to document webhooks that uses OAS 3.0+ compliant callback definitions.
   path 'https://example.com/your/webhook' do
     post 'Job succeeded webhook notification' do
       tags 'Webhook'
       consumes 'application/json'
-      description 'Webhook notification sent to your webhook endpoint when a job is successfully processed'
+      description <<~DESC
+        This is the webhook notification sent to your webhook endpoint when a job succeeds and finishes processing.
+
+        Your webhook key will be provided in the headers (X-API-KEY) for you to authenticate the request.
+
+        The body of the request is described below.
+      DESC
 
       parameter name: :'X-API-KEY',
                 in: :header,
@@ -93,7 +102,7 @@ RSpec.describe 'API::V1::Jobs' do
         }
       }
 
-      response '200', '------' do
+      response '---', '------' do
         # skip actual test run — just for docs
         run_test! do |_|
           skip 'This is a doc-only example of an outbound webhook'
@@ -102,11 +111,18 @@ RSpec.describe 'API::V1::Jobs' do
     end
   end
 
-  path "https://example.com/your/webhook\u200B" do
+  # Invisible character added to trick RSwag into treating this as a new path.
+  path "https://example.com/your/webhook​" do
     post 'Job failed webhook notification' do
       tags 'Webhook'
       consumes 'application/json'
-      description 'Webhook notification sent to your webhook endpoint when a job is failed'
+      description <<~DESC
+        This is the webhook notification sent to your webhook endpoint when a job fails to process.
+
+        Your webhook key will be provided in the headers (X-API-KEY) for you to authenticate the request.
+
+        The body of the request is described below.
+      DESC
 
       parameter name: :'X-API-KEY',
                 in: :header,
@@ -129,7 +145,7 @@ RSpec.describe 'API::V1::Jobs' do
         }
       }
 
-      response '200', '------' do
+      response '---', '------' do
         # skip actual test run — just for docs
         run_test! do |_|
           skip 'This is a doc-only example of an outbound webhook'
