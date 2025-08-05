@@ -140,7 +140,7 @@ jobs:
             bundle _$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)_ install
       - run:
           name: Build and run containers
-          command: docker-compose -f docker-compose.ci.yml up -d --build
+          command: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d --build
       - run:
           name: Wait for mysql to be ready
           command: docker-compose exec web bash ./wait_for_db.sh
