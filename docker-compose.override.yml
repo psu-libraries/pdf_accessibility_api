@@ -1,0 +1,6 @@
+services:
+  web:
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
