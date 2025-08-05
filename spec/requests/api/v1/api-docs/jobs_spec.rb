@@ -3,6 +3,12 @@
 require 'swagger_helper'
 
 RSpec.describe 'API::V1::Jobs' do
+  before do
+    create(:api_user, api_key: valid_api_key)
+  end
+
+  let(:valid_api_key) { 'valid_api_key' }
+
   path '/api/v1/jobs' do
     post 'Creates a job' do
       tags 'Jobs'
@@ -25,7 +31,7 @@ RSpec.describe 'API::V1::Jobs' do
       }
 
       response '200', 'job created' do
-        let(:X_API_KEY) { 'valid_api_key' }
+        let(:'X-API-KEY') { valid_api_key }
         let(:job) { { source_url: 'https://example.com/file.pdf' } }
 
         schema type: :object,
@@ -37,7 +43,7 @@ RSpec.describe 'API::V1::Jobs' do
       end
 
       response '401', 'unauthorized' do
-        let(:X_API_KEY) { nil }
+        let(:'X-API-KEY') { nil }
         let(:job) { { source_url: 'https://example.com/file.pdf' } }
 
         schema type: :object,
@@ -51,8 +57,8 @@ RSpec.describe 'API::V1::Jobs' do
       end
 
       response '422', 'invalid request' do
-        let(:X_API_KEY) { 'valid_api_key' }
-        let(:job) { { source_url: '' } }
+        let(:'X-API-KEY') { valid_api_key }
+        let(:job) { { source_url: 'example_invalid' } }
 
         schema type: :object,
                properties: {
@@ -62,94 +68,6 @@ RSpec.describe 'API::V1::Jobs' do
                required: ['message', 'code']
 
         run_test!
-      end
-    end
-  end
-
-  # Below describes the webhook notifications.  There are two definitions: one for job success and one for job failure.
-  # This is not standard RSwag usage, and likely not OAS 3.0+ compliant, but it works for now.
-  # TODO: Find some other way to document webhooks that uses OAS 3.0+ compliant callback definitions.
-  path 'https://example.com/your/webhook' do
-    post 'Job succeeded webhook notification' do
-      tags 'Webhook'
-      consumes 'application/json'
-      description <<~DESC
-        This is the webhook notification sent to your webhook endpoint when a job succeeds and finishes processing.
-
-        Your webhook key will be provided in the headers (X-API-KEY) for you to authenticate the request.
-
-        The body of the request is described below.
-      DESC
-
-      parameter name: :'X-API-KEY',
-                in: :header,
-                type: :string,
-                description: 'Webhook key for authentication',
-                required: true
-
-      parameter name: :webhook, in: :body, schema: {
-        type: :object,
-        properties: {
-          event_type: { type: :string, example: 'job.succeeded' },
-          job: {
-            type: :object,
-            properties: {
-              uuid: { type: :string, example: '123e4567-e89b-12d3-a456-426614174000' },
-              status: { type: :string, example: 'completed' },
-              output_url: { type: :string, format: :uri, example: 'https://example.com/output.pdf' }
-            }
-          }
-        }
-      }
-
-      response '---', '------' do
-        # skip actual test run — just for docs
-        run_test! do |_|
-          skip 'This is a doc-only example of an outbound webhook'
-        end
-      end
-    end
-  end
-
-  # Invisible character added to trick RSwag into treating this as a new path.
-  path 'https://example.com/your/webhook​' do
-    post 'Job failed webhook notification' do
-      tags 'Webhook'
-      consumes 'application/json'
-      description <<~DESC
-        This is the webhook notification sent to your webhook endpoint when a job fails to process.
-
-        Your webhook key will be provided in the headers (X-API-KEY) for you to authenticate the request.
-
-        The body of the request is described below.
-      DESC
-
-      parameter name: :'X-API-KEY',
-                in: :header,
-                type: :string,
-                description: 'Webhook key for authentication',
-                required: true
-
-      parameter name: :webhook, in: :body, schema: {
-        type: :object,
-        properties: {
-          event_type: { type: :string, example: 'job.failed' },
-          job: {
-            type: :object,
-            properties: {
-              uuid: { type: :string, example: '123e4567-e89b-12d3-a456-426614174000' },
-              status: { type: :string, example: 'failed' },
-              processing_error_message: { type: :string, example: 'An error occurred during processing' }
-            }
-          }
-        }
-      }
-
-      response '---', '------' do
-        # skip actual test run — just for docs
-        run_test! do |_|
-          skip 'This is a doc-only example of an outbound webhook'
-        end
       end
     end
   end

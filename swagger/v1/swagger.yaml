@@ -88,11 +88,11 @@ paths:
                   example: https://example.com/file.pdf
               required:
               - source_url
-  https://example.com/your/webhook:
+  https://example.com/your/endpoint (when job succeeds):
     post:
       summary: Job succeeded webhook notification
       tags:
-      - Webhook
+      - Webhook Callback
       description: |
         This is the webhook notification sent to your webhook endpoint when a job succeeds and finishes processing.
 
@@ -131,11 +131,11 @@ paths:
                       type: string
                       format: uri
                       example: https://example.com/output.pdf
-  https://example.com/your/webhook​:
+  https://example.com/your/endpoint (when job fails):
     post:
       summary: Job failed webhook notification
       tags:
-      - Webhook
+      - Webhook Callback
       description: |
         This is the webhook notification sent to your webhook endpoint when a job fails to process.
 
