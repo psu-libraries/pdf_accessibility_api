@@ -8,7 +8,7 @@ RSpec.describe 'API::V1::WebhookCallbacks' do
   # TODO: Find some other way to document webhooks that uses OAS 3.0+ compliant callback definitions.
   path 'https://example.com/your/endpoint (when job succeeds)' do
     post 'Job succeeded webhook notification' do
-      tags 'Webhook Callback'
+      tags 'Webhook Callbacks'
       consumes 'application/json'
       description <<~DESC
         This is the webhook notification sent to your webhook endpoint when a job succeeds and finishes processing.
@@ -47,7 +47,7 @@ RSpec.describe 'API::V1::WebhookCallbacks' do
 
   path 'https://example.com/your/endpoint (when job fails)' do
     post 'Job failed webhook notification' do
-      tags 'Webhook Callback'
+      tags 'Webhook Callbacks'
       consumes 'application/json'
       description <<~DESC
         This is the webhook notification sent to your webhook endpoint when a job fails to process.
