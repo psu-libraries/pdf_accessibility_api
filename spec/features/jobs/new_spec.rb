@@ -2,7 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.feature 'New job' do
+RSpec.feature 'New job', js: true do
+let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
+
+  before do
+    login_as(gui_user)
+  end
   it 'shows content and submit button' do
     visit new_job_path
     expect(page).to have_content(I18n.t('heading'))

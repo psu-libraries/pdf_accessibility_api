@@ -46,6 +46,7 @@ group :development, :test do
 
   # Use Capybara for feature/system tests
   gem 'capybara'
+  gem 'selenium-webdriver'
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem 'rubocop-rails-omakase', require: false

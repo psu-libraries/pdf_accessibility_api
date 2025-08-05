@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Jobs show' do
+RSpec.feature 'Jobs show', js: true do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let(:job_attrs) do
     {
@@ -14,6 +14,10 @@ RSpec.feature 'Jobs show' do
       status: 'completed',
       owner: gui_user
     }
+  end
+
+  before do
+    login_as(gui_user)
   end
 
   it 'shows all job metadata and download link when output_url is present' do

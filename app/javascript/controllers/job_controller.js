@@ -37,7 +37,7 @@ import consumer from '../channels/consumer'
    }
 
    renderFinishedAt () {
-     const finishedAt = this.data.get('finishedAt')
+     const finishedAt = new Date(this.data.get('finishedAt'));
 
      this.finishedAtTarget.textContent = finishedAt.toLocaleString('en-US', {
        month: 'short',
