@@ -14,6 +14,19 @@ RSpec.describe 'API::V1::Jobs' do
       tags 'Jobs'
       consumes 'application/json'
       produces 'application/json'
+      description <<~DESC
+        This endpoint allows you to submit a PDF for remediation.
+
+        You must provide a valid API key in the `X-API-KEY` header to authenticate your request.
+
+        The body of the request must include a `source_url` parameter with the URL of the PDF to be remediated.
+
+        On success, the response will include a UUID for your job.#{'  '}
+
+        A delayed callback will be sent to your configured webhook URL when the job is complete.
+
+        Refer to the Webhook Callbacks section for details on the webhook notifications.
+      DESC
       security [ApiKeyAuth: []]
 
       parameter name: :'X-API-KEY',
