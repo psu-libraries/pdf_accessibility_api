@@ -31,11 +31,11 @@ COPY --chown=app . /app
 
 FROM base AS dev-worker
 
-CMD ["bundle", "exec", "sidekiq"]
+ENTRYPOINT ["entrypoints/dev-worker.sh"]
 
 FROM base AS dev-mock-remediation-tool
 
-CMD ["bin/mock_remediation_tool"]
+ENTRYPOINT ["entrypoints/dev-mock-remediation-tool.sh"]
 
 FROM base AS dev
 
