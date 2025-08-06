@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UploadForm
-  UPLOADS_TMP_DIR = Rails.root.join(ENV.fetch('UPLOADS_TMP_DIR', 'tmp/storage'))
+  UPLOADS_TMP_DIR = Rails.root.join(ENV.fetch('UPLOADS_TMP_DIR', 'tmp/uploads'))
 
   include ActiveModel::Validations
   include ActiveModel::Model

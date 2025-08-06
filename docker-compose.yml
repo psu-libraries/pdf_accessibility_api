@@ -11,7 +11,7 @@ x-web_env: &web_env
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
       S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
-      UPLOADS_TMP_DIR: "${UPLOADS_TMP_DIR:-tmp/storage}"
+      UPLOADS_TMP_DIR: "${UPLOADS_TMP_DIR:-tmp/uploads}"
 services:
   web:
     user: 1000:1000
@@ -31,7 +31,7 @@ services:
     volumes:
       - bundle-data:/app/vendor/bundle
       - node-data:/app/node_modules
-      - uploads-tmp-data:/app/${UPLOADS_TMP_DIR:-tmp/storage}
+      - uploads-tmp-data:/app/${UPLOADS_TMP_DIR:-tmp/uploads}
     ports:
       - "3000:3000"
     healthcheck:
@@ -51,7 +51,7 @@ services:
       target: dev-worker
     volumes:
       - worker-bundle-data:/app/vendor/bundle
-      - uploads-tmp-data:/app/${UPLOADS_TMP_DIR:-tmp/storage}
+      - uploads-tmp-data:/app/${UPLOADS_TMP_DIR:-tmp/uploads}
   mock_remediation_tool:
     user: 1000:1000
     depends_on:

@@ -30,6 +30,11 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
+# Ignore uploaded files in tmp/uploads, but keep the directory.
+/tmp/uploads/*
+!/tmp/uploads/
+!/tmp/uploads/.keep
+
 /public/assets
 
 # Ignore master key for decrypting credentials and more.
