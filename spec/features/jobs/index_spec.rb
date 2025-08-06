@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Jobs index', js: true do
+RSpec.feature 'Jobs index', :js do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:job_completed) { create(:job, output_object_key: 'file1.pdf',
                                       status: 'completed',
@@ -16,6 +16,7 @@ RSpec.feature 'Jobs index', js: true do
   before do
     login_as(gui_user)
   end
+
   it 'shows jobs and their metadata in the table' do
     visit jobs_path
 

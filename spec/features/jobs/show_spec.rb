@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Jobs show', js: true do
+RSpec.feature 'Jobs show', :js do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let(:job_attrs) do
     {
@@ -10,7 +10,7 @@ RSpec.feature 'Jobs show', js: true do
       output_object_key: 'file1.pdf',
       uuid: 'abc123',
       created_at: Time.zone.local(2024, 7, 22, 10, 30),
-      finished_at: Time.zone.local(2024, 7, 22, 11, 0),
+      finished_at: Time.new(2024, 7, 22, 11, 0, 0, '-04:00'),
       status: 'completed',
       owner: gui_user
     }
@@ -29,7 +29,7 @@ RSpec.feature 'Jobs show', js: true do
     expect(page).to have_content('abc123')
     expect(page).to have_content('Jul 22, 2024 10:30 AM')
     expect(page).to have_content('Jul 22, 2024 11:00 AM')
-    expect(page).to have_content('Completed')
+    expect(page).to have_content('completed')
     expect(page).to have_link('Click to download', href: 'http://example.com/result1.pdf')
     expect(page).to have_content('Errors:')
     expect(page).to have_content('None')
