@@ -47,7 +47,7 @@ describe 'Jobs' do
       post(
         '/jobs', headers: valid_headers, params: { file: file_upload }
       )
-      expect(response).to redirect_to(jobs_path)
+      expect(response).to redirect_to(job_path(Job.last))
     end
 
     context 'when an error occurs' do
