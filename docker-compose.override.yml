@@ -4,3 +4,8 @@ services:
       - type: bind
         source: ./
         target: /app
+  worker:
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
