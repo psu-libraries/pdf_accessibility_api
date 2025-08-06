@@ -118,6 +118,13 @@ RSpec.describe RemediationJob do
         expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
       end
 
+      context 'if the job is a GUI job' do
+        it 'does not queue up a notification' do
+          described_class.perform_now(gui_job.uuid, output_polling_timeout: 1)
+          expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(job.uuid)
+        end
+      end
+
       it 'closes the temporarily downloaded file' do
         described_class.perform_now(job.uuid, output_polling_timeout: 1)
         expect(file).to have_received(:close!)
@@ -167,6 +174,13 @@ RSpec.describe RemediationJob do
       it 'queues up a notification about the status of the job' do
         described_class.perform_now(job.uuid)
         expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
+      end
+
+      context 'if the job is a GUI job' do
+        it 'does not queue up a notification' do
+          described_class.perform_now(gui_job.uuid)
+          expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(job.uuid)
+        end
       end
 
       it 'closes the temporarily downloaded file' do
