@@ -11,10 +11,10 @@ class UploadForm
   validates :file, presence: true
 
   def persist_to_tmp!
-    return unless file.present?
+    return if file.blank?
 
     tmp_path = UPLOADS_TMP_DIR.join("#{SecureRandom.uuid}_#{file.original_filename}")
-    File.open(tmp_path, 'wb') { |f| f.write(file.read) }
+    File.binwrite(tmp_path, file.read)
     file.rewind if file.respond_to?(:rewind)
     tmp_path.to_s
   end
