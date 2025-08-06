@@ -93,6 +93,11 @@ RSpec.describe RemediationJob do
       it 'calls File.delete on the given path' do
         expect(File).to have_received(:delete).with(file_path)
       end
+
+      it 'does not queue up a notification about the status of the job' do
+        expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(gui_job.uuid)
+      end
+
     end
 
     context 'when an output file is not produced before the timeout is exceeded' do

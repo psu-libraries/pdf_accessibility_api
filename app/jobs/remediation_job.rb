@@ -35,7 +35,7 @@ class RemediationJob < ApplicationJob
       output_url_expires_at: PRESIGNED_URL_EXPIRES_IN.seconds.from_now
     )
 
-    RemediationStatusNotificationJob.perform_later(job_uuid)
+    RemediationStatusNotificationJob.perform_later(job_uuid) if job.owner_type == 'APIUser'
   rescue Down::Error => e
     # We may want to retry the download depending on the more specific nature of the failure.
     record_failure_and_notify(job, "Failed to download file from source URL:  #{e.message}")
