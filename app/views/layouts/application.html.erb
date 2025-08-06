@@ -11,14 +11,15 @@
     <%= yield :head %>
 
     <link rel="manifest" href="/manifest.json">
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_pack_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_pack_tag "application" %>
   </head>
 
   <body>
     <header>
       <div class='container-fluid'>
         <div class='header-mark'>
-          <%= link_to image_tag('logo-penn_state_university_libraries.png', :alt => "Site logo"), 'https://libraries.psu.edu/' %>
+          <%= link_to image_pack_tag('static/frontend/img/logo-penn_state_university_libraries.png', :alt => "Site logo"), 'https://libraries.psu.edu/' %>
           <h1 class="header-mark--name-slogan">
               <a href='/' class='site-title'>
               <%= I18n.t('heading') %>
@@ -32,7 +33,7 @@
       <div class='container-fluid'>
         <div class='header-mark'>
           <div class='site-logo col-lg-3'>
-            <%= link_to image_tag('logo-penn_state_university_libraries.png', :alt => "Site logo"), 'https://libraries.psu.edu/' %>
+            <%= link_to image_pack_tag('static/frontend/img/logo-penn_state_university_libraries.png', :alt => "Site logo"), 'https://libraries.psu.edu/' %>
           </div>
           <div class="col-lg-6">
             <p><%= t('footer.heading') %></p>

@@ -11,6 +11,8 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 # return unless Rails.env.test?
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
+require 'capybara/rspec'
+require 'selenium/webdriver'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -72,11 +74,27 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  # Set authorized user in header for feature tests. This will likely
-  # stop working when we start using real webdrivers, so
-  # we'll need to come up with another solution then.
-  config.before(:each, type: :feature) do
-    page.driver.header('X_AUTH_REQUEST_EMAIL', 'test1@psu.edu')
+  Capybara.default_driver = :rack_test
+  Capybara.javascript_driver = :selenium_chrome_headless
+
+  Capybara.register_driver :selenium_chrome do |app|
+    Capybara::Selenium::Driver.new(app, browser: :chrome)
+  end
+
+  Capybara.register_driver :selenium_chrome_headless do |app|
+    options = Selenium::WebDriver::Chrome::Options.new
+    options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--window-size=1400,1400')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+
+    Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  end
+
+  config.include Warden::Test::Helpers
+  config.after do
+    Warden.test_reset!
   end
 
   config.after(:suite) do
