@@ -118,7 +118,7 @@ RSpec.describe RemediationJob do
         expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
       end
 
-      context 'if the job is a GUI job' do
+      context 'when the job is a GUI job' do
         it 'does not queue up a notification' do
           described_class.perform_now(gui_job.uuid, output_polling_timeout: 1)
           expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(job.uuid)
@@ -176,7 +176,7 @@ RSpec.describe RemediationJob do
         expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
       end
 
-      context 'if the job is a GUI job' do
+      context 'when the job is a GUI job' do
         it 'does not queue up a notification' do
           described_class.perform_now(gui_job.uuid)
           expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(job.uuid)
