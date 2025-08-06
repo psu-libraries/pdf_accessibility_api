@@ -3,7 +3,7 @@
   <ul data-controller="job"
           data-job-id="<%= @job.id %>"
           data-job-status="<%= @job.status %>"
-          data-job-finished-at="<%= @job.finished_at %>"
+          data-job-finished-at="<%= @job.finished_at&.iso8601 %>"
           data-job-output-url="<%= @job.output_url %>"
           data-job-output-url-expired="<%= @job.output_url_expired? %>"
           data-job-processing-error-message="<%= @job.processing_error_message %>"

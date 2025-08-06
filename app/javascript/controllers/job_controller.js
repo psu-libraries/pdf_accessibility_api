@@ -1,4 +1,5 @@
 import { Controller } from 'stimulus'
+import { DateTime } from 'luxon';
 import consumer from '../channels/consumer'
 
  export default class extends Controller {
@@ -37,16 +38,10 @@ import consumer from '../channels/consumer'
    }
 
    renderFinishedAt () {
-     const finishedAt = new Date(this.data.get('finishedAt'));
+     const finishedAt = this.data.get('finishedAt')
+     const finishedAtDate = DateTime.fromISO(finishedAt)
 
-     this.finishedAtTarget.textContent = finishedAt.toLocaleString('en-US', {
-       month: 'short',
-       day: 'numeric',
-       year: 'numeric',
-       hour: 'numeric',
-       minute: '2-digit',
-       hour12: true
-     }) || ''
+     this.finishedAtTarget.textContent = finishedAtDate.toFormat("MMM d, yyyy h:mm a")
    }
 
    renderOutputUrl () {
