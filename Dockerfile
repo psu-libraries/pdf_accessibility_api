@@ -31,12 +31,10 @@ COPY --chown=app . /app
 
 FROM base AS dev-worker
 
-RUN chmod +x entrypoints/dev-worker.sh
 ENTRYPOINT ["entrypoints/dev-worker.sh"]
 
 FROM base AS dev-mock-remediation-tool
 
-RUN chmod +x entrypoints/dev-mock-remediation-tool.sh
 ENTRYPOINT ["entrypoints/dev-mock-remediation-tool.sh"]
 
 FROM base AS dev
