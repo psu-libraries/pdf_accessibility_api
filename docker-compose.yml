@@ -11,6 +11,7 @@ x-web_env: &web_env
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
       S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
+      UPLOADS_TMP_DIR: "${UPLOADS_TMP_DIR:-tmp/storage}"
 services:
   web:
     user: 1000:1000
@@ -28,8 +29,9 @@ services:
       context: .
       target: dev
     volumes:
-    - bundle-data:/app/vendor/bundle
-    - node-data:/app/node_modules
+      - bundle-data:/app/vendor/bundle
+      - node-data:/app/node_modules
+      - uploads-tmp-data:/app/${UPLOADS_TMP_DIR:-tmp/storage}
     ports:
       - "3000:3000"
     healthcheck:
@@ -49,6 +51,7 @@ services:
       target: dev-worker
     volumes:
       - worker-bundle-data:/app/vendor/bundle
+      - uploads-tmp-data:/app/${UPLOADS_TMP_DIR:-tmp/storage}
   mock_remediation_tool:
     user: 1000:1000
     depends_on:
@@ -81,7 +84,7 @@ services:
     image: redis:8.0.2
     command: redis-server --requirepass redispassword
     volumes:
-    - redis-data:/data
+      - redis-data:/data
     ports:
     - "6379:6379"
   minio:
@@ -89,7 +92,7 @@ services:
     container_name: minio
     restart: always
     volumes:
-    - minio-data:/data
+      - minio-data:/data
     environment:
       MINIO_ACCESS_KEY: pdf_accessibility_api
       MINIO_SECRET_KEY: pdf_accessibility_api
@@ -116,3 +119,4 @@ volumes:
   node-data:
   minio-data:
   db-data:
+  uploads-tmp-data:

@@ -24,8 +24,10 @@ class JobsController < GUIAuthController
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!
-    uploaded_file.close
-    RemediationJob.perform_later(job.uuid, file_path: uploaded_file.path,
+
+    persistent_path = form.persist_to_tmp!
+
+    RemediationJob.perform_later(job.uuid, file_path: persistent_path,
                                            original_filename: uploaded_file.original_filename)
 
     redirect_to jobs_path, notice: I18n.t('upload.success')
