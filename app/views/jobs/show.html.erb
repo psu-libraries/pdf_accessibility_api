@@ -2,13 +2,14 @@
   <h2>Job Details</h2>
   <ul data-controller="job"
           data-job-id="<%= @job.id %>"
+          data-job-output-object-key="<%= @job.output_object_key %>"
           data-job-status="<%= @job.status %>"
           data-job-finished-at="<%= @job.finished_at&.iso8601 %>"
           data-job-output-url="<%= @job.output_url %>"
           data-job-output-url-expired="<%= @job.output_url_expired? %>"
           data-job-processing-error-message="<%= @job.processing_error_message %>"
           id="<%= dom_id @job %>">
-    <li><strong>File Name:</strong> <%= @job.output_object_key %></li>
+    <li><strong>File Name:</strong> <span data-target="job.outputObjectKey"></span></li>
     <li><strong>Job ID:</strong> <%= @job.uuid %></li>
     <li><strong>Started At:</strong> <%= @job.created_at.strftime("%b %e, %Y %l:%M %p") if @job.created_at %></li>
     <li><strong>Finished At:</strong> <span data-target="job.finishedAt"></span></li>

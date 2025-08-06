@@ -27,6 +27,6 @@ RSpec.feature 'New job', :js do
     attach_file('./spec/fixtures/files/testing.pdf')
     click_button 'Upload'
     sleep 1
-    expect(page).to have_current_path(jobs_path)
+    expect(page).to have_current_path(job_path(Job.last))
   end
 end
