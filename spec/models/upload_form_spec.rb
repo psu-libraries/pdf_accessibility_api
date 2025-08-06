@@ -9,10 +9,6 @@ RSpec.describe UploadForm do
     let(:form) { described_class.new(file: file) }
     let(:persisted_path) { form.persist_to_tmp! }
 
-    after do
-      File.delete(persisted_path) if persisted_path && File.exist?(persisted_path)
-    end
-
     context 'when a file is provided' do
       let(:file) { fixture_file_upload('testing.pdf', 'application/pdf') }
 

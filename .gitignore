@@ -39,3 +39,4 @@
 .DS_Store
 .irb_history
 .cache/
+.local/

@@ -17,10 +17,12 @@ RSpec.feature 'New job' do
   end
 
   it 'redirects to the job show page for a new job when one is created' do
+    file_count = Dir[Rails.root.join('tmp/storage/*_testing.pdf')].count
     visit new_job_path
     attach_file('./spec/fixtures/files/testing.pdf')
     click_button 'Upload'
     sleep 1
+    expect(Dir[Rails.root.join('tmp/storage/*_testing.pdf')].count).to eq(file_count + 1)
     expect(page).to have_current_path(jobs_path)
   end
 end
