@@ -61,6 +61,7 @@ group :development do
 end
 
 group :test do
+  gem 'climate_control'
   gem 'factory_bot_rails'
   gem 'shoulda-matchers'
 end

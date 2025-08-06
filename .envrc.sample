@@ -3,11 +3,16 @@ export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
 export AWS_REGION="us-east-1"
 
-# Ignore AWS Config Files
-export AWS_SDK_CONFIG_OPT_OUT=true
-
 # S3 Bucket Info
 export S3_BUCKET_NAME=
+
+#---------------------------------
+# The below configurations are not
+# needed if using docker compose
+#---------------------------------
+
+# Ignore AWS Config Files
+export AWS_SDK_CONFIG_OPT_OUT=true
 
 # Database configurations
 export MYSQL_DB=
@@ -15,6 +20,3 @@ export MYSQL_USER=
 export MYSQL_PASSWORD=
 export MYSQL_PORT=
 export MYSQL_HOST=
-
-export RAILS_MAX_THREADS=
-export SIDEKIQ_MAX_RETRIES=
