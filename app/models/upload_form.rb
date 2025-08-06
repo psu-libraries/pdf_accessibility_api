@@ -11,7 +11,7 @@ class UploadForm
   validates :file, presence: true
 
   def persist_to_tmp!
-    return if file.blank?
+    return unless valid?
 
     tmp_path = UPLOADS_TMP_DIR.join("#{SecureRandom.uuid}_#{file.original_filename}")
     File.binwrite(tmp_path, file.read)
