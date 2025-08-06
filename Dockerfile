@@ -26,6 +26,10 @@ RUN bundle install && \
   rm -rf /app/.bundle/cache && \
   rm -rf /app/vendor/bundle/ruby/*/cache
 
+COPY package.json yarn.lock /app/
+RUN yarn install --frozen-lockfile && \
+  rm -rf /app/.cache && \
+  rm -rf /app/tmp
 
 COPY --chown=app . /app
 

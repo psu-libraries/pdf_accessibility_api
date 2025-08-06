@@ -223,6 +223,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.8-x86_64-linux-gnu)
       racc (~> 1.4)
+    package_json (0.1.0)
     parallel (1.27.0)
     parser (3.3.8.0)
       ast (~> 2.4.1)
@@ -239,6 +240,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.16)
+    rack-proxy (0.7.7)
+      rack
     rack-session (2.1.1)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -285,11 +288,14 @@ GEM
     rdoc (6.14.1)
       erb
       psych (>= 4.0.0)
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
     redis-client (0.25.1)
       connection_pool
     regexp_parser (2.10.0)
     reline (0.6.1)
       io-console (~> 0.5)
+    rexml (3.4.1)
     rspec-core (3.13.4)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.5)
@@ -360,6 +366,7 @@ GEM
       rubocop (~> 1.72, >= 1.72.1)
       rubocop-rspec (~> 3.5)
     ruby-progressbar (1.13.0)
+    rubyzip (2.4.1)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -368,6 +375,19 @@ GEM
     scss_lint (0.60.0)
       sass (~> 3.5, >= 3.5.5)
     securerandom (0.4.1)
+    selenium-webdriver (4.34.0)
+      base64 (~> 0.2)
+      logger (~> 1.4)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
+    semantic_range (3.1.0)
+    shakapacker (8.3.0)
+      activesupport (>= 5.2)
+      package_json
+      rack-proxy (>= 0.6.1)
+      railties (>= 5.2)
+      semantic_range (>= 2.3.0)
     shoulda-matchers (6.5.0)
       activesupport (>= 5.2.0)
     sidekiq (8.0.6)
@@ -377,14 +397,6 @@ GEM
       rack (>= 3.1.0)
       redis-client (>= 0.23.2)
     smart_properties (1.17.0)
-    sprockets (4.2.2)
-      concurrent-ruby (~> 1.0)
-      logger
-      rack (>= 2.2.4, < 4)
-    sprockets-rails (3.5.2)
-      actionpack (>= 6.1)
-      activesupport (>= 6.1)
-      sprockets (>= 3.0.0)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.7)
@@ -404,6 +416,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
+    websocket (1.2.11)
     websocket-driver (0.8.0)
       base64
       websocket-extensions (>= 0.1.0)
@@ -435,14 +448,16 @@ DEPENDENCIES
   puma (>= 5.0)
   rails (~> 7.2.2, >= 7.2.2.1)
   rails_warden (~> 0.6.0)
+  redis (>= 4.0.1)
   rspec-rails
   rswag-api
   rswag-specs
   rswag-ui
   rubocop-rails-omakase
+  selenium-webdriver
+  shakapacker
   shoulda-matchers
   sidekiq
-  sprockets-rails
   stimulus-rails
   tzinfo-data
   web-console

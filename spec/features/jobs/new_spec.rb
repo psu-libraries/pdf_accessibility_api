@@ -2,7 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.feature 'New job' do
+RSpec.feature 'New job', :js do
+  let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
+
+  before do
+    login_as(gui_user)
+  end
+
   it 'shows content and submit button' do
     visit new_job_path
     expect(page).to have_content(I18n.t('heading'))
@@ -23,6 +29,6 @@ RSpec.feature 'New job' do
     click_button 'Upload'
     sleep 1
     expect(Rails.root.glob('tmp/uploads/*_testing.pdf').count).to eq(file_count + 1)
-    expect(page).to have_current_path(jobs_path)
+    expect(page).to have_current_path(job_path(Job.last))
   end
 end

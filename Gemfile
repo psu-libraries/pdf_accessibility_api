@@ -6,8 +6,8 @@ ruby '3.4.1'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.2.2', '>= 7.2.2.1'
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem 'sprockets-rails'
+
+gem 'shakapacker'
 # Use mysql as the database for Active Record
 gem 'mysql2'
 # Use the Puma web server [https://github.com/puma/puma]
@@ -17,7 +17,7 @@ gem 'stimulus-rails'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder'
 # Use Redis adapter
-# gem 'redis', '>= 4.0.1'
+gem 'redis', '>= 4.0.1'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mswin mswin64 mingw x64_mingw jruby]
@@ -50,6 +50,7 @@ group :development, :test do
 
   # Use Capybara for feature/system tests
   gem 'capybara'
+  gem 'selenium-webdriver'
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem 'rubocop-rails-omakase', require: false
