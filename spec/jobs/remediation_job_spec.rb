@@ -97,7 +97,6 @@ RSpec.describe RemediationJob do
       it 'does not queue up a notification about the status of the job' do
         expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(gui_job.uuid)
       end
-
     end
 
     context 'when an output file is not produced before the timeout is exceeded' do
