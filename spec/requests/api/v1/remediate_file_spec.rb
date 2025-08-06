@@ -6,7 +6,7 @@ def with_modified_env(options = {}, &)
   ClimateControl.modify(options, &)
 end
 
-describe 'requesting a file remediation via the API', :active_job_inline, type: :request do
+describe 'requesting a file remediation via the API', :active_job_inline do
   let!(:api_user) { create(:api_user, webhook_endpoint: 'https://example.com/webhooks') }
   let(:http_client) { instance_double Faraday::Connection }
   let(:request) { instance_spy Faraday::Request }

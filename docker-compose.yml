@@ -28,8 +28,8 @@ services:
       context: .
       target: dev
     volumes:
-    - bundle-data:/app/vendor/bundle
-    - node-data:/app/node_modules
+      - bundle-data:/app/vendor/bundle
+      - node-data:/app/node_modules
     ports:
       - "3000:3000"
     healthcheck:

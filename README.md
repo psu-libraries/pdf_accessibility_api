@@ -20,7 +20,7 @@ The PDF Accessibility API acts as an intermediary to send and retrieve those fil
 
 ## API
 
-Refer to the Swagger documentation for endpoint details and usage. (Add link to API docs here.)
+Refer to the Swagger documentation for endpoint and webhook details at `/api-docs`.
 
 We use an `APIUser` model to store metadata for our API users and their associated clients/systems. A developer with console access must manually add `APIUser` records. Each `APIUser` requires:
 
@@ -75,3 +75,8 @@ To build the image and run necessary containers:
 To run the tests within the container:
 1. `docker compose exec web bash`
 2. `RAILS_ENV=test bundle exec rspec`
+
+
+## Swagger Docs
+
+Our API and webhook documentation is generated using RSwag and the RSwag DSL from the spec files in `spec/requests/api/v1/api-docs`.  If you make changes to the RSwag spec files, run `RAILS_ENV=test bundle exec rails rswag` to regenerate the swagger.yaml.

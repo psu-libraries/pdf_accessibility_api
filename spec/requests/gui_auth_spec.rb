@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Warden Http Header Authentication', type: :request do
+RSpec.describe 'Warden Http Header Authentication' do
   context 'when allowlisted user' do
     it 'returns 200 status' do
       get '/jobs/new', headers: { 'HTTP_X_AUTH_REQUEST_EMAIL' => 'test1@psu.edu' }
