@@ -32,6 +32,7 @@ RUN yarn install --frozen-lockfile && \
   rm -rf /app/tmp
 
 COPY --chown=app . /app
+RUN mkdir -p tmp/uploads && chown -R app:app tmp/uploads
 
 FROM base AS dev-worker
 

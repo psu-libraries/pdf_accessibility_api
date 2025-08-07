@@ -31,6 +31,9 @@
 /tmp/storage/*
 !/tmp/storage/.keep
 
+# Ignore uploads directory
+/tmp/uploads
+
 # Ignore assets.
 /node_modules/
 /app/assets/builds/*

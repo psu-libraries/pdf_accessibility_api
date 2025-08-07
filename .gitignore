@@ -30,10 +30,8 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
-# Ignore uploaded files in tmp/uploads, but keep the directory.
-/tmp/uploads/*
-!/tmp/uploads/
-!/tmp/uploads/.keep
+# Ignore uploads directory
+/tmp/uploads
 
 /public/assets
 
@@ -52,3 +50,5 @@ yarn-debug.log*
 .irb_history
 .cache/
 .local/
+.config/
+.pki/
