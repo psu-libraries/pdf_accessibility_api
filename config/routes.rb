@@ -34,4 +34,6 @@ Rails.application.routes.draw do
       post '/jobs', to: 'jobs#create'
     end
   end
+
+  get '/unauthorized', to: 'errors#unauthorized'
 end

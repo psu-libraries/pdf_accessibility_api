@@ -13,11 +13,11 @@ RSpec.describe 'Warden Http Header Authentication' do
   end
 
   context 'when user is not allowlisted' do
-    it 'returns 401 status and redirects to 401 page' do
+    it 'returns 302 status and redirects to unauthorized page' do
       get '/jobs/new', headers: { 'HTTP_X_AUTH_REQUEST_EMAIL' => 'test2@psu.edu' }
       expect(request.path).to eq '/unauthenticated'
-      expect(response).to have_http_status :unauthorized
-      expect(response.body).to include 'Not authorized'
+      expect(response).to have_http_status :redirect
+      expect(response.body).to include 'Redirecting to unauthorized page'
     end
   end
 end

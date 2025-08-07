@@ -12,12 +12,16 @@ RSpec.describe 'Sidekiq Access Constraint' do
   it 'redirects access for unauthorized user' do
     get '/sidekiq', headers: { 'HTTP_X_AUTH_REQUEST_EMAIL' => 'unauthorized@example.com' }
 
-    expect(response).to have_http_status(:unauthorized)
+    expect(request.path).to eq '/unauthenticated'
+    expect(response).to have_http_status :redirect
+    expect(response.body).to include 'Redirecting to unauthorized page'
   end
 
   it 'redirects access when header is missing' do
     get '/sidekiq'
 
-    expect(response).to have_http_status(:unauthorized)
+    expect(request.path).to eq '/unauthenticated'
+    expect(response).to have_http_status :redirect
+    expect(response.body).to include 'Redirecting to unauthorized page'
   end
 end
