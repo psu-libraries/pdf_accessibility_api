@@ -34,8 +34,6 @@ class RemediationJob < ApplicationJob
       output_object_key: object_key,
       output_url_expires_at: PRESIGNED_URL_EXPIRES_IN.seconds.from_now
     )
-
-    RemediationStatusNotificationJob.perform_later(job_uuid)
   rescue Down::Error => e
     # We may want to retry the download depending on the more specific nature of the failure.
     record_failure_and_notify(job, "Failed to download file from source URL:  #{e.message}")
@@ -43,6 +41,7 @@ class RemediationJob < ApplicationJob
     # We may want to retry the upload depending on the more specific nature of the failure.
     record_failure_and_notify(job, "Failed to upload file to remediation input location:  #{e.message}")
   ensure
+    RemediationStatusNotificationJob.perform_later(job_uuid) if job.owner_type == 'APIUser'
     tempfile&.close!
     File.delete(file_path) if File.exist?(file_path.to_s)
   end
@@ -55,7 +54,5 @@ class RemediationJob < ApplicationJob
         finished_at: Time.zone.now,
         processing_error_message: message
       )
-
-      RemediationStatusNotificationJob.perform_later(job.uuid)
     end
 end

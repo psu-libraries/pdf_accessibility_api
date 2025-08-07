@@ -93,6 +93,10 @@ RSpec.describe RemediationJob do
       it 'calls File.delete on the given path' do
         expect(File).to have_received(:delete).with(file_path)
       end
+
+      it 'does not queue up a notification about the status of the job' do
+        expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(gui_job.uuid)
+      end
     end
 
     context 'when an output file is not produced before the timeout is exceeded' do
@@ -112,6 +116,13 @@ RSpec.describe RemediationJob do
       it 'queues up a notification about the status of the job' do
         described_class.perform_now(job.uuid, output_polling_timeout: 1)
         expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
+      end
+
+      context 'when the job is a GUI job' do
+        it 'does not queue up a notification' do
+          described_class.perform_now(gui_job.uuid, output_polling_timeout: 1)
+          expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(job.uuid)
+        end
       end
 
       it 'closes the temporarily downloaded file' do
@@ -163,6 +174,13 @@ RSpec.describe RemediationJob do
       it 'queues up a notification about the status of the job' do
         described_class.perform_now(job.uuid)
         expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
+      end
+
+      context 'when the job is a GUI job' do
+        it 'does not queue up a notification' do
+          described_class.perform_now(gui_job.uuid)
+          expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(job.uuid)
+        end
       end
 
       it 'closes the temporarily downloaded file' do
