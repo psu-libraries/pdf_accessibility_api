@@ -30,6 +30,9 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
+# Ignore uploads directory
+/tmp/uploads
+
 /public/assets
 
 # Ignore master key for decrypting credentials and more.
@@ -47,3 +50,5 @@ yarn-debug.log*
 .irb_history
 .cache/
 .local/
+.config/
+.pki/

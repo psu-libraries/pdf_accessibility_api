@@ -30,6 +30,7 @@ services:
     volumes:
       - bundle-data:/app/vendor/bundle
       - node-data:/app/node_modules
+      - uploads-tmp-data:/app/tmp/uploads
     ports:
       - "3000:3000"
     healthcheck:
@@ -49,6 +50,7 @@ services:
       target: dev-worker
     volumes:
       - worker-bundle-data:/app/vendor/bundle
+      - uploads-tmp-data:/app/tmp/uploads
   mock_remediation_tool:
     user: 1000:1000
     depends_on:
@@ -81,7 +83,7 @@ services:
     image: redis:8.0.2
     command: redis-server --requirepass redispassword
     volumes:
-    - redis-data:/data
+      - redis-data:/data
     ports:
     - "6379:6379"
   minio:
@@ -89,7 +91,7 @@ services:
     container_name: minio
     restart: always
     volumes:
-    - minio-data:/data
+      - minio-data:/data
     environment:
       MINIO_ACCESS_KEY: pdf_accessibility_api
       MINIO_SECRET_KEY: pdf_accessibility_api
@@ -116,3 +118,4 @@ volumes:
   node-data:
   minio-data:
   db-data:
+  uploads-tmp-data:

@@ -98,6 +98,6 @@ RSpec.configure do |config|
   end
 
   config.after(:suite) do
-    FileUtils.rm_rf(Rails.root.join('tmp', 'storage'))
+    FileUtils.rm_rf(Rails.root.glob('tmp/uploads/**/*'))
   end
 end
