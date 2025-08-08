@@ -1,7 +1,7 @@
 x-web_env: &web_env
   environment:
       REDIS_HOST: redis
-      REDIS_PASSWORD: redispassword
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redispassword}
       API_BEARER_TOKEN: 
       MYSQL_DB: pdf_accessibility_api
       MYSQL_USER: root
@@ -80,8 +80,10 @@ services:
       retries: 5
       start_period: 10s
   redis:
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redispassword}
     image: redis:8.0.2
-    command: redis-server --requirepass redispassword
+    command: redis-server --requirepass $$REDIS_PASSWORD
     volumes:
       - redis-data:/data
     ports:
