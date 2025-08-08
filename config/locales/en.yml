@@ -12,3 +12,5 @@ en:
     heading: PDF Accessibility Remediation
     description: ''
     copyright_statement: 'Copyright © 2025 The Pennsylvania State University'
+  authentication:
+    no_auth: You are not authorized to use this resource.
