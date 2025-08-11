@@ -74,6 +74,7 @@ RUN RAILS_ENV=production \
   bundle exec rails assets:precompile && \
   rm -rf /app/.cache/ && \
   rm -rf /app/node_modules/.cache/ && \
-  rm -rf /app/tmp/
+  rm -rf /app/tmp/ && \
+  mkdir /app/tmp && chown -R app:app /app/tmp
 
 CMD ["bin/startup"]
