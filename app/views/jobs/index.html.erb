@@ -25,7 +25,7 @@
           data-job-processing-error-message="<%= job.processing_error_message %>"
           id="<%= dom_id job %>">
           <td><%= link_to job.output_object_key, job_path(job) %></td>
-          <td><%= job.created_at.strftime("%b %e, %Y %l:%M %p") %>
+          <td><%= job.created_at.getlocal.strftime("%b %e, %Y %l:%M %p") %>
           </td>
           <td><span data-job-target="status"></span></td>
           <td class='d-none'>

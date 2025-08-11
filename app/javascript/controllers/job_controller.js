@@ -44,10 +44,15 @@ export default class extends Controller {
   }
 
   renderFinishedAt() {
+    if (this.data.get('finishedAt')) {
     const finishedAt = this.data.get('finishedAt')
     const finishedAtDate = DateTime.fromISO(finishedAt)
 
     this.finishedAtTarget.textContent = finishedAtDate.toFormat("MMM d, yyyy h:mm a")
+    }
+    else {
+      this.finishedAtTarget.textContent = ''
+    }
   }
 
   renderOutputUrl() {

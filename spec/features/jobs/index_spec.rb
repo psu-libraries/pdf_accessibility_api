@@ -6,11 +6,11 @@ RSpec.feature 'Jobs index', :js do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:job_completed) { create(:job, output_object_key: 'file1.pdf',
                                       status: 'completed',
-                                      created_at: Time.zone.local(2024, 7, 22, 10, 30),
+                                      created_at: Time.new(2024, 7, 22, 10, 30),
                                       owner: gui_user) }
   let!(:job_processing) { create(:job, output_object_key: 'file2.pdf',
                                        status: 'processing',
-                                       created_at: Time.zone.local(2024, 7, 21, 9, 0),
+                                       created_at: Time.new(2024, 7, 21, 9, 0),
                                        owner: gui_user) }
 
   before do
