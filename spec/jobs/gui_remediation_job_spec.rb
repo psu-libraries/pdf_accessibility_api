@@ -41,7 +41,7 @@ RSpec.describe GUIRemediationJob do
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
         expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_testing\.pdf/
         expect(reloaded_job.output_url_expires_at).to be_within(1.minute)
-          .of(RemediationJob::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
+          .of(RemediationModule::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
       end
 
       it 'calls File.delete on the given path' do

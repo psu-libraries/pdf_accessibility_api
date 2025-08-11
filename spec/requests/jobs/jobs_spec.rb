@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe 'Jobs' do
-  before { allow(RemediationJob).to receive(:perform_later) }
+  before { allow(GUIRemediationJob).to receive(:perform_later) }
 
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
@@ -36,11 +36,11 @@ describe 'Jobs' do
       expect(job.status).to eq 'processing'
     end
 
-    it 'enqueues a job with RemediationJob' do
+    it 'enqueues a job with GUIRemediationJob' do
       post(
         '/jobs', headers: valid_headers, params: { file: file_upload }
       )
-      expect(RemediationJob).to have_received(:perform_later)
+      expect(GUIRemediationJob).to have_received(:perform_later)
     end
 
     it 'redirects to new page' do
