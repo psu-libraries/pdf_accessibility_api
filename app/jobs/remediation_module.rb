@@ -31,7 +31,7 @@ module RemediationModule
       output_object_key: object_key,
       output_url_expires_at: PRESIGNED_URL_EXPIRES_IN.seconds.from_now
     )
-   rescue S3Handler::Error => e
+  rescue S3Handler::Error => e
     # We may want to retry the upload depending on the more specific nature of the failure.
     record_failure_and_notify(job, "Failed to upload file to remediation input location:  #{e.message}")
   end
