@@ -6,9 +6,8 @@ class Tempfile
   include Down::NetHttp::DownloadedFile
 end
 
-RSpec.describe RemediationJob do
+RSpec.describe APIRemediationJob do
   let!(:job) { create(:job, source_url: 'https://test.com/file.pdf') }
-  let!(:gui_job) { create(:job, :gui_user_job) }
   let(:file) {
     instance_double(
       Tempfile,
@@ -49,7 +48,7 @@ RSpec.describe RemediationJob do
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
         expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_file\.pdf/
         expect(reloaded_job.output_url_expires_at).to be_within(1.minute)
-          .of(RemediationJob::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
+          .of(RemediationModule::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
       end
 
       it 'queues up a notification about the status of the job' do
@@ -60,42 +59,6 @@ RSpec.describe RemediationJob do
       it 'closes the temporarily downloaded file' do
         described_class.perform_now(job.uuid)
         expect(file).to have_received(:close!)
-      end
-    end
-
-    context 'when the job is called with file_path and original_filename arguments' do
-      before do
-        described_class.perform_now(gui_job.uuid, file_path:, original_filename:)
-      end
-
-      it 'does not create a tempfile with down' do
-        expect(Down).not_to have_received(:download)
-      end
-
-      it 'uses the original_filename for creating the object key' do
-        expect(S3Handler).to have_received(:new).with(/[a-f0-9]{16}_testing\.pdf/)
-      end
-
-      it 'uses the file_path for uploading to S3' do
-        expect(s3).to have_received(:upload_to_input).with(file_path)
-      end
-
-      it 'updates the status and metadata of the given job record' do
-        reloaded_job = gui_job.reload
-        expect(reloaded_job.status).to eq 'completed'
-        expect(reloaded_job.output_url).to eq 'https://example.com/presigned-file-url'
-        expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_testing\.pdf/
-        expect(reloaded_job.output_url_expires_at).to be_within(1.minute)
-          .of(RemediationJob::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
-      end
-
-      it 'calls File.delete on the given path' do
-        expect(File).to have_received(:delete).with(file_path)
-      end
-
-      it 'does not queue up a notification about the status of the job' do
-        expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(gui_job.uuid)
       end
     end
 
@@ -116,13 +79,6 @@ RSpec.describe RemediationJob do
       it 'queues up a notification about the status of the job' do
         described_class.perform_now(job.uuid, output_polling_timeout: 1)
         expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
-      end
-
-      context 'when the job is a GUI job' do
-        it 'does not queue up a notification' do
-          described_class.perform_now(gui_job.uuid, output_polling_timeout: 1)
-          expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(job.uuid)
-        end
       end
 
       it 'closes the temporarily downloaded file' do
@@ -174,13 +130,6 @@ RSpec.describe RemediationJob do
       it 'queues up a notification about the status of the job' do
         described_class.perform_now(job.uuid)
         expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
-      end
-
-      context 'when the job is a GUI job' do
-        it 'does not queue up a notification' do
-          described_class.perform_now(gui_job.uuid)
-          expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(job.uuid)
-        end
       end
 
       it 'closes the temporarily downloaded file' do
