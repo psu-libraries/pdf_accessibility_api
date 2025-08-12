@@ -11,9 +11,10 @@ x-web_env: &web_env
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
       S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
+      USER_ID: 3000
 services:
   web:
-    user: 1000:1000
+    user: $USER_ID:$USER_ID
     depends_on:
       db:
         condition: service_healthy
@@ -40,7 +41,7 @@ services:
       retries: 5
       start_period: 30s
   worker:
-    user: 1000:1000
+    user: $USER_ID:$USER_ID
     depends_on:
       web:
         condition: service_healthy
@@ -52,7 +53,7 @@ services:
       - worker-bundle-data:/app/vendor/bundle
       - uploads-tmp-data:/app/tmp/uploads
   mock_remediation_tool:
-    user: 1000:1000
+    user: $USER_ID:$USER_ID
     depends_on:
       web:
         condition: service_healthy
