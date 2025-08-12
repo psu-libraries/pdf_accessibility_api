@@ -1,5 +1,5 @@
 FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20250131 AS base
-ARG UID=1000
+ARG UID=3000
 
 USER root
 RUN apt-get update && \
