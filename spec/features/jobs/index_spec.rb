@@ -36,4 +36,16 @@ RSpec.feature 'Jobs index', :js do
     click_link 'file1.pdf'
     expect(page).to have_current_path(job_path(job_completed))
   end
+
+  it 'updates status in real-time' do
+    visit jobs_path
+
+    within '#jobs-table tr:nth-child(2)' do
+      expect(page).to have_content('processing')
+
+      job_processing.update!(status: 'completed')
+
+      expect(page).to have_content('completed')
+    end
+  end
 end
