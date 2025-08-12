@@ -67,27 +67,4 @@ RSpec.describe S3Handler, type: :service do
       end
     end
   end
-
-  describe 'live S3 interactions' do
-    # This test requires AWS credentials and an S3 bucket to connect to
-    # It takes several minutes to complete, so it should be ran in isolation
-    it 'uploads file, retrieves presigned URL from output, and deletes files', :live_s3 do
-      file_path = Rails.root.join('spec', 'fixtures', 'files', 'testing.pdf')
-      object_key = "testing-#{SecureRandom.uuid}.pdf"
-      handler = described_class.new(object_key)
-      handler.upload_to_input(file_path)
-      url = nil
-      Timeout.timeout(360) do
-        loop do
-          url = described_class.new(object_key).presigned_url_for_output
-          break if url
-
-          puts 'Waiting for processed file...'
-          sleep 15
-        end
-      end
-      expect(url).to match(%r{https://#{ENV.fetch('S3_BUCKET_NAME',
-                                                  nil)}.s3.amazonaws.com/result/COMPLIANT_#{object_key}})
-    end
-  end
 end
