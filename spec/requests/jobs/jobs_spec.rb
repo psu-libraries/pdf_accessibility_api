@@ -26,6 +26,14 @@ describe 'Jobs' do
                                                       'application.pdf',
                                                       original_filename:)}
 
+    it 'saves the uploaded file' do
+      expect {
+        post(
+          '/jobs', headers: valid_headers, params: { file: file_upload }
+        )
+      }.to(change { Rails.root.glob('tmp/uploads/*_testing.pdf').count }.by(1))
+    end
+
     it 'creates a record to track the job status' do
       expect {
         post(
