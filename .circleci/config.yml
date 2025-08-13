@@ -170,6 +170,7 @@ workflows:
           name: deploy-image
           requires:
             - build-and-push
+            - test-application
       - release-image:
           context:
             - org-global
@@ -181,6 +182,7 @@ workflows:
           name: release-image
           requires:
             - build-and-push
+            - test-application
       - test-application:
           context:
             - org-global
