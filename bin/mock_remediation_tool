@@ -29,6 +29,7 @@ begin
       result_key = "#{S3Handler::OUTPUT_PREFIX}#{filename}"
 
       unless bucket.objects.detect { |o| o.key == result_key }
+        logger.info "Copying #{o.key} to #{result_key}"
         o.copy_to(bucket: "pdf_accessibility_api", key: result_key)
       end
     end

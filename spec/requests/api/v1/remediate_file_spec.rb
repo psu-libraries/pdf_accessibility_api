@@ -24,10 +24,9 @@ describe 'requesting a file remediation via the API', :active_job_inline do
   end
 
   it 'processes the file and sends a webhook notification' do
-    # We have a separate test that specifically exercies our connection to the AWS S3
-    # bucket used by the real remediation tool. Here we're testing our API workflow
-    # without depending on the real S3 bucket by substituting in MinIO and a trivial
-    # script that doubles for the remediation tool behavior.
+    # Here we're ensuring that even if we have configured our environment to use the real
+    # AWS S3 bucket and PDF remediation tool, this test will still use MinIO and avoid
+    # actually uploading the file to be remediated.
     with_modified_env(
       {
         S3_ENDPOINT: 'http://minio:9000',
