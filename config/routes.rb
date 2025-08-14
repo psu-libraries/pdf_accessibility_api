@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   mount Rswag::Api::Engine => '/api-docs'
   mount Rswag::Ui::Engine => '/api-docs'
   mount Sidekiq::Web => '/sidekiq', :constraints => SidekiqWebConstraint.new
+  mount Shrine.uppy_s3_multipart(:cache) => '/s3/multipart'
+
   get '/sidekiq', to: ->(_env) {
     [
       401,
