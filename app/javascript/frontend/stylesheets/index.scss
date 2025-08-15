@@ -1,1 +1,6 @@
+// Import Uppy styles for the uploader
+@use '@uppy/core/dist/style' as core-style;
+@use '@uppy/dashboard/dist/style';
+
 @use 'base';
+@use 'uppy';

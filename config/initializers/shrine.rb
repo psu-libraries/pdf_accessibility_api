@@ -4,7 +4,7 @@ require 'shrine'
 require 'shrine/storage/s3'
 require 'uppy/s3_multipart'
 
-require 'lib/shrine_config.rb'
+require 'shrine_config.rb'
 
 
 Shrine.storages = ShrineConfig.storages

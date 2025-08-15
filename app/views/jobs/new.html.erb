@@ -10,9 +10,10 @@
   </div>
 
   <section>
-    <%= form_with url: jobs_path do |form| %>
-        <%= form.label :file, class: "visually-hidden" %>
-        <%= form.file_field :file %>
+    <%= form_with url: jobs_path, id: 'file-uploader' do |form| %>
+    <div
+      data-controller="uppy">
+    </div>
       <div>
         <%= form.submit 'Upload', class: 'btn btn-primary' %>
       </div>

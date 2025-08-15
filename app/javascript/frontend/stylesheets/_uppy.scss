@@ -1,0 +1,22 @@
+@import 'variables';
+
+.uppy-Dashboard-inner {
+  // background-color: transparent;
+  border: 5px dashed $gray-300;
+}
+
+.uppy-Dashboard-AddFiles,
+[data-uppy-drag-drop-supported="true"] .uppy-Dashboard-AddFiles {
+  border: 0;
+}
+
+
+// Hide the back button in the uppy file edit screen
+.uppy-DashboardContent-bar .uppy-DashboardContent-back {
+  display: none;
+}
+
+// Hide the cancel button in the uppy file edit screen
+.uppy-Dashboard-FileCard-actionsBtn[type="button"] {
+  display: none;
+}
