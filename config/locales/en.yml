@@ -8,6 +8,8 @@ en:
     success: File uploaded!
   index:
     link_to_upload: Upload a new PDF
+  job_details:
+    expiration: Files will be available to download for 24 hours after they have been remediated.
   footer:
     heading: PDF Accessibility Remediation
     description: ''

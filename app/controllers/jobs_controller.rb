@@ -27,8 +27,7 @@ class JobsController < GUIAuthController
 
     persistent_path = form.persist_to_tmp!
 
-    RemediationJob.perform_later(job.uuid, file_path: persistent_path,
-                                           original_filename: uploaded_file.original_filename)
+    GUIRemediationJob.perform_later(job.uuid, persistent_path, uploaded_file.original_filename)
 
     redirect_to job_path(job), notice: I18n.t('upload.success')
   rescue ActiveModel::ValidationError

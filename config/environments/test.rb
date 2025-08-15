@@ -68,5 +68,5 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 
   # Queue jobs but do not run them
-  config.active_job.queue_adapter = :test
+  # config.active_job.queue_adapter = :test
 end
