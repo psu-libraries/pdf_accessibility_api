@@ -1,6 +1,6 @@
 development:
   adapter: redis
-  url: <%= redis_url(1) %>
+  url: <%= redis_url(ACTION_CABLE_REDIS_DB) %>
   channel_prefix: pdf_accessibility_api_development
 
 test:
@@ -8,5 +8,5 @@ test:
 
 production:
   adapter: redis
-  url: <%= redis_url(1) %>
+  url: <%= redis_url(ACTION_CABLE_REDIS_DB) %>
   channel_prefix: pdf_accessibility_api_production

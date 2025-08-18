@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+SIDEKIQ_REDIS_DB = 0
+ACTION_CABLE_REDIS_DB = 1
 
 REDIS_CONFIG = {
   password: ENV['REDIS_PASSWORD'].presence,
