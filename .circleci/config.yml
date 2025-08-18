@@ -158,14 +158,7 @@ workflows:
       - build-and-push:
           context:
             - org-global
-          filters:
-            branches:
-              only:
-                - main
-                - /preview\/.*/
           name: build-and-push
-          requires:
-            - test-application
       - deploy-application:
           context:
             - org-global
@@ -177,6 +170,7 @@ workflows:
           name: deploy-image
           requires:
             - build-and-push
+            - test-application
       - release-image:
           context:
             - org-global
@@ -188,6 +182,7 @@ workflows:
           name: release-image
           requires:
             - build-and-push
+            - test-application
       - test-application:
           context:
             - org-global
