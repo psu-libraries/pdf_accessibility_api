@@ -6,7 +6,6 @@ import { generateUploadedFileData, simulateEditAndUpload } from './uppy_utils'
 
 export default class extends Controller {
   connect() {
-    console.log('yoo controller is connected')
     this.uploadSubmit = document.querySelector('.upload-submit')
     this.parentForm = document.getElementById(this.data.get('parentForm'))
     this.denylist = JSON.parse(this.data.get('denylist') || '[]')
@@ -21,13 +20,12 @@ export default class extends Controller {
   }
 
   createUppyInstance() {
-    console.log('creating Uppy instance')
     return new Uppy({
       id: 'uppy_' + (new Date().getTime()),
       autoProceed: false,
       allowMultipleUploads: true,
-      onBeforeFileAdded: (currentFile, files) => this.handleBeforeFileAdded(currentFile, files),
-      onBeforeUpload: (files) => this.handleBeforeUpload(files)
+      // onBeforeFileAdded: (currentFile, files) => this.handleBeforeFileAdded(currentFile, files),
+      // onBeforeUpload: (files) => this.handleBeforeUpload(files)
     })
   }
 
@@ -41,17 +39,28 @@ export default class extends Controller {
         showProgressDetails: true,
         height: 350,
         doneButtonHandler: null,
-        metaFields: [
-          {
-            id: 'alt_text',
-            name: 'Alt Text',
-            placeholder: 'Describe this image for accessibility',
-            required: true
-          }
-        ]
       })
       .use(AwsS3, {
-        endpoint: '/'
+        allowMultipleUploads: true,
+        getUploadParameters: async (file) => {
+          const resp = await fetch('/s3/sign', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              filename: file.name,
+              content_type: file.type,
+              size: file.size
+            })
+          })
+          console.log('waiting for a response')
+          const { url, headers } = await resp.json();
+          console.log(url)
+          return {
+            method: 'PUT',
+            url,
+            headers   // <-- Uppy will attach these to the PUT request
+          };
+        }
       })
   }
 
@@ -62,17 +71,17 @@ export default class extends Controller {
       .on('complete', (result) => this.onUppyComplete(result))
   }
 
-  handleBeforeFileAdded(currentFile, _files) {
-    const filename = currentFile.name
-    const isDenylisted = this.denylist.includes(filename)
+  // handleBeforeFileAdded(currentFile, _files) {
+  //   const filename = currentFile.name
+  //   const isDenylisted = this.denylist.includes(filename)
 
-    if (isDenylisted) {
-      this.uppy.info(`Error: ${filename} already exists in this version`, 'error', 10000)
-      return false
-    }
-  }
+  //   if (isDenylisted) {
+  //     this.uppy.info(`Error: ${filename} already exists in this version`, 'error', 10000)
+  //     return false
+  //   }
+  // }
 
-  handleBeforeUpload(files) {
+  // handleBeforeUpload(files) {
     // Validate for PDF type?
     // const fileCount = Object.keys(files).length
     // const file = Object.values(files)[fileCount - 1]
@@ -83,7 +92,7 @@ export default class extends Controller {
     //   simulateEditAndUpload()
     //   return false
     // }
-  }
+  // }
 
   handleFileAdded(file) {
     if (file.type.startsWith('image/')) {
@@ -102,15 +111,15 @@ export default class extends Controller {
     })
   }
 
-  createHiddenFileInput(success) {
-    const inputName = this.data.get('inputName')
-    const uploadedFileData = generateUploadedFileData(success)
+  // createHiddenFileInput(success) {
+  //   const inputName = this.data.get('inputName')
+  //   const uploadedFileData = generateUploadedFileData(success)
 
-    const input = document.createElement('input')
-    input.setAttribute('type', 'hidden')
-    input.setAttribute('name', inputName)
-    input.setAttribute('value', uploadedFileData)
+  //   const input = document.createElement('input')
+  //   input.setAttribute('type', 'hidden')
+  //   input.setAttribute('name', inputName)
+  //   input.setAttribute('value', uploadedFileData)
 
-    return input
-  }
+  //   return input
+  // }
 }

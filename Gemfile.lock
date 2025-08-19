@@ -123,7 +123,6 @@ GEM
     colorize (1.1.0)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.3)
-    content_disposition (1.0.0)
     crass (1.0.6)
     date (3.4.1)
     debug (1.11.0)
@@ -302,8 +301,6 @@ GEM
     reline (0.6.1)
       io-console (~> 0.5)
     rexml (3.4.1)
-    roda (3.95.0)
-      rack
     rspec-core (3.13.4)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.5)
@@ -401,9 +398,6 @@ GEM
       semantic_range (>= 2.3.0)
     shoulda-matchers (6.5.0)
       activesupport (>= 5.2.0)
-    shrine (3.6.0)
-      content_disposition (~> 1.0)
-      down (~> 5.1)
     sidekiq (8.0.6)
       connection_pool (>= 2.5.0)
       json (>= 2.9.0)
@@ -421,10 +415,6 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
-    uppy-s3_multipart (1.2.1)
-      aws-sdk-s3 (~> 1.0)
-      content_disposition (~> 1.0)
-      roda (>= 2.27, < 4)
     uri (1.0.3)
     useragent (0.16.11)
     warden (1.2.9)
@@ -476,11 +466,9 @@ DEPENDENCIES
   selenium-webdriver
   shakapacker
   shoulda-matchers
-  shrine
   sidekiq
   stimulus-rails
   tzinfo-data
-  uppy-s3_multipart (~> 1.0)
   web-console
 
 RUBY VERSION

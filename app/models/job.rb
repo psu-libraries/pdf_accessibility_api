@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Job < ApplicationRecord
-  include PdfUploader::Attachment(:file)
-
   after_commit :broadcast_to_job_channel
 
   def self.statuses
