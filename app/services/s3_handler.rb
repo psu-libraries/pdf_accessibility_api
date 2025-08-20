@@ -47,7 +47,6 @@ class S3Handler
   end
 
   def simple_post_policy(key, content_type)
-    debugger()
     signer = Aws::S3::Presigner.new(client: @s3_client)
 
     url = signer.presigned_url(
@@ -68,10 +67,9 @@ class S3Handler
   end
 
   def initiate_multipart(key_prefix, content_type)
-    debugger()
     key = "#{key_prefix}/#{SecureRandom.uuid}"
     resp = @s3_client.create_multipart_upload(
-      bucket: bucket,
+      bucket: ENV.fetch('S3_BUCKET_NAME'),
       key: key,
       content_type: content_type,
       acl: 'private'
