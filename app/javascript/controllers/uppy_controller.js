@@ -27,7 +27,6 @@ export default class extends Controller {
   }
 
   configureUppyPlugins() {
-    console.log('configuring plug-ins')
     this.uppy
       .use(Dashboard, {
         id: 'dashboard',
@@ -49,9 +48,7 @@ export default class extends Controller {
               size: file.size
             })
           })
-          console.log('waiting for a response: ' + resp.stringify)
           const { url, headers } = await resp.json();
-          console.log(url)
 
           return {
             method: 'PUT',
@@ -63,10 +60,9 @@ export default class extends Controller {
   }
 
   registerUppyEventHandlers() {
-    console.log('registering event handlers')
     this.uppy
       // .on('file-added', (_) => this.handleFileAdded())
-      .on('complete', (_) => console.log('Successfully uploaded'))
+      // .on('complete', (_) => console.log('Successfully uploaded '))
   }
 
 
