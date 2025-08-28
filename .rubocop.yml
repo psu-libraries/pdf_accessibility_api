@@ -5,6 +5,14 @@ Metrics/BlockLength:
   Exclude:
     - 'config/environments/development.rb'
 
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/jobs/remediation_job.rb'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'app/jobs/remediation_job.rb'
+
 Rails/NotNullColumn:
   Exclude:
     - 'db/migrate/20250714203038_create_gui_users.rb'
@@ -14,3 +22,15 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/NestedGroups:
   Enabled: false
+
+# Rubocop doesn't seem to understand the rswag DSL.
+# Exclude the rswag spec file spec/requests/api/v1/api-docs/jobs_spec.rb
+# from RSpec/EmptyExampleGroup.  Without this, autocorrect will delete 
+# the code in that file.
+RSpec/EmptyExampleGroup:
+  Exclude:
+    - 'spec/requests/api/v1/api-docs/jobs_spec.rb'
+
+RSpec/VariableName:
+  Exclude:
+    - 'spec/requests/api/v1/api-docs/jobs_spec.rb'

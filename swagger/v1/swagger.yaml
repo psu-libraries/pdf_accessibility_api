@@ -1,0 +1,182 @@
+---
+openapi: 3.0.1
+info:
+  title: PDF Accessibility API
+  version: v1
+  description: "This API provides an endpoint for submitting a PDF for remediation
+    and \na webhook service for retrieving the remediated version of the PDF.\n\nAuthentication
+    is handled via API keys.\n"
+  contact:
+    name: Penn State University Libraries
+    url: https://libraries.psu.edu
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      description: API key required in the X-API-KEY header
+paths:
+  "/api/v1/jobs":
+    post:
+      summary: Creates a job
+      tags:
+      - Jobs
+      description: "This endpoint allows you to submit a PDF for remediation.\n\nYou
+        must provide a valid API key in the `X-API-KEY` header to authenticate your
+        request.\n\nThe body of the request must include a `source_url` parameter
+        with the URL of the PDF to be remediated.\n\nOn success, the response will
+        include a UUID for your job.  \n\nA delayed callback will be sent to your
+        configured webhook URL when the job is complete.\n\nRefer to the Webhook Callbacks
+        section for details on the webhook notifications.\n"
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: X-API-KEY
+        in: header
+        description: API key for authentication
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: job created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    example: 123e4567-e89b-12d3-a456-426614174000
+                required:
+                - uuid
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Authorized
+                  code:
+                    type: integer
+                    example: 401
+                required:
+                - message
+                - code
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation failed: Source url can''t be blank'
+                  code:
+                    type: integer
+                    example: 422
+                required:
+                - message
+                - code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source_url:
+                  type: string
+                  format: uri
+                  example: https://example.com/file.pdf
+              required:
+              - source_url
+  https://example.com/your/endpoint (when job succeeds):
+    post:
+      summary: Job succeeded webhook notification
+      tags:
+      - Webhook Callbacks
+      description: |
+        This is the webhook notification sent to your webhook endpoint when a job succeeds and finishes processing.
+
+        Your webhook key will be provided in the headers (X-API-KEY) for you to authenticate the request.
+
+        The body of the request is described below.
+      parameters:
+      - name: X-API-KEY
+        in: header
+        description: Webhook key for authentication
+        required: true
+        schema:
+          type: string
+      responses:
+        "---":
+          description: "------"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_type:
+                  type: string
+                  example: job.succeeded
+                job:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+                      example: 123e4567-e89b-12d3-a456-426614174000
+                    status:
+                      type: string
+                      example: completed
+                    output_url:
+                      type: string
+                      format: uri
+                      example: https://example.com/output.pdf
+  https://example.com/your/endpoint (when job fails):
+    post:
+      summary: Job failed webhook notification
+      tags:
+      - Webhook Callbacks
+      description: |
+        This is the webhook notification sent to your webhook endpoint when a job fails to process.
+
+        Your webhook key will be provided in the headers (X-API-KEY) for you to authenticate the request.
+
+        The body of the request is described below.
+      parameters:
+      - name: X-API-KEY
+        in: header
+        description: Webhook key for authentication
+        required: true
+        schema:
+          type: string
+      responses:
+        "---":
+          description: "------"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_type:
+                  type: string
+                  example: job.failed
+                job:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+                      example: 123e4567-e89b-12d3-a456-426614174000
+                    status:
+                      type: string
+                      example: failed
+                    processing_error_message:
+                      type: string
+                      example: An error occurred during processing

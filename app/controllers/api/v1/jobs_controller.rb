@@ -8,7 +8,7 @@ module API::V1
       job.uuid = SecureRandom.uuid
       job.save!
 
-      RemediationJob.perform_later(job.uuid)
+      APIRemediationJob.perform_later(job.uuid)
 
       render json: job, only: :uuid
     rescue ActiveRecord::RecordInvalid => e

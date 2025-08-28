@@ -1,31 +1,18 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  heading: PDF Accessibility Remediation
+  upload:
+    heading: Remediate a PDF Document
+    subheading: Click 'Browse' to select your document
+    no_file: No file uploaded yet
+    error: File must be present
+    success: File uploaded!
+  index:
+    link_to_upload: Upload a new PDF
+  job_details:
+    expiration: Files will be available to download for 24 hours after they have been remediated.
+  footer:
+    heading: PDF Accessibility Remediation
+    description: ''
+    copyright_statement: 'Copyright © 2025 The Pennsylvania State University'
+  authentication:
+    no_auth: You are not authorized to use this resource.

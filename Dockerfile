@@ -1,5 +1,5 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20250825 AS base
-ARG UID=1000
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20250131 AS base
+ARG UID=3000
 
 USER root
 RUN apt-get update && \
@@ -26,10 +26,21 @@ RUN bundle install && \
   rm -rf /app/.bundle/cache && \
   rm -rf /app/vendor/bundle/ruby/*/cache
 
+COPY package.json yarn.lock /app/
+RUN yarn install --frozen-lockfile && \
+  rm -rf /app/.cache && \
+  rm -rf /app/tmp
 
 COPY --chown=app . /app
+RUN mkdir -p tmp/uploads && chown -R app:app tmp/uploads
 
-CMD ["bin/startup"]
+FROM base AS dev-worker
+
+ENTRYPOINT ["entrypoints/dev-worker.sh"]
+
+FROM base AS dev-mock-remediation-tool
+
+ENTRYPOINT ["entrypoints/dev-mock-remediation-tool.sh"]
 
 FROM base AS dev
 
@@ -40,6 +51,8 @@ RUN apt-get update && apt-get install -y rsync \
 
 USER app
 RUN bundle config set path 'vendor/bundle'
+
+CMD ["bin/startup"]
 
 # Final Target
 FROM base AS production
@@ -61,6 +74,7 @@ RUN RAILS_ENV=production \
   bundle exec rails assets:precompile && \
   rm -rf /app/.cache/ && \
   rm -rf /app/node_modules/.cache/ && \
-  rm -rf /app/tmp/
+  rm -rf /app/tmp/ && \
+  mkdir /app/tmp && chown -R app:app /app/tmp
 
 CMD ["bin/startup"]

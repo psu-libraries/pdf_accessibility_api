@@ -1,9 +1,20 @@
 # frozen_string_literal: true
 
 require 'sidekiq/web'
+require 'sidekiq_web_constraint'
 
 Rails.application.routes.draw do
-  mount Sidekiq::Web => '/sidekiq'
+  mount ActionCable.server => '/cable'
+  mount Rswag::Api::Engine => '/api-docs'
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Sidekiq::Web => '/sidekiq', :constraints => SidekiqWebConstraint.new
+  get '/sidekiq', to: ->(_env) {
+    [
+      401,
+      { 'Content-Type' => 'text/plain' },
+      ['Unauthorized']
+    ]
+  }, constraints: ->(req) { !SidekiqWebConstraint.new.matches?(req) }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -15,11 +26,15 @@ Rails.application.routes.draw do
   get 'manifest' => 'rails/pwa#manifest', as: :pwa_manifest
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root 'jobs#new'
+
+  resources :jobs, only: [:index, :show, :new, :create]
 
   namespace :api do
     namespace :v1 do
       post '/jobs', to: 'jobs#create'
     end
   end
+
+  get '/unauthorized', to: 'errors#unauthorized'
 end
