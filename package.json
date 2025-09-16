@@ -17,7 +17,7 @@
     "babel-loader": "8",
     "compression-webpack-plugin": "9",
     "luxon": "^3.7.1",
-    "shakapacker": "8.3.0",
+    "shakapacker": "8.4.0",
     "stimulus": "^3.2.2",
     "terser-webpack-plugin": "5",
     "webpack": "5",
