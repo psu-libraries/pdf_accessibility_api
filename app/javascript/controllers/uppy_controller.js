@@ -61,8 +61,7 @@ export default class extends Controller {
 
   registerUppyEventHandlers() {
     this.uppy
-      // .on('file-added', (_) => this.handleFileAdded())
-      // .on('complete', (_) => console.log('Successfully uploaded '))
+      .on('file-added', (_) => this.handleFileAdded())
   }
 
 

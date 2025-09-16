@@ -62,7 +62,6 @@ class JobsController < GUIAuthController
   end
 
   def complete
-    debugger()
     key = params[:key]
     upload_id = params[:upload_id]
     parts = params.require(:parts).map { |p| { etag: p[:etag], part_number: p[:part_number] } }
