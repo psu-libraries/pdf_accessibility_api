@@ -13,7 +13,7 @@ RSpec.describe UploadForm do
       let(:file) { fixture_file_upload('testing.pdf', 'application/pdf') }
 
       it 'returns a path to the uploaded file' do
-        expect(persisted_path).to match(%r{/app/tmp/uploads/[\w\-]+_testing\.pdf})
+        expect(persisted_path).to match(%r{/app/tmp/uploads/[\w-]+_testing\.pdf})
       end
 
       it 'writes the file to the tmp directory' do
