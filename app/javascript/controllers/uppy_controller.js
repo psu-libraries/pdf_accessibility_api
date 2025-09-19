@@ -5,14 +5,6 @@ import AwsS3 from '@uppy/aws-s3'
 
 export default class extends Controller {
   connect() {
-    this.uploadSubmit = document.querySelector('.upload-submit')
-    this.parentForm = document.getElementById(this.data.get('parentForm'))
-    this.denylist = JSON.parse(this.data.get('denylist') || '[]')
-
-    this.initializeUppy()
-  }
-
-  initializeUppy() {
     this.uppy = this.createUppyInstance()
     this.configureUppyPlugins()
     this.registerUppyEventHandlers()
@@ -21,9 +13,10 @@ export default class extends Controller {
   createUppyInstance() {
     return new Uppy({
       id: 'uppy_' + (new Date().getTime()),
-      autoProceed: false,
+      allowMultipleUploadBatches: false,
       restrictions: {
-        allowedFileTypes: ['.pdf']
+        allowedFileTypes: ['.pdf'],
+        maxNumberOfFiles: 1
       }
     })
   }
@@ -70,6 +63,7 @@ export default class extends Controller {
     if (res.successful.isArray || res.successful.length == 0) {
       return;
     }
+    // Currently we should only have one successful result, but if we allow multiple uploads, this will handle that
     if (res.successful.length > 1) {
       window.location.href = `/jobs`;
       return;
