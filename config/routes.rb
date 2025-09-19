@@ -38,7 +38,7 @@ Rails.application.routes.draw do
   end
 
   get '/unauthorized', to: 'errors#unauthorized'
-  post '/s3/sign', to: 'jobs#sign'
 
-  post '/s3/complete/:upload_id', to: 's3#complete'
+  # Uppy route
+  post '/s3/sign', to: 'jobs#sign'
 end

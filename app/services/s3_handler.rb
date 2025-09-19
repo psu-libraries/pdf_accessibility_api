@@ -46,7 +46,7 @@ class S3Handler
     raise Error.new(e)
   end
 
-  def simple_post_policy(key, content_type)
+  def presigned_url_for_input(key, content_type, job_id)
     signer = Aws::S3::Presigner.new(client: @s3_client)
 
     url = signer.presigned_url(
@@ -55,33 +55,16 @@ class S3Handler
       key: key,
       acl: 'private',
       content_type: content_type,
-      expires_in: 900 # 15 minutes
+      expires_in: 900 # 15 minutes
     )
     {
       url: url,
       headers: {
         'Content-Type' => content_type,
         'x-amz-acl' => 'private'
-      }
+      },
+      job_id: job_id
     }
-  end
-
-  def initiate_multipart(key_prefix, content_type)
-    key = "#{key_prefix}/#{SecureRandom.uuid}"
-    resp = @s3_client.create_multipart_upload(
-      bucket: ENV.fetch('S3_BUCKET_NAME'),
-      key: key,
-      content_type: content_type,
-      acl: 'private'
-    )
-    { upload_id: resp.upload_id, key: key, part_size: 10.megabytes }
-  end
-
-  def complete_multipart_upload(key, upload_id, parts)
-    @s3_client.complete_multipart_upload(key: key,
-                                         upload_id: upload_id,
-                                         multipart_upload: { parts: parts })
-    "https://#{@bucket}.s3.amazonaws.com/#{key}"
   end
 
   private

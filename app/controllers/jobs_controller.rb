@@ -3,7 +3,7 @@
 class JobsController < GUIAuthController
   include RemediationModule
 
-  protect_from_forgery except: [:sign, :complete]
+  protect_from_forgery except: [:sign]
   add_flash_types :info, :error, :warning
   def index
     @jobs = current_user.jobs.order(created_at: :desc)
@@ -50,31 +50,9 @@ class JobsController < GUIAuthController
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!
-
     object_key = create_object_key(filename)
     s3_handler = S3Handler.new(object_key)
     s3_handler.bucket
-    if size < 5.megabytes
-      render json: s3_handler.simple_post_policy(filename, content_type)
-    else
-      render json: s3_handler.initiate_multipart(filename, content_type)
-    end
+    render json: s3_handler.presigned_url_for_input(filename, content_type, job.id)
   end
-
-  def complete
-    key = params[:key]
-    upload_id = params[:upload_id]
-    parts = params.require(:parts).map { |p| { etag: p[:etag], part_number: p[:part_number] } }
-
-    object_key = create_object_key(key)
-    s3_handler = S3Handler.new(object_key)
-
-    location = s3_handler.complete_multipart_upload(bucket: bucket, key: key,
-                                                    upload_id: upload_id,
-                                                    multipart_upload: { parts: parts })
-    render json: { location: location }
-  end
-
-rescue Aws::S3::Errors::ServiceError => e
-  render json: { error: e.message }, status: :bad_request
 end

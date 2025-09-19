@@ -22,7 +22,9 @@ export default class extends Controller {
     return new Uppy({
       id: 'uppy_' + (new Date().getTime()),
       autoProceed: false,
-      allowMultipleUploads: true,
+      restrictions: {
+        allowedFileTypes: ['.pdf']
+      }
     })
   }
 
@@ -37,7 +39,6 @@ export default class extends Controller {
         doneButtonHandler: null,
       })
       .use(AwsS3, {
-        allowMultipleUploads: true,
         getUploadParameters: async (file) => {
           const resp = await fetch('/s3/sign', {
             method: 'POST',
@@ -48,12 +49,12 @@ export default class extends Controller {
               size: file.size
             })
           })
-          const { url, headers } = await resp.json();
-
+          const data = await resp.json();
+          file.meta.jobId = data.job_id;
           return {
             method: 'PUT',
-            url,
-            headers
+            url: data.url,
+            headers: data.headers
           };
         }
       })
@@ -61,12 +62,21 @@ export default class extends Controller {
 
   registerUppyEventHandlers() {
     this.uppy
-      .on('file-added', (_) => this.handleFileAdded())
+      .on('complete', (res) => this.handleComplete(res))
   }
 
-
-  handleFileAdded() {
-    this.uppy.upload()
+//  Reroute to the page of the Job Created
+  handleComplete(res) {
+    if (res.successful.isArray || res.successful.length == 0) {
+      return;
+    }
+    if (res.successful.length > 1) {
+      window.location.href = `/jobs`;
+      return;
+    }
+    const jobId = res.successful[0].meta.jobId
+    if (jobId) {
+      window.location.href = `/jobs/${jobId}`;
+    }
   }
-
 }
