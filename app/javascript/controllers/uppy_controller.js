@@ -58,7 +58,7 @@ export default class extends Controller {
       .on('complete', (res) => this.handleComplete(res))
   }
 
-//  Reroute to the page of the Job Created
+//  Reroute to the page of the Job created
   handleComplete(res) {
     if (res.successful.isArray || res.successful.length == 0) {
       return;

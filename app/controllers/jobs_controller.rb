@@ -18,29 +18,6 @@ class JobsController < GUIAuthController
     @job = Job.new
   end
 
-  def create
-    uploaded_file = params[:file]
-    form = UploadForm.new(file: uploaded_file)
-    form.validate!
-
-    job = current_user.jobs.build
-    job.status = 'processing'
-    job.uuid = SecureRandom.uuid
-    job.save!
-
-    persistent_path = form.persist_to_tmp!
-
-    GUIRemediationJob.perform_later(job.uuid, persistent_path, uploaded_file.original_filename)
-
-    redirect_to job_path(job), notice: I18n.t('upload.success')
-  rescue ActiveModel::ValidationError
-    flash[:alert] = I18n.t('upload.error')
-    redirect_to action: 'new'
-  rescue StandardError => e
-    flash[:alert] = "Exception: #{e.message}"
-    redirect_to action: 'new'
-  end
-
   def sign
     filename     = params[:filename].presence || "upload/#{SecureRandom.uuid}"
     content_type = params[:content_type].presence || 'application/pdf'
