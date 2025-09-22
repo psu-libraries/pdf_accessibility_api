@@ -33,7 +33,7 @@ export default class extends Controller {
       })
       .use(AwsS3, {
         getUploadParameters: async (file) => {
-          const resp = await fetch('/s3/sign', {
+          const resp = await fetch('/jobs/sign', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

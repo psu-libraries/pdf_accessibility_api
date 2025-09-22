@@ -21,7 +21,6 @@ class JobsController < GUIAuthController
   def sign
     filename     = params[:filename].presence || "upload/#{SecureRandom.uuid}"
     content_type = params[:content_type].presence || 'application/pdf'
-    size         = params[:size].to_i
 
     job = current_user.jobs.build
     job.status = 'processing'
