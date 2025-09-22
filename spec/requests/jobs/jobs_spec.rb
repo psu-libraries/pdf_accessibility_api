@@ -3,11 +3,13 @@
 require 'rails_helper'
 
 describe 'Jobs' do
-  before { allow(GUIRemediationJob).to receive(:perform_later) }
+  include RemediationModule
 
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
   let!(:original_filename) { 'testing.pdf' }
+  let!(:content_type) {'application/pdf'}
+  let!(:size) {'9000'}
 
   describe 'GET jobs/new' do
     it 'gets a successful response' do
@@ -21,50 +23,29 @@ describe 'Jobs' do
     end
   end
 
-  describe 'POST jobs/create' do
-    let!(:file_upload) { Rack::Test::UploadedFile.new(File.new("#{Rails.root}/spec/fixtures/files/testing.pdf"),
-                                                      'application.pdf',
-                                                      original_filename:)}
-
-    it 'saves the uploaded file' do
-      expect {
-        post(
-          '/jobs', headers: valid_headers, params: { file: file_upload }
-        )
-      }.to(change { Rails.root.glob('tmp/uploads/*_testing.pdf').count }.by(1))
+  describe 'POST jobs/sign' do
+    it 'returns appropriate json' do
+      post(
+        '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
+      )
+      expect(response).to be_ok
+      parsed_body = response.parsed_body
+      object_key = create_object_key(original_filename)
+      s3_handler = S3Handler.new(object_key)
+      id = gui_user.jobs.last.id
+      expect(parsed_body).to eq(
+        s3_handler.presigned_url_for_input(original_filename, content_type, id).with_indifferent_access
+      )
     end
 
     it 'creates a record to track the job status' do
       expect {
         post(
-          '/jobs', headers: valid_headers, params: { file: file_upload }
+          '/jobs/sign', headers: valid_headers, params: { file: original_filename, original_filename:, size: }
         )
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last
       expect(job.status).to eq 'processing'
-    end
-
-    it 'enqueues a job with GUIRemediationJob' do
-      post(
-        '/jobs', headers: valid_headers, params: { file: file_upload }
-      )
-      expect(GUIRemediationJob).to have_received(:perform_later)
-    end
-
-    it 'redirects to new page' do
-      post(
-        '/jobs', headers: valid_headers, params: { file: file_upload }
-      )
-      expect(response).to redirect_to(job_path(Job.last))
-    end
-
-    context 'when an error occurs' do
-      it 'displays an error' do
-        post(
-          '/jobs/', headers: valid_headers, params: { file: {} }
-        )
-        expect(flash[:alert]).to eq(I18n.t('upload.error'))
-      end
     end
   end
 end
