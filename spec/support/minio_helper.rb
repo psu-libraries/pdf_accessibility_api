@@ -7,7 +7,7 @@ module MinioEnvironmentHelper
                             S3_BUCKET_NAME: 'pdf_accessibility_api',
                             AWS_ACCESS_KEY_ID: 'pdf_accessibility_api',
                             AWS_SECRET_ACCESS_KEY: 'pdf_accessibility_api',
-                            AWS_REGION: 'none'
+                            AWS_REGION: 'us-east-1'
                           }, &)
   end
 end
