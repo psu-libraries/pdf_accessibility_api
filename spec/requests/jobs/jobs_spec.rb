@@ -8,8 +8,8 @@ describe 'Jobs' do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
   let!(:original_filename) { 'testing.pdf' }
-  let!(:content_type) {'application/pdf'}
-  let!(:size) {'9000'}
+  let!(:content_type) { 'application/pdf' }
+  let!(:size) { '9000' }
 
   describe 'GET jobs/new' do
     it 'gets a successful response' do
