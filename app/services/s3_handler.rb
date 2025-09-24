@@ -8,6 +8,8 @@ class S3Handler
   INPUT_PREFIX = 'pdf/'
   OUTPUT_PREFIX = 'result/COMPLIANT_'
 
+  attr_reader :bucket
+
   def initialize(object_key)
     @object_key = object_key
     client_options = {
@@ -22,8 +24,8 @@ class S3Handler
       client_options[:region] = ENV.fetch('AWS_REGION')
     end
 
-    s3_client = Aws::S3::Client.new(client_options)
-    @s3 = Aws::S3::Resource.new(client: s3_client)
+    @s3_client = Aws::S3::Client.new(client_options)
+    @s3 = Aws::S3::Resource.new(client: @s3_client)
     @bucket = @s3.bucket(ENV.fetch('S3_BUCKET_NAME'))
   end
 
@@ -42,6 +44,28 @@ class S3Handler
     obj.presigned_url(:get, expires_in: expires_in)
   rescue Aws::Errors::ServiceError => e
     raise Error.new(e)
+  end
+
+  def presigned_url_for_input(key, content_type, job_id)
+    signer = Aws::S3::Presigner.new(client: @s3_client)
+
+    url = signer.presigned_url(
+      :put_object,
+      bucket: ENV.fetch('S3_BUCKET_NAME'),
+      key: key,
+      acl: 'private',
+      content_type: content_type,
+      expires_in: 900 # 15 minutes
+    )
+    {
+      url: url,
+      headers: {
+        'Content-Type' => content_type,
+        'x-amz-acl' => 'private'
+      },
+      job_id: job_id,
+      object_key: @object_key
+    }
   end
 
   private

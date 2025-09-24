@@ -5,10 +5,24 @@ module RemediationModule
   OUTPUT_POLLING_TIMEOUT = 3600 # The default 1-hour timeout is also arbitrary and should probably be adjusted.
   PRESIGNED_URL_EXPIRES_IN = 84_000
 
+  def create_object_key(original_filename)
+    "#{SecureRandom.hex(8)}_#{original_filename}"
+  end
+
+  def update_job(job, output_url, object_key)
+    job.update(
+      status: 'completed',
+      finished_at: Time.zone.now,
+      output_url: output_url,
+      output_object_key: object_key,
+      output_url_expires_at: PRESIGNED_URL_EXPIRES_IN.seconds.from_now
+    )
+  end
+
   def upload_and_update(job_uuid, file_path, original_filename, output_polling_timeout)
     job = Job.find_by!(uuid: job_uuid)
 
-    object_key = "#{SecureRandom.hex(8)}_#{original_filename}"
+    object_key = create_object_key(original_filename)
     s3 = S3Handler.new(object_key)
     s3.upload_to_input(file_path)
 
@@ -24,13 +38,7 @@ module RemediationModule
       end
     end
 
-    job.update(
-      status: 'completed',
-      finished_at: Time.zone.now,
-      output_url: output_url,
-      output_object_key: object_key,
-      output_url_expires_at: PRESIGNED_URL_EXPIRES_IN.seconds.from_now
-    )
+    update_job(job, output_url, object_key)
   rescue S3Handler::Error => e
     # We may want to retry the upload depending on the more specific nature of the failure.
     record_failure_and_notify(job, "Failed to upload file to remediation input location:  #{e.message}")

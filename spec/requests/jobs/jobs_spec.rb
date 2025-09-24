@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe 'Jobs' do
-  before { allow(GUIRemediationJob).to receive(:perform_later) }
+  include RemediationModule
 
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
@@ -21,50 +21,66 @@ describe 'Jobs' do
     end
   end
 
-  describe 'POST jobs/create' do
-    let!(:file_upload) { Rack::Test::UploadedFile.new(File.new("#{Rails.root}/spec/fixtures/files/testing.pdf"),
-                                                      'application.pdf',
-                                                      original_filename:)}
+  describe 'POST jobs/sign' do
+    let(:example_json) do {
+      url: 'www.example.com',
+      headers: {
+        'Content-Type' => 'application/pdf',
+        'x-amz-acl' => 'private'
+      },
+      job_id: '1',
+      object_key: 'example object key'
+    }
+    end
 
-    it 'saves the uploaded file' do
-      expect {
-        post(
-          '/jobs', headers: valid_headers, params: { file: file_upload }
-        )
-      }.to(change { Rails.root.glob('tmp/uploads/*_testing.pdf').count }.by(1))
+    let(:s3) {
+      instance_spy(
+        S3Handler,
+        presigned_url_for_input: example_json
+      )
+    }
+
+    before do
+      allow(S3Handler).to receive(:new).and_return s3
+    end
+
+    it 'returns json created by S3Handler' do
+      post(
+        '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
+      )
+      expect(response).to be_ok
+      parsed_body = response.parsed_body
+      gui_user.jobs.last.id
+      expect(s3).to have_received(:presigned_url_for_input)
+      expect(parsed_body).to eq(example_json.with_indifferent_access)
     end
 
     it 'creates a record to track the job status' do
       expect {
         post(
-          '/jobs', headers: valid_headers, params: { file: file_upload }
+          '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
         )
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last
       expect(job.status).to eq 'processing'
     end
+  end
 
-    it 'enqueues a job with GUIRemediationJob' do
+  describe 'POST jobs/complete' do
+    let!(:job) { create(:job, :gui_user_job) }
+
+    it 'updates the related job' do
       post(
-        '/jobs', headers: valid_headers, params: { file: file_upload }
+        '/jobs/complete', headers: valid_headers, params: {
+          job_id: job.id,
+          output_url: 'www.test.com',
+          output_object_key: 'test output key'
+        }
       )
-      expect(GUIRemediationJob).to have_received(:perform_later)
-    end
-
-    it 'redirects to new page' do
-      post(
-        '/jobs', headers: valid_headers, params: { file: file_upload }
-      )
-      expect(response).to redirect_to(job_path(Job.last))
-    end
-
-    context 'when an error occurs' do
-      it 'displays an error' do
-        post(
-          '/jobs/', headers: valid_headers, params: { file: {} }
-        )
-        expect(flash[:alert]).to eq(I18n.t('upload.error'))
-      end
+      reloaded_job = job.reload
+      expect(reloaded_job.status).to eq 'completed'
+      expect(reloaded_job.output_url).to eq 'www.test.com'
+      expect(reloaded_job.output_object_key).to eq 'test output key'
     end
   end
 end

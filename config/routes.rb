@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   mount Rswag::Api::Engine => '/api-docs'
   mount Rswag::Ui::Engine => '/api-docs'
   mount Sidekiq::Web => '/sidekiq', :constraints => SidekiqWebConstraint.new
+
   get '/sidekiq', to: ->(_env) {
     [
       401,
@@ -28,7 +29,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root 'jobs#new'
 
-  resources :jobs, only: [:index, :show, :new, :create]
+  resources :jobs, only: [:index, :show, :new]
 
   namespace :api do
     namespace :v1 do
@@ -37,4 +38,8 @@ Rails.application.routes.draw do
   end
 
   get '/unauthorized', to: 'errors#unauthorized'
+
+  # Uppy routes
+  post '/jobs/sign', to: 'jobs#sign'
+  post '/jobs/complete', to: 'jobs#complete'
 end
