@@ -9,7 +9,6 @@ describe 'Jobs' do
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
   let!(:original_filename) { 'testing.pdf' }
   let!(:content_type) { 'application/pdf' }
-  let!(:size) { '9000' }
 
   describe 'GET jobs/new' do
     it 'gets a successful response' do
@@ -41,7 +40,7 @@ describe 'Jobs' do
     it 'creates a record to track the job status' do
       expect {
         post(
-          '/jobs/sign', headers: valid_headers, params: { file: original_filename, original_filename:, size: }
+          '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
         )
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last
