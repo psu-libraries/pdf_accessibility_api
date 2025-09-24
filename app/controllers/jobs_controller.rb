@@ -31,4 +31,11 @@ class JobsController < GUIAuthController
     s3_handler.bucket
     render json: s3_handler.presigned_url_for_input(filename, content_type, job.id)
   end
+
+  def complete
+    job = Job.find(params[:job_id])
+    output_url = params[:output_url]
+    output_object_key = params[:output_object_key]
+    update_job(job, output_url, output_object_key)
+  end
 end

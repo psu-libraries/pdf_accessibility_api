@@ -63,7 +63,8 @@ class S3Handler
         'Content-Type' => content_type,
         'x-amz-acl' => 'private'
       },
-      job_id: job_id
+      job_id: job_id,
+      object_key: @object_key
     }
   end
 
