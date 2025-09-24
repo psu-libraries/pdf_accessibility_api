@@ -23,32 +23,47 @@ describe 'Jobs' do
   end
 
   describe 'POST jobs/sign' do
-    it 'returns appropriate json' do
-      with_minio_env do
-        post(
-          '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
-        )
-        expect(response).to be_ok
-        parsed_body = response.parsed_body
-        object_key = create_object_key(original_filename)
-        s3_handler = S3Handler.new(object_key)
-        id = gui_user.jobs.last.id
-        expect(parsed_body).to eq(
-          s3_handler.presigned_url_for_input(original_filename, content_type, id).with_indifferent_access
-        )
-      end
+    let(:example_json) do {
+      url: 'www.example.com',
+      headers: {
+        'Content-Type' => 'application/pdf',
+        'x-amz-acl' => 'private'
+      },
+      job_id: '1',
+      object_key: 'example object key'
+    }
+    end
+
+    let(:s3) {
+      instance_spy(
+        S3Handler,
+        presigned_url_for_input: example_json
+      )
+    }
+
+    before do
+      allow(S3Handler).to receive(:new).and_return s3
+    end
+
+    it 'returns json created by S3Handler' do
+      post(
+        '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
+      )
+      expect(response).to be_ok
+      parsed_body = response.parsed_body
+      gui_user.jobs.last.id
+      expect(s3).to have_received(:presigned_url_for_input)
+      expect(parsed_body).to eq(example_json.with_indifferent_access)
     end
 
     it 'creates a record to track the job status' do
-      with_minio_env do
-        expect {
-          post(
-            '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
-          )
-        }.to(change { gui_user.jobs.count }.by(1))
-        job = gui_user.jobs.last
-        expect(job.status).to eq 'processing'
-      end
+      expect {
+        post(
+          '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
+        )
+      }.to(change { gui_user.jobs.count }.by(1))
+      job = gui_user.jobs.last
+      expect(job.status).to eq 'processing'
     end
   end
 
@@ -56,19 +71,17 @@ describe 'Jobs' do
     let!(:job) { create(:job, :gui_user_job) }
 
     it 'updates the related job' do
-      with_minio_env do
-        post(
-          '/jobs/complete', headers: valid_headers, params: {
-            job_id: job.id,
-            output_url: 'www.test.com',
-            output_object_key: 'test output key'
-          }
-        )
-        reloaded_job = job.reload
-        expect(reloaded_job.status).to eq 'completed'
-        expect(reloaded_job.output_url).to eq 'www.test.com'
-        expect(reloaded_job.output_object_key).to eq 'test output key'
-      end
+      post(
+        '/jobs/complete', headers: valid_headers, params: {
+          job_id: job.id,
+          output_url: 'www.test.com',
+          output_object_key: 'test output key'
+        }
+      )
+      reloaded_job = job.reload
+      expect(reloaded_job.status).to eq 'completed'
+      expect(reloaded_job.output_url).to eq 'www.test.com'
+      expect(reloaded_job.output_object_key).to eq 'test output key'
     end
   end
 end

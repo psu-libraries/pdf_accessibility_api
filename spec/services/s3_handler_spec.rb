@@ -77,11 +77,14 @@ RSpec.describe S3Handler, type: :service do
         allow(Aws::S3::Presigner).to receive(:new).and_return signer
       end
 
-      it 'returns json with the headers, job_id, and url' do
+      it 'returns json with the url, headers, job_id, and object_key' do
         expect(handler.presigned_url_for_input(object_key, content_type, job_id)).to eq(
-          { headers: { 'Content-Type' => content_type.to_s, 'x-amz-acl' => 'private' },
+          {
+            url: url,
+            headers: { 'Content-Type' => content_type.to_s, 'x-amz-acl' => 'private' },
             job_id: job_id,
-            url: url }
+            object_key: object_key
+          }
         )
       end
 
