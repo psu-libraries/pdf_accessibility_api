@@ -24,27 +24,31 @@ describe 'Jobs' do
 
   describe 'POST jobs/sign' do
     it 'returns appropriate json' do
-      post(
-        '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
-      )
-      expect(response).to be_ok
-      parsed_body = response.parsed_body
-      object_key = create_object_key(original_filename)
-      s3_handler = S3Handler.new(object_key)
-      id = gui_user.jobs.last.id
-      expect(parsed_body).to eq(
-        s3_handler.presigned_url_for_input(original_filename, content_type, id).with_indifferent_access
-      )
-    end
-
-    it 'creates a record to track the job status' do
-      expect {
+      with_minio_env do
         post(
           '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
         )
-      }.to(change { gui_user.jobs.count }.by(1))
-      job = gui_user.jobs.last
-      expect(job.status).to eq 'processing'
+        expect(response).to be_ok
+        parsed_body = response.parsed_body
+        object_key = create_object_key(original_filename)
+        s3_handler = S3Handler.new(object_key)
+        id = gui_user.jobs.last.id
+        expect(parsed_body).to eq(
+          s3_handler.presigned_url_for_input(original_filename, content_type, id).with_indifferent_access
+        )
+      end
+    end
+
+    it 'creates a record to track the job status' do
+      with_minio_env do
+        expect {
+          post(
+            '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
+          )
+        }.to(change { gui_user.jobs.count }.by(1))
+        job = gui_user.jobs.last
+        expect(job.status).to eq 'processing'
+      end
     end
   end
 end
