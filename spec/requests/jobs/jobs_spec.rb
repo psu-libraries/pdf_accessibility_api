@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe 'Jobs' do
-  include RemediationModule
+  before { allow(GUIRemediationJob).to receive(:perform_later) }
 
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
@@ -63,6 +63,13 @@ describe 'Jobs' do
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last
       expect(job.status).to eq 'processing'
+    end
+
+    it 'enqueues a job with GUIRemediationJob' do
+      post(
+        '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
+      )
+      expect(GUIRemediationJob).to have_received(:perform_later)
     end
   end
 end
