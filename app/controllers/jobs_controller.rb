@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class JobsController < GUIAuthController
-  include RemediationModule
-
   protect_from_forgery except: [:sign]
   add_flash_types :info, :error, :warning
   def index
