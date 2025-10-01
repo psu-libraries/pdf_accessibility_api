@@ -23,6 +23,7 @@ RSpec.describe S3Handler, type: :service do
       allow(ENV).to receive(:fetch).with('S3_BUCKET_NAME').and_return(bucket_name)
       allow(Aws::S3::Resource).to receive(:new).and_return(s3_resource)
       allow(s3_resource).to receive(:bucket).with(bucket_name).and_return(bucket)
+      allow(bucket).to receive(:name).and_return(bucket_name)
     end
 
     describe '#upload_to_input' do

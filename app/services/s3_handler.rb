@@ -8,8 +8,6 @@ class S3Handler
   INPUT_PREFIX = 'pdf/'
   OUTPUT_PREFIX = 'result/COMPLIANT_'
 
-  attr_reader :bucket
-
   def initialize(object_key)
     @object_key = object_key
     client_options = {
@@ -51,7 +49,7 @@ class S3Handler
 
     url = signer.presigned_url(
       :put_object,
-      bucket: ENV.fetch('S3_BUCKET_NAME'),
+      bucket: @bucket.name,
       key: key,
       acl: 'private',
       content_type: content_type,
