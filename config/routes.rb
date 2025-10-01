@@ -41,5 +41,4 @@ Rails.application.routes.draw do
 
   # Uppy routes
   post '/jobs/sign', to: 'jobs#sign'
-  post '/jobs/complete', to: 'jobs#complete'
 end

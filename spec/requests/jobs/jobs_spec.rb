@@ -65,22 +65,4 @@ describe 'Jobs' do
       expect(job.status).to eq 'processing'
     end
   end
-
-  describe 'POST jobs/complete' do
-    let!(:job) { create(:job, :gui_user_job) }
-
-    it 'updates the related job' do
-      post(
-        '/jobs/complete', headers: valid_headers, params: {
-          job_id: job.id,
-          output_url: 'www.test.com',
-          output_object_key: 'test output key'
-        }
-      )
-      reloaded_job = job.reload
-      expect(reloaded_job.status).to eq 'completed'
-      expect(reloaded_job.output_url).to eq 'www.test.com'
-      expect(reloaded_job.output_object_key).to eq 'test output key'
-    end
-  end
 end
