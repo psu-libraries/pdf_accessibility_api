@@ -4,7 +4,7 @@ export AWS_SECRET_ACCESS_KEY=pdf_accessibility_api # Default value for MinIO in 
 export AWS_REGION="us-east-1"
 
 # S3 Bucket Info
-export S3_ENDPOINT=http://minio:9000 # Do not set if connecting to the real AWS S3 bucket
+export S3_ENDPOINT=http://docker.for.mac.localhost:9000 # Do not set if connecting to the real AWS S3 bucket
 export S3_BUCKET_NAME=pdf_accessibility_api # Default value for MinIO in the docker compose environment
 
 #---------------------------------
