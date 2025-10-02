@@ -7,8 +7,9 @@ class APIRemediationJob < ApplicationJob
     job = Job.find_by!(uuid: job_uuid)
     tempfile = Down.download(job.source_url)
     original_filename = tempfile&.original_filename
+    object_key = "#{SecureRandom.hex(8)}_#{original_filename}"
     file_path = tempfile&.path
-    upload_and_update(job_uuid, original_filename, output_polling_timeout, file_path:)
+    upload_and_update(job_uuid, object_key, output_polling_timeout, file_path:)
   rescue Down::Error => e
     # We may want to retry the download depending on the more specific nature of the failure.
     record_failure_and_notify(job, "Failed to download file from source URL:  #{e.message}")

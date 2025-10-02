@@ -5,9 +5,8 @@ module RemediationModule
   OUTPUT_POLLING_TIMEOUT = 3600 # The default 1-hour timeout is also arbitrary and should probably be adjusted.
   PRESIGNED_URL_EXPIRES_IN = 84_000
 
-  def upload_and_update(job_uuid, original_filename, output_polling_timeout, file_path: '')
+  def upload_and_update(job_uuid, object_key, output_polling_timeout, file_path: '')
     job = Job.find_by!(uuid: job_uuid)
-    object_key = "#{SecureRandom.hex(8)}_#{original_filename}"
     s3 = S3Handler.new(object_key)
     s3.upload_to_input(file_path) unless file_path.empty?
 
