@@ -44,6 +44,7 @@ export default class extends Controller {
           })
           const data = await resp.json();
           file.meta.jobId = data.job_id;
+          file.meta.objectKey = data.object_key
           return {
             method: 'PUT',
             url: data.url,
@@ -64,6 +65,15 @@ export default class extends Controller {
     }
     const jobId = res.successful[0].meta.jobId
     if (jobId) {
+      await fetch('/jobs/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          job_id: jobId,
+          output_url: res.successful[0].uploadURL,
+          object_key: res.successful[0].meta.objectKey
+        })
+      })
       window.location.href = `/jobs/${jobId}`;
     }
   }

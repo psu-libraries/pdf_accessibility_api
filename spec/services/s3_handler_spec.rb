@@ -83,7 +83,8 @@ RSpec.describe S3Handler, type: :service do
           {
             url: url,
             headers: { 'Content-Type' => content_type.to_s, 'x-amz-acl' => 'private' },
-            job_id: job_id
+            job_id: job_id,
+            object_key: object_key
           }
         )
       end

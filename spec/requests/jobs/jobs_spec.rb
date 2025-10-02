@@ -8,6 +8,7 @@ describe 'Jobs' do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
   let!(:original_filename) { 'testing.pdf' }
+  let!(:job) { create(:job) }
 
   describe 'GET jobs/new' do
     it 'gets a successful response' do
@@ -64,10 +65,12 @@ describe 'Jobs' do
       job = gui_user.jobs.last
       expect(job.status).to eq 'processing'
     end
+  end
 
+  describe 'POST jobs/complete' do
     it 'enqueues a job with GUIRemediationJob' do
       post(
-        '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
+        '/jobs/complete', headers: valid_headers, params: { job_id: job.id, object_key: '12345678_testing.pdf' }
       )
       expect(GUIRemediationJob).to have_received(:perform_later)
     end
