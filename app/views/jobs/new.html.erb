@@ -6,16 +6,13 @@
   <% end %>
   <div>
     <h2><%= I18n.t('upload.heading') %></h2>
-    <p><%= I18n.t('upload.subheading') %></p>
   </div>
 
   <section>
-    <%= form_with url: jobs_path do |form| %>
-        <%= form.label :file, class: "visually-hidden" %>
-        <%= form.file_field :file %>
-      <div>
-        <%= form.submit 'Upload', class: 'btn btn-primary' %>
-      </div>
+    <%= form_with url: jobs_path, id: 'file-uploader' do |form| %>
+    <div
+      data-controller="uppy"
+      data-uppy-parent-form="file-uploader">
     <% end %>
   </section>
 </main>

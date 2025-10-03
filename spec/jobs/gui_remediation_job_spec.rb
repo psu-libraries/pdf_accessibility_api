@@ -12,7 +12,7 @@ RSpec.describe GUIRemediationJob do
   }
   let(:output_url) { 'https://example.com/presigned-file-url' }
   let(:file_path) { './spec/fixtures/files/testing.pdf' }
-  let(:original_filename) { 'testing.pdf' }
+  let(:object_key) { "#{SecureRandom.hex(8)}_testing.pdf" }
 
   before do
     allow(S3Handler).to receive(:new).and_return s3
@@ -21,17 +21,13 @@ RSpec.describe GUIRemediationJob do
   end
 
   describe '#perform' do
-    context 'when the job is called with file_path and original_filename arguments' do
+    context 'when the job is called with file_path and object_key arguments' do
       before do
-        described_class.perform_now(gui_job.uuid, file_path, original_filename)
+        described_class.perform_now(gui_job.uuid, object_key)
       end
 
-      it 'uses the original_filename for creating the object key' do
-        expect(S3Handler).to have_received(:new).with(/[a-f0-9]{16}_testing\.pdf/)
-      end
-
-      it 'uses the file_path for uploading to S3' do
-        expect(s3).to have_received(:upload_to_input).with(file_path)
+      it 'does not upload to S3 (this is done by uppy)' do
+        expect(s3).not_to have_received(:upload_to_input).with(file_path)
       end
 
       it 'updates the status and metadata of the given job record' do
@@ -44,10 +40,6 @@ RSpec.describe GUIRemediationJob do
           .of(RemediationModule::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
       end
 
-      it 'calls File.delete on the given path' do
-        expect(File).to have_received(:delete).with(file_path)
-      end
-
       it 'does not queue up a notification about the status of the job' do
         expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(gui_job.uuid)
       end
@@ -57,7 +49,7 @@ RSpec.describe GUIRemediationJob do
       let(:output_url) { nil }
 
       it 'updates the status and metadata of the given job record' do
-        described_class.perform_now(gui_job.uuid, file_path, original_filename, output_polling_timeout: 1)
+        described_class.perform_now(gui_job.uuid, object_key, output_polling_timeout: 1)
         reloaded_job = gui_job.reload
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.output_url).to be_nil
@@ -68,18 +60,18 @@ RSpec.describe GUIRemediationJob do
       end
 
       it 'does not queue up a notification' do
-        described_class.perform_now(gui_job.uuid, file_path, original_filename, output_polling_timeout: 1)
+        described_class.perform_now(gui_job.uuid, object_key, output_polling_timeout: 1)
         expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(gui_job.uuid)
       end
     end
 
     context 'when an error occurs while uploading the source file' do
       before do
-        allow(s3).to receive(:upload_to_input).and_raise(S3Handler::Error.new('upload error'))
+        allow(s3).to receive(:presigned_url_for_output).and_raise(S3Handler::Error.new('upload error'))
       end
 
       it 'updates the status and metadata of the given job record' do
-        described_class.perform_now(gui_job.uuid, file_path, original_filename)
+        described_class.perform_now(gui_job.uuid, object_key)
         reloaded_job = gui_job.reload
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.output_url).to be_nil
@@ -92,7 +84,7 @@ RSpec.describe GUIRemediationJob do
       end
 
       it 'does not queue up a notification' do
-        described_class.perform_now(gui_job.uuid, file_path, original_filename)
+        described_class.perform_now(gui_job.uuid, object_key)
         expect(RemediationStatusNotificationJob).not_to have_received(:perform_later).with(gui_job.uuid)
       end
     end

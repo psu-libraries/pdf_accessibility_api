@@ -2,10 +2,6 @@
 
 require 'rails_helper'
 
-def with_modified_env(options = {}, &)
-  ClimateControl.modify(options, &)
-end
-
 describe 'requesting a file remediation via the API', :active_job_inline do
   let!(:api_user) { create(:api_user, webhook_endpoint: 'https://example.com/webhooks') }
   let(:http_client) { instance_double Faraday::Connection }
@@ -27,15 +23,7 @@ describe 'requesting a file remediation via the API', :active_job_inline do
     # Here we're ensuring that even if we have configured our environment to use the real
     # AWS S3 bucket and PDF remediation tool, this test will still use MinIO and avoid
     # actually uploading the file to be remediated.
-    with_modified_env(
-      {
-        S3_ENDPOINT: 'http://minio:9000',
-        S3_BUCKET_NAME: 'pdf_accessibility_api',
-        AWS_ACCESS_KEY_ID: 'pdf_accessibility_api',
-        AWS_SECRET_ACCESS_KEY: 'pdf_accessibility_api',
-        AWS_REGION: 'none'
-      }
-    ) do
+    with_minio_env do
       post(
         '/api/v1/jobs',
         params: {

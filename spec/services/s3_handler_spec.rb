@@ -11,6 +11,9 @@ RSpec.describe S3Handler, type: :service do
     let(:bucket) { instance_double(Aws::S3::Bucket) }
     let(:s3_object) { instance_double(Aws::S3::Object) }
     let(:handler) { described_class.new(object_key) }
+    let(:content_type) { 'application/pdf' }
+    let(:signer) { instance_double Aws::S3::Presigner }
+    let(:url) { 'www.response_example.com' }
 
     before do
       allow(ENV).to receive(:fetch).with('AWS_REGION').and_return('us-east-1')
@@ -19,6 +22,7 @@ RSpec.describe S3Handler, type: :service do
       allow(ENV).to receive(:fetch).with('S3_BUCKET_NAME').and_return(bucket_name)
       allow(Aws::S3::Resource).to receive(:new).and_return(s3_resource)
       allow(s3_resource).to receive(:bucket).with(bucket_name).and_return(bucket)
+      allow(bucket).to receive(:name).and_return(bucket_name)
     end
 
     describe '#upload_to_input' do
@@ -64,6 +68,35 @@ RSpec.describe S3Handler, type: :service do
         it 're-raises an S3Handler::Error' do
           expect { handler.presigned_url_for_output }.to raise_error(S3Handler::Error, 'AWS error')
         end
+      end
+    end
+
+    describe '#presigned_url_for_input' do
+      before do
+        allow(signer).to receive(:presigned_url).and_return(url)
+        allow(Aws::S3::Presigner).to receive(:new).and_return signer
+      end
+
+      it 'returns json with the url, headers, and object_key' do
+        expect(handler.presigned_url_for_input(object_key, content_type)).to eq(
+          {
+            url: url,
+            headers: { 'Content-Type' => content_type.to_s, 'x-amz-acl' => 'private' },
+            object_key: object_key
+          }
+        )
+      end
+
+      it "calls the AWS Signer's #presigned_url method" do
+        handler.presigned_url_for_input(object_key, content_type)
+        expect(signer).to have_received(:presigned_url).with(
+          :put_object,
+          bucket: ENV.fetch('S3_BUCKET_NAME'),
+          key: object_key,
+          acl: 'private',
+          content_type: content_type,
+          expires_in: 900
+        )
       end
     end
   end

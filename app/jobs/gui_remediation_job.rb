@@ -3,9 +3,7 @@
 class GUIRemediationJob < ApplicationJob
   include RemediationModule
 
-  def perform(job_uuid, file_path, original_filename, output_polling_timeout: OUTPUT_POLLING_TIMEOUT)
-    upload_and_update(job_uuid, file_path, original_filename, output_polling_timeout)
-  ensure
-    File.delete(file_path) if File.exist?(file_path.to_s)
+  def perform(job_uuid, object_key, output_polling_timeout: OUTPUT_POLLING_TIMEOUT)
+    poll_and_update(job_uuid, object_key, output_polling_timeout)
   end
 end

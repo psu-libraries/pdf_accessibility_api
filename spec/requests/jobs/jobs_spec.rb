@@ -21,23 +21,45 @@ describe 'Jobs' do
     end
   end
 
-  describe 'POST jobs/create' do
-    let!(:file_upload) { Rack::Test::UploadedFile.new(File.new("#{Rails.root}/spec/fixtures/files/testing.pdf"),
-                                                      'application.pdf',
-                                                      original_filename:)}
-
-    it 'saves the uploaded file' do
-      expect {
-        post(
-          '/jobs', headers: valid_headers, params: { file: file_upload }
-        )
-      }.to(change { Rails.root.glob('tmp/uploads/*_testing.pdf').count }.by(1))
+  describe 'POST jobs/sign' do
+    let(:example_json) do {
+      url: 'www.example.com',
+      headers: {
+        'Content-Type' => 'application/pdf',
+        'x-amz-acl' => 'private'
+      },
+      job_id: '1',
+      object_key: 'example object key'
+    }
     end
 
+    let(:s3) {
+      instance_spy(
+        S3Handler,
+        presigned_url_for_input: example_json
+      )
+    }
+
+    before do
+      allow(S3Handler).to receive(:new).and_return s3
+    end
+
+    it 'returns json created by S3Handler' do
+      post(
+        '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
+      )
+      expect(response).to be_ok
+      parsed_body = response.parsed_body
+      expect(s3).to have_received(:presigned_url_for_input)
+      expect(parsed_body).to eq(example_json.with_indifferent_access)
+    end
+  end
+
+  describe 'POST jobs/complete' do
     it 'creates a record to track the job status' do
       expect {
         post(
-          '/jobs', headers: valid_headers, params: { file: file_upload }
+          '/jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf' }
         )
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last
@@ -46,25 +68,9 @@ describe 'Jobs' do
 
     it 'enqueues a job with GUIRemediationJob' do
       post(
-        '/jobs', headers: valid_headers, params: { file: file_upload }
+        '/jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf' }
       )
       expect(GUIRemediationJob).to have_received(:perform_later)
-    end
-
-    it 'redirects to new page' do
-      post(
-        '/jobs', headers: valid_headers, params: { file: file_upload }
-      )
-      expect(response).to redirect_to(job_path(Job.last))
-    end
-
-    context 'when an error occurs' do
-      it 'displays an error' do
-        post(
-          '/jobs/', headers: valid_headers, params: { file: {} }
-        )
-        expect(flash[:alert]).to eq(I18n.t('upload.error'))
-      end
     end
   end
 end
