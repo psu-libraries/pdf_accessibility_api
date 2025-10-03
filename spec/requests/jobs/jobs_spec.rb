@@ -51,26 +51,25 @@ describe 'Jobs' do
       )
       expect(response).to be_ok
       parsed_body = response.parsed_body
-      gui_user.jobs.last.id
       expect(s3).to have_received(:presigned_url_for_input)
       expect(parsed_body).to eq(example_json.with_indifferent_access)
     end
+  end
 
+  describe 'POST jobs/complete' do
     it 'creates a record to track the job status' do
       expect {
         post(
-          '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
+          '/jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf' }
         )
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last
       expect(job.status).to eq 'processing'
     end
-  end
 
-  describe 'POST jobs/complete' do
     it 'enqueues a job with GUIRemediationJob' do
       post(
-        '/jobs/complete', headers: valid_headers, params: { job_id: job.id, object_key: '12345678_testing.pdf' }
+        '/jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf' }
       )
       expect(GUIRemediationJob).to have_received(:perform_later)
     end

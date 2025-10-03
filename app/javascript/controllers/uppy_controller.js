@@ -43,7 +43,6 @@ export default class extends Controller {
             })
           })
           const data = await resp.json();
-          file.meta.jobId = data.job_id;
           file.meta.objectKey = data.object_key
           return {
             method: 'PUT',
@@ -59,22 +58,23 @@ export default class extends Controller {
       .on('complete', (res) => this.handleComplete(res))
   }
 
-  async handleComplete(res) {
+  handleComplete(res) {
     if (res.successful == undefined || res.successful.length == 0) {
       return;
     }
-    const jobId = res.successful[0].meta.jobId
-    if (jobId) {
-      await fetch('/jobs/complete', {
+    fetch('/jobs/complete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          job_id: jobId,
           output_url: res.successful[0].uploadURL,
           object_key: res.successful[0].meta.objectKey
         })
       })
-      window.location.href = `/jobs/${jobId}`;
-    }
+      .then(r => r.json())
+      .then(data => {
+        if (data.job_id) {
+          window.location.href = `/jobs/${data.job_id}`;
+        }
+      })
   }
 }

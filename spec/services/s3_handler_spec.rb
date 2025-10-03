@@ -11,7 +11,6 @@ RSpec.describe S3Handler, type: :service do
     let(:bucket) { instance_double(Aws::S3::Bucket) }
     let(:s3_object) { instance_double(Aws::S3::Object) }
     let(:handler) { described_class.new(object_key) }
-    let(:job_id) { '1' }
     let(:content_type) { 'application/pdf' }
     let(:signer) { instance_double Aws::S3::Presigner }
     let(:url) { 'www.response_example.com' }
@@ -78,19 +77,18 @@ RSpec.describe S3Handler, type: :service do
         allow(Aws::S3::Presigner).to receive(:new).and_return signer
       end
 
-      it 'returns json with the url, headers, and job_id' do
-        expect(handler.presigned_url_for_input(object_key, content_type, job_id)).to eq(
+      it 'returns json with the url, headers, and object_key' do
+        expect(handler.presigned_url_for_input(object_key, content_type)).to eq(
           {
             url: url,
             headers: { 'Content-Type' => content_type.to_s, 'x-amz-acl' => 'private' },
-            job_id: job_id,
             object_key: object_key
           }
         )
       end
 
       it "calls the AWS Signer's #presigned_url method" do
-        handler.presigned_url_for_input(object_key, content_type, job_id)
+        handler.presigned_url_for_input(object_key, content_type)
         expect(signer).to have_received(:presigned_url).with(
           :put_object,
           bucket: ENV.fetch('S3_BUCKET_NAME'),

@@ -44,7 +44,7 @@ class S3Handler
     raise Error.new(e)
   end
 
-  def presigned_url_for_input(key, content_type, job_id)
+  def presigned_url_for_input(key, content_type)
     signer = Aws::S3::Presigner.new(client: @s3_client)
 
     url = signer.presigned_url(
@@ -61,7 +61,6 @@ class S3Handler
         'Content-Type' => content_type,
         'x-amz-acl' => 'private'
       },
-      job_id: job_id,
       object_key: @object_key
     }
   end

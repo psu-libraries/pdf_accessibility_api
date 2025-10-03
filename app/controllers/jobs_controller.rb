@@ -20,18 +20,18 @@ class JobsController < GUIAuthController
     filename     = params[:filename].presence || "upload/#{SecureRandom.uuid}"
     content_type = params[:content_type].presence || 'application/pdf'
 
+    object_key = "#{SecureRandom.hex(8)}_#{filename}"
+    s3_handler = S3Handler.new(object_key)
+    render json: s3_handler.presigned_url_for_input(object_key, content_type)
+  end
+
+  def complete
     job = current_user.jobs.build
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!
-    object_key = "#{SecureRandom.hex(8)}_#{filename}"
-    s3_handler = S3Handler.new(object_key)
-    render json: s3_handler.presigned_url_for_input(object_key, content_type, job.id)
-  end
-
-  def complete
-    job = Job.find(params[:job_id])
     object_key = params[:object_key]
     GUIRemediationJob.perform_later(job.uuid, object_key)
+    render json: { job_id: job.id }, status: :created
   end
 end
