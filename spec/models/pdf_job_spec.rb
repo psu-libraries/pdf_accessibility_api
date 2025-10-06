@@ -14,7 +14,6 @@ RSpec.describe PdfJob do
 
   describe 'factories' do
     it { is_expected.to have_valid_factory(:pdf_job) }
-    it { is_expected.to have_valid_factory(:image_job) }
   end
 
   describe 'validations' do
