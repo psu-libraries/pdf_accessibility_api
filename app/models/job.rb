@@ -2,31 +2,24 @@
 
 class Job < ApplicationRecord
   after_commit :broadcast_to_job_channel
+  belongs_to :owner, polymorphic: true
 
-  # both
   def self.statuses
     ['processing', 'completed', 'failed']
   end
 
   validates :status, inclusion: { in: statuses }
-  # just pdf job?
-  validates :source_url, format: { with: URI::RFC2396_PARSER.make_regexp }, if: -> { owner_type == 'APIUser' }
-  belongs_to :owner, polymorphic: true
 
-  delegate :webhook_endpoint, :webhook_key, to: :owner, prefix: false
-  # both?
   def completed?
     status == 'completed'
   end
 
-  # both?
   def output_url_expired?
     output_url_expires_at.present? && output_url_expires_at < Time.zone.now
   end
 
   private
 
-    # both?
     def broadcast_to_job_channel
       JobChannel.broadcast_to(self, {
                                 output_object_key: output_object_key,

@@ -3,7 +3,7 @@
 module API::V1
   class JobsController < BaseAPIController
     def create
-      job = current_api_user.jobs.build(job_params)
+      job = current_api_user.pdf_jobs.build(job_params)
       job.status = 'processing'
       job.uuid = SecureRandom.uuid
       job.save!

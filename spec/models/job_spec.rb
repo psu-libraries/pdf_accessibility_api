@@ -24,13 +24,6 @@ RSpec.describe Job do
 
     it { is_expected.to have_db_index([:owner_type, :owner_id]) }
     it { is_expected.to have_db_index(:uuid) }
-    it { is_expected.to delegate_method(:webhook_endpoint).to(:owner) }
-    it { is_expected.to delegate_method(:webhook_key).to(:owner) }
-  end
-
-  describe 'factories' do
-    it { is_expected.to have_valid_factory(:pdf_job) }
-    it { is_expected.to have_valid_factory(:image_job) }
   end
 
   describe 'validations' do

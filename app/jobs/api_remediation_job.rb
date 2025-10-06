@@ -4,7 +4,7 @@ class APIRemediationJob < ApplicationJob
   include RemediationModule
 
   def perform(job_uuid, output_polling_timeout: OUTPUT_POLLING_TIMEOUT)
-    job = Job.find_by!(uuid: job_uuid)
+    job = PdfJob.find_by!(uuid: job_uuid)
     tempfile = Down.download(job.source_url)
     original_filename = tempfile&.original_filename
     object_key = "#{SecureRandom.hex(8)}_#{original_filename}"

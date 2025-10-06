@@ -2,6 +2,7 @@
 
 class APIUser < ApplicationRecord
   has_many :jobs, as: :owner, dependent: :restrict_with_exception
+  has_many :pdf_jobs, as: :owner, dependent: :restrict_with_exception
 
   before_create :set_keys
 
