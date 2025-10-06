@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_22_175316) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_06_134207) do
   create_table "api_users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -42,6 +42,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_22_175316) do
     t.string "owner_type", null: false
     t.bigint "owner_id", null: false
     t.datetime "output_url_expires_at"
+    t.string "type"
+    t.text "prompt"
+    t.string "llm_model"
+    t.text "alt_text"
     t.index ["owner_type", "owner_id"], name: "index_jobs_on_owner"
     t.index ["uuid"], name: "index_jobs_on_uuid"
   end
