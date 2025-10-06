@@ -7,7 +7,7 @@ class Tempfile
 end
 
 RSpec.describe APIRemediationJob do
-  let!(:job) { create(:job, source_url: 'https://test.com/file.pdf') }
+  let!(:job) { create(:pdf_job, source_url: 'https://test.com/file.pdf') }
   let(:file) {
     instance_double(
       Tempfile,

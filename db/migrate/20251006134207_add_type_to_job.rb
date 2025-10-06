@@ -1,8 +1,12 @@
+# frozen_string_literal: true
+
 class AddTypeToJob < ActiveRecord::Migration[7.2]
   def change
-    add_column :jobs, :type, :string
-    add_column :jobs, :prompt, :text
-    add_column :jobs, :llm_model, :string
-    add_column :jobs, :alt_text, :text
+    change_table :jobs, bulk: true do |t|
+      t.string :type
+      t.text :prompt
+      t.string :llm_model
+      t.text :alt_text
+    end
   end
 end

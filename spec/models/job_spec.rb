@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Job do
-  let(:gui_job) { build(:job, :gui_user_job) }
+  let(:gui_job) { build(:pdf_job, :gui_user_job) }
 
-  let(:job) { build(:job) }
+  let(:job) { build(:pdf_job) }
 
   describe 'table' do
     it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
@@ -29,7 +29,8 @@ RSpec.describe Job do
   end
 
   describe 'factories' do
-    it { is_expected.to have_valid_factory(:job) }
+    it { is_expected.to have_valid_factory(:pdf_job) }
+    it { is_expected.to have_valid_factory(:image_job) }
   end
 
   describe 'validations' do

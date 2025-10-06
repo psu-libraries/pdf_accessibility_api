@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.2].define(version: 2025_10_06_134207) do
-  create_table "api_users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "api_users", charset: "latin1", force: :cascade do |t|
     t.string "name"
     t.string "email"
     t.string "api_key", null: false
@@ -23,13 +23,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_06_134207) do
     t.index ["webhook_key"], name: "index_api_users_on_webhook_key", unique: true
   end
 
-  create_table "gui_users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "gui_users", charset: "latin1", force: :cascade do |t|
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "jobs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "jobs", charset: "latin1", force: :cascade do |t|
     t.string "uuid", null: false
     t.text "source_url"
     t.string "status", null: false

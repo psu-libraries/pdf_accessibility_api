@@ -1,0 +1,23 @@
+<main class='container-fluid'>
+  <h2>Job Details</h2>
+  <ul data-controller="job"
+          data-job-id="<%= @pdf_job.id %>"
+          data-job-output-object-key="<%= @pdf_job.output_object_key %>"
+          data-job-status="<%= @pdf_job.status %>"
+          data-job-finished-at="<%= @pdf_job.finished_at&.iso8601 %>"
+          data-job-output-url="<%= @pdf_job.output_url %>"
+          data-job-output-url-expired="<%= @pdf_job.output_url_expired? %>"
+          data-job-processing-error-message="<%= @pdf_job.processing_error_message %>"
+          id="<%= dom_id @pdf_job %>">
+    <li><strong>File Name:</strong> <span data-target="job.outputObjectKey"></span></li>
+    <li><strong>Job ID:</strong> <%= @pdf_job.uuid %></li>
+    <li><strong>Started At:</strong> <%= @pdf_job.created_at.getlocal.strftime("%b %e, %Y %l:%M %p") if @pdf_job.created_at %></li>
+    <li><strong>Finished At:</strong> <span data-target="job.finishedAt"></span></li>
+    <li><strong>Status:</strong> <span data-target="job.status"></span></li>
+    <li><strong>Download:</strong> <span data-target="job.downloadLink"></span></li>
+    <li><strong>Errors:</strong> <span data-target="job.processingErrorMessage"></span></li>
+  </ul>
+  <p><em><%= I18n.t('job_details.expiration') %></em></p>
+
+  <%= link_to '<< Jobs List', pdf_jobs_path %>
+</main>

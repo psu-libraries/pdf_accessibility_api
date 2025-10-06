@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-class JobsController < GUIAuthController
+class PdfJobsController < GUIAuthController
   protect_from_forgery except: [:sign]
   add_flash_types :info, :error, :warning
   def index
-    @jobs = current_user.jobs.order(created_at: :desc)
+    @pdf_jobs = current_user.pdf_jobs.order(created_at: :desc)
   end
 
   def show
-    @job = current_user.jobs.find(params[:id])
+    @pdf_job = current_user.pdf_jobs.find(params[:id])
   end
 
   def new
     @current_user = current_user
-    @job = Job.new
+    @pdf_job = PdfJob.new
   end
 
   def sign
@@ -26,12 +26,12 @@ class JobsController < GUIAuthController
   end
 
   def complete
-    job = current_user.jobs.build
-    job.status = 'processing'
-    job.uuid = SecureRandom.uuid
-    job.save!
+    pdf_job = current_user.pdf_jobs.build
+    pdf_job.status = 'processing'
+    pdf_job.uuid = SecureRandom.uuid
+    pdf_job.save!
     object_key = params[:object_key]
-    GUIRemediationJob.perform_later(job.uuid, object_key)
-    render json: { job_id: job.id }, status: :created
+    GUIRemediationJob.perform_later(pdf_job.uuid, object_key)
+    render json: { job_id: pdf_job.id }, status: :created
   end
 end

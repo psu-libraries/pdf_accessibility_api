@@ -6,7 +6,7 @@ RSpec.describe RemediationStatusNotificationJob do
   let(:user) { create(:api_user, webhook_endpoint: 'https://test.com/webhook') }
   let!(:job) {
     create(
-      :job,
+      :pdf_job,
       status: status,
       owner: user,
       output_url: 'https://example.com/output',

@@ -21,8 +21,8 @@ RSpec.feature 'Jobs show', :js do
   end
 
   it 'shows all job metadata and download link when output_url is present' do
-    job = create(:job, job_attrs.merge(output_url: 'http://example.com/result1.pdf'))
-    visit job_path(job)
+    job = create(:pdf_job, job_attrs.merge(output_url: 'http://example.com/result1.pdf'))
+    visit pdf_job_path(job)
 
     expect(page).to have_content('Job Details')
     expect(page).to have_content('file1.pdf')
@@ -33,39 +33,40 @@ RSpec.feature 'Jobs show', :js do
     expect(page).to have_link('Click to download', href: 'http://example.com/result1.pdf')
     expect(page).to have_content('Errors:')
     expect(page).to have_content('None')
-    expect(page).to have_link('<< Jobs List', href: jobs_path)
+    expect(page).to have_link('<< Jobs List', href: pdf_jobs_path)
   end
 
   it "shows 'Expired' if output_url is present and output_url_expired? is true" do
-    job = Job.create!(job_attrs.merge(output_url: 'http://example.com/result1.pdf', output_url_expires_at: 1.hour.ago))
-    visit job_path(job)
+    job = PdfJob.create!(job_attrs.merge(output_url: 'http://example.com/result1.pdf',
+                                         output_url_expires_at: 1.hour.ago))
+    visit pdf_job_path(job)
 
     expect(page).to have_content('Download: Expired')
   end
 
   it "shows 'Not available' if no output_url" do
-    job = Job.create!(job_attrs.merge(output_url: nil, output_url_expires_at: 1.hour.from_now))
-    visit job_path(job)
+    job = PdfJob.create!(job_attrs.merge(output_url: nil, output_url_expires_at: 1.hour.from_now))
+    visit pdf_job_path(job)
 
     expect(page).to have_content('Download: Not available')
 
-    job2 = Job.create!(job_attrs.merge(output_url: nil, output_url_expires_at: nil))
-    visit job_path(job2)
+    job2 = PdfJob.create!(job_attrs.merge(output_url: nil, output_url_expires_at: nil))
+    visit pdf_job_path(job2)
 
     expect(page).to have_content('Download: Not available')
   end
 
   it 'shows error message if present' do
-    job = Job.create!(job_attrs.merge(processing_error_message: 'Something went wrong'))
-    visit job_path(job)
+    job = PdfJob.create!(job_attrs.merge(processing_error_message: 'Something went wrong'))
+    visit pdf_job_path(job)
 
     expect(page).to have_content('Errors:')
     expect(page).to have_content('Something went wrong')
   end
 
   it 'updates status, finished_at, download, and errors in real-time' do
-    job = create(:job, job_attrs.merge(status: 'processing'))
-    visit job_path(job)
+    job = create(:pdf_job, job_attrs.merge(status: 'processing'))
+    visit pdf_job_path(job)
 
     expect(page).to have_content('Status: processing')
     expect(page).to have_content('Finished At:')

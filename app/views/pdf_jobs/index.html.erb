@@ -13,7 +13,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @jobs.each do |job| %>
+      <% @pdf_jobs.each do |job| %>
 
   <tr data-controller="job"
           data-job-id="<%= job.id %>"
@@ -24,7 +24,7 @@
           data-job-output-url-expired="<%= job.output_url_expired? %>"
           data-job-processing-error-message="<%= job.processing_error_message %>"
           id="<%= dom_id job %>">
-          <td><%= link_to job.output_object_key, job_path(job) %></td>
+          <td><%= link_to job.output_object_key, pdf_job_path(job) %></td>
           <td><%= job.created_at.getlocal.strftime("%b %e, %Y %l:%M %p") %>
           </td>
           <td><span data-job-target="status"></span></td>
@@ -40,6 +40,6 @@
     </tbody>
   </table>
   <div class='mt-4'>
-    <%= link_to I18n.t('index.link_to_upload'), new_job_path %>
+    <%= link_to I18n.t('index.link_to_upload'), new_pdf_job_path %>
   </div>
 </main>

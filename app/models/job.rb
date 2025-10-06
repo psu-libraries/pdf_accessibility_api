@@ -18,12 +18,14 @@ class Job < ApplicationRecord
   def completed?
     status == 'completed'
   end
+
   # both?
   def output_url_expired?
     output_url_expires_at.present? && output_url_expires_at < Time.zone.now
   end
 
   private
+
     # both?
     def broadcast_to_job_channel
       JobChannel.broadcast_to(self, {

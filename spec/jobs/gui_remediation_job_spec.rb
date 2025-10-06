@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe GUIRemediationJob do
-  let!(:gui_job) { create(:job, :gui_user_job) }
+  let!(:gui_job) { create(:pdf_job, :gui_user_job) }
   let(:s3) {
     instance_spy(
       S3Handler,
