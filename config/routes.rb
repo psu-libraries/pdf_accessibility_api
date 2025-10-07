@@ -27,9 +27,9 @@ Rails.application.routes.draw do
   get 'manifest' => 'rails/pwa#manifest', as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root 'jobs#new'
+  root 'pdf_jobs#new'
 
-  resources :jobs, only: [:index, :show, :new]
+  resources :pdf_jobs, only: [:index, :show, :new]
 
   namespace :api do
     namespace :v1 do
@@ -40,6 +40,6 @@ Rails.application.routes.draw do
   get '/unauthorized', to: 'errors#unauthorized'
 
   # Uppy routes
-  post '/jobs/sign', to: 'jobs#sign'
-  post '/jobs/complete', to: 'jobs#complete'
+  post '/pdf_jobs/sign', to: 'pdf_jobs#sign'
+  post '/pdf_jobs/complete', to: 'pdf_jobs#complete'
 end

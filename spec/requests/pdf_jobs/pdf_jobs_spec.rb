@@ -2,26 +2,26 @@
 
 require 'rails_helper'
 
-describe 'Jobs' do
+describe 'PDF Jobs' do
   before { allow(GUIRemediationJob).to receive(:perform_later) }
 
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
   let!(:original_filename) { 'testing.pdf' }
 
-  describe 'GET jobs/new' do
+  describe 'GET pdf_jobs/new' do
     it 'gets a successful response' do
-      get '/jobs/new', headers: valid_headers
+      get '/pdf_jobs/new', headers: valid_headers
       expect(response).to have_http_status :ok
     end
 
     it 'displays page' do
-      get '/jobs/new', headers: valid_headers
+      get '/pdf_jobs/new', headers: valid_headers
       expect(response.body).to include(I18n.t('heading'))
     end
   end
 
-  describe 'POST jobs/sign' do
+  describe 'POST pdf_jobs/sign' do
     let(:example_json) do {
       url: 'www.example.com',
       headers: {
@@ -45,7 +45,7 @@ describe 'Jobs' do
 
     it 'returns json created by S3Handler' do
       post(
-        '/jobs/sign', headers: valid_headers, params: { filename: original_filename }
+        '/pdf_jobs/sign', headers: valid_headers, params: { filename: original_filename }
       )
       expect(response).to be_ok
       parsed_body = response.parsed_body
@@ -54,11 +54,11 @@ describe 'Jobs' do
     end
   end
 
-  describe 'POST jobs/complete' do
+  describe 'POST pdf_jobs/complete' do
     it 'creates a record to track the job status' do
       expect {
         post(
-          '/jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf' }
+          '/pdf_jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf' }
         )
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last
@@ -67,7 +67,7 @@ describe 'Jobs' do
 
     it 'enqueues a job with GUIRemediationJob' do
       post(
-        '/jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf' }
+        '/pdf_jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf' }
       )
       expect(GUIRemediationJob).to have_received(:perform_later)
     end

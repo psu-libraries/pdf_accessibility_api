@@ -2,7 +2,7 @@
 
 class RemediationStatusNotificationJob < ApplicationJob
   def perform(job_uuid)
-    job = Job.find_by!(uuid: job_uuid)
+    job = PdfJob.find_by!(uuid: job_uuid)
 
     body = if job.completed?
              {

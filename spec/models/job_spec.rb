@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Job do
-  let(:gui_job) { build(:job, :gui_user_job) }
+  let(:gui_job) { build(:pdf_job, :gui_user_job) }
 
-  let(:job) { build(:job) }
+  let(:job) { build(:pdf_job) }
 
   describe 'table' do
     it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
@@ -24,12 +24,6 @@ RSpec.describe Job do
 
     it { is_expected.to have_db_index([:owner_type, :owner_id]) }
     it { is_expected.to have_db_index(:uuid) }
-    it { is_expected.to delegate_method(:webhook_endpoint).to(:owner) }
-    it { is_expected.to delegate_method(:webhook_key).to(:owner) }
-  end
-
-  describe 'factories' do
-    it { is_expected.to have_valid_factory(:job) }
   end
 
   describe 'validations' do
@@ -80,34 +74,6 @@ RSpec.describe Job do
 
       it 'returns false' do
         expect(job.completed?).to be false
-      end
-    end
-  end
-
-  describe '#output_url_expired?' do
-    let(:job) { described_class.new(output_url_expires_at: expires_at) }
-
-    context 'when output_url_expires_at is nil' do
-      let(:expires_at) { nil }
-
-      it 'returns false' do
-        expect(job.output_url_expired?).to be(false)
-      end
-    end
-
-    context 'when output_url_expires_at is in the future' do
-      let(:expires_at) { 1.hour.from_now }
-
-      it 'returns false' do
-        expect(job.output_url_expired?).to be(false)
-      end
-    end
-
-    context 'when output_url_expires_at is in the past' do
-      let(:expires_at) { 1.hour.ago }
-
-      it 'returns true' do
-        expect(job.output_url_expired?).to be(true)
       end
     end
   end

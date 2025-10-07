@@ -33,7 +33,7 @@ export default class extends Controller {
       })
       .use(AwsS3, {
         getUploadParameters: async (file) => {
-          const resp = await fetch('/jobs/sign', {
+          const resp = await fetch('/pdf_jobs/sign', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -62,7 +62,7 @@ export default class extends Controller {
     if (res.successful == undefined || res.successful.length == 0) {
       return;
     }
-    fetch('/jobs/complete', {
+    fetch('/pdf_jobs/complete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -73,7 +73,7 @@ export default class extends Controller {
       .then(r => r.json())
       .then(data => {
         if (data.job_id) {
-          window.location.href = `/jobs/${data.job_id}`;
+          window.location.href = `/pdf_jobs/${data.job_id}`;
         }
       })
   }
