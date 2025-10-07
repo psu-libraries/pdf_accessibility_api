@@ -17,13 +17,6 @@ class Job < ApplicationRecord
   private
 
     def broadcast_to_job_channel
-      JobChannel.broadcast_to(self, {
-                                output_object_key: output_object_key,
-                                status: status,
-                                output_url: output_url,
-                                output_url_expired: output_url_expired?,
-                                finished_at: finished_at,
-                                processing_error_message: processing_error_message
-                              })
+      raise NotImplementedError, 'Subclasses must implement this method'
     end
 end
