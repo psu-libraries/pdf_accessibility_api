@@ -81,7 +81,7 @@ RSpec.describe S3Handler, type: :service do
         expect(handler.presigned_url_for_input(object_key, content_type)).to eq(
           {
             url: url,
-            headers: { 'Content-Type' => content_type.to_s, 'x-amz-acl' => 'private' },
+            headers: { 'Content-Type' => content_type.to_s },
             object_key: object_key
           }
         )
@@ -93,7 +93,6 @@ RSpec.describe S3Handler, type: :service do
           :put_object,
           bucket: ENV.fetch('S3_BUCKET_NAME'),
           key: object_key,
-          acl: 'private',
           content_type: content_type,
           expires_in: 900
         )

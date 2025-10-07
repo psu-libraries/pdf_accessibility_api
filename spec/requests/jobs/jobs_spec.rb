@@ -25,8 +25,7 @@ describe 'Jobs' do
     let(:example_json) do {
       url: 'www.example.com',
       headers: {
-        'Content-Type' => 'application/pdf',
-        'x-amz-acl' => 'private'
+        'Content-Type' => 'application/pdf'
       },
       job_id: '1',
       object_key: 'example object key'
