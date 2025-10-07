@@ -51,15 +51,13 @@ class S3Handler
       :put_object,
       bucket: @bucket.name,
       key: key,
-      acl: 'private',
       content_type: content_type,
       expires_in: 900 # 15 minutes
     )
     {
       url: url,
       headers: {
-        'Content-Type' => content_type,
-        'x-amz-acl' => 'private'
+        'Content-Type' => content_type
       },
       object_key: @object_key
     }
