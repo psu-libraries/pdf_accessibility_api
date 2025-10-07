@@ -14,10 +14,6 @@ class Job < ApplicationRecord
     status == 'completed'
   end
 
-  def output_url_expired?
-    output_url_expires_at.present? && output_url_expires_at < Time.zone.now
-  end
-
   private
 
     def broadcast_to_job_channel

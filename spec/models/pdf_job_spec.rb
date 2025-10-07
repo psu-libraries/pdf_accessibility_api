@@ -39,4 +39,32 @@ RSpec.describe PdfJob do
   describe 'associations' do
     it { is_expected.to belong_to(:owner) }
   end
+
+  describe '#output_url_expired?' do
+    let(:job) { described_class.new(output_url_expires_at: expires_at) }
+
+    context 'when output_url_expires_at is nil' do
+      let(:expires_at) { nil }
+
+      it 'returns false' do
+        expect(job.output_url_expired?).to be(false)
+      end
+    end
+
+    context 'when output_url_expires_at is in the future' do
+      let(:expires_at) { 1.hour.from_now }
+
+      it 'returns false' do
+        expect(job.output_url_expired?).to be(false)
+      end
+    end
+
+    context 'when output_url_expires_at is in the past' do
+      let(:expires_at) { 1.hour.ago }
+
+      it 'returns true' do
+        expect(job.output_url_expired?).to be(true)
+      end
+    end
+  end
 end
