@@ -12,7 +12,7 @@ RSpec.feature 'New job', :js do
   it 'shows content and submit button' do
     visit new_pdf_job_path
     expect(page).to have_content(I18n.t('heading'))
-    expect(page).to have_content(I18n.t('upload.heading'))
+    expect(page).to have_content(I18n.t('pdf.upload.heading'))
     expect(page).to have_content('Drop files here')
     expect(page).to have_button('browse files')
   end

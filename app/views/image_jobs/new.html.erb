@@ -5,13 +5,14 @@
     </div>
   <% end %>
   <div>
-    <h2><%= I18n.t('pdf.upload.heading') %></h2>
+    <h2><%= I18n.t('image.upload.heading') %></h2>
+    <p><%= I18n.t('image.upload.subheading') %></p>
   </div>
 
   <section>
-    <%= form_with url: pdf_jobs_path, id: 'file-uploader' do |form| %>
+    <%= form_with url: image_jobs_path, id: 'file-uploader' do |form| %>
     <div
-      data-controller="pdf-uppy"
+      data-controller="image-uppy"
       data-uppy-parent-form="file-uploader">
     <% end %>
   </section>

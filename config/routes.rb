@@ -30,6 +30,11 @@ Rails.application.routes.draw do
   root 'pdf_jobs#new'
 
   resources :pdf_jobs, only: [:index, :show, :new]
+  # Uppy routes
+  post '/pdf_jobs/sign', to: 'pdf_jobs#sign'
+  post '/pdf_jobs/complete', to: 'pdf_jobs#complete'
+
+  resources :image_jobs, only: [:index, :show, :new, :create]
 
   namespace :api do
     namespace :v1 do
@@ -39,7 +44,4 @@ Rails.application.routes.draw do
 
   get '/unauthorized', to: 'errors#unauthorized'
 
-  # Uppy routes
-  post '/pdf_jobs/sign', to: 'pdf_jobs#sign'
-  post '/pdf_jobs/complete', to: 'pdf_jobs#complete'
 end

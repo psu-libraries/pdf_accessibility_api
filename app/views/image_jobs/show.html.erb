@@ -1,0 +1,24 @@
+<main class='container-fluid'>
+  <h2>Image Job Details</h2>
+  <ul data-controller="job"
+          data-job-id="<%= @image_job.id %>"
+          data-job-output-object-key="<%= @image_job.output_object_key %>"
+          data-job-status="<%= @image_job.status %>"
+          data-job-finished-at="<%= @image_job.finished_at&.iso8601 %>"
+          data-job-prompt="<%= @image_job.prompt %>"
+          data-job-llm-model="<%= @image_job.llm_model %>"
+          data-job-llm-model="<%= @image_job.alt_text %>"
+          data-job-processing-error-message="<%= @image_job.processing_error_message %>"
+          id="<%= dom_id @image_job %>">
+    <li><strong>File Name:</strong> <span data-target="job.outputObjectKey"></span></li>
+    <li><strong>Job ID:</strong> <%= @image_job.uuid %></li>
+    <li><strong>Started At:</strong> <%= @image_job.created_at.getlocal.strftime("%b %e, %Y %l:%M %p") if @image_job.created_at %></li>
+    <li><strong>Finished At:</strong> <span data-target="job.finishedAt"></span></li>
+    <li><strong>Status:</strong> <span data-target="job.status"></span></li>
+    <li><strong>Alt Text:</strong> <span data-target="job.alt-text"></span></li>
+    <li><strong>Errors:</strong> <span data-target="job.processingErrorMessage"></span></li>
+  </ul>
+  <p><em><%= I18n.t('image_job_details.expiration') %></em></p>
+
+  <%= link_to '<< Image Jobs List', image_jobs_path %>
+</main>
