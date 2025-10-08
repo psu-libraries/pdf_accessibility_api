@@ -14,6 +14,7 @@
     "@uppy/aws-s3": "^4.3.2",
     "@uppy/core": "^4.5.2",
     "@uppy/dashboard": "^4.4.3",
+    "@uppy/xhr-upload": "^4.4.2",
     "babel-loader": "8",
     "compression-webpack-plugin": "9",
     "luxon": "^3.7.1",

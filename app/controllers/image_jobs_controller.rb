@@ -15,11 +15,14 @@ class ImageJobsController < GUIAuthController
   end
 
   def create
-    # get file from params
-    # create job
-    # save to tmp storage for file path
-    # start alt-text-generation job
-    # go to show page
+    uploaded_io = params[:file]
+
+    job = current_gui_user.image_jobs.build
+    job.status = 'processing'
+    job.uuid = SecureRandom.uuid
+    job.save!
+
+    ImageAltTextJob.perform_later(job.uuid, uploaded_io)
   end
 
 end
