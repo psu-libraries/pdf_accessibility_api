@@ -19,7 +19,7 @@ RSpec.feature 'Image Jobs show', :js do
     login_as(gui_user)
   end
 
-  xit 'shows all job metadata' do
-    # Todo: implement in 161
+  it 'shows all job metadata' do
+    pending 'TODO: implement in 161'
   end
 end

@@ -5,13 +5,13 @@ require 'rails_helper'
 RSpec.feature 'Image Jobs index', :js do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:job_completed) { create(:image_job, output_object_key: 'test.jpg',
-                                          status: 'completed',
-                                          created_at: Time.new(2024, 7, 22, 10, 30),
-                                          owner: gui_user) }
+                                            status: 'completed',
+                                            created_at: Time.new(2024, 7, 22, 10, 30),
+                                            owner: gui_user) }
   let!(:job_processing) { create(:image_job, output_object_key: 'test2.jpg',
-                                           status: 'processing',
-                                           created_at: Time.new(2024, 7, 21, 9, 0),
-                                           owner: gui_user) }
+                                             status: 'processing',
+                                             created_at: Time.new(2024, 7, 21, 9, 0),
+                                             owner: gui_user) }
 
   before do
     login_as(gui_user)
@@ -43,8 +43,9 @@ RSpec.feature 'Image Jobs index', :js do
     expect(page).to have_current_path(new_image_job_path)
   end
 
-  xit 'updates status in real-time' do
-    visit image_jobs_path
+  it 'updates status in real-time' do
+    # visit image_jobs_path
     # TODO: Implement in 161
+    pending 'reason'
   end
 end

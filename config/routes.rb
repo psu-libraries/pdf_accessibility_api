@@ -43,5 +43,4 @@ Rails.application.routes.draw do
   end
 
   get '/unauthorized', to: 'errors#unauthorized'
-
 end

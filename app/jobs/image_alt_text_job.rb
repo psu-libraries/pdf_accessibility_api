@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ImageAltTextJob < ApplicationJob
-
   def perform(job_uuid, uploaded_io, output_polling_timeout: OUTPUT_POLLING_TIMEOUT)
     # To be implemented in #159
     # tmp_path = Rails.root.join('tmp', 'uploads', SecureRandom.hex + File.extname(uploaded_io.original_filename))

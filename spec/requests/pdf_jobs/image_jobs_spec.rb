@@ -7,7 +7,7 @@ describe 'Image Jobs' do
 
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
-  let!(:mock_io) { {'original_filename' => 'lion.jpg'} }
+  let!(:mock_io) { { 'original_filename' => 'lion.jpg' } }
 
   describe 'GET image_jobs/new' do
     it 'gets a successful response' do
