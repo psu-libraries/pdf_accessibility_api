@@ -17,8 +17,8 @@ class ImageJobsController < GUIAuthController
 
   def create
     uploaded_io = params[:image]
-    object_key = "#{SecureRandom.hex(8)}_#{uploaded_io.original_filename}"
     debugger()
+    object_key = "#{SecureRandom.hex(8)}_#{uploaded_io.original_filename}"
     job = current_user.image_jobs.build
     job.output_object_key = object_key
     job.alt_text = 'Generating...'

@@ -14,9 +14,8 @@ export default class extends Controller {
     return new Uppy({
       id: 'uppy_' + (new Date().getTime()),
       allowMultipleUploadBatches: false,
-      autoProceed: true,
       restrictions: {
-        allowedFileTypes: ['.pdf'],
+        allowedFileTypes: ['.jpg', '.jpeg', '.png'],
         maxNumberOfFiles: 1
       }
     })
@@ -29,15 +28,15 @@ export default class extends Controller {
           endpoint: '/image_jobs',
           fieldName: 'image',
           formData: true,
-          limit: 1,
+          autoProceed: false
       })
       .use(Dashboard, {
         id: 'dashboard',
         target: this.element,
         inline: 'true',
         showProgressDetails: true,
-        height: 350,
-        doneButtonHandler: null,
+        hideUploadButton: false,
+        height: 350
       })
   }
 

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.feature 'New job', :js do
+RSpec.feature 'New PDF job', :js do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
 
   before do
@@ -27,7 +27,7 @@ RSpec.feature 'New job', :js do
 
       page
         .first('.uppy-Dashboard-input', visible: false)
-        .attach_file(Rails.root.join('spec', 'fixtures', 'files', 'testing.pdf'))
+        .attach_file(Rails.root.join('spec', 'fixtures', 'files', 'lion.png'))
       while page.has_no_selector?('.uppy-StatusBar-actionBtn--upload')
         sleep 0.1
       end

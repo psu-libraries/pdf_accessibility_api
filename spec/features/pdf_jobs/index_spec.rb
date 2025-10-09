@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Jobs index', :js do
+RSpec.feature 'PDF Jobs index', :js do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:job_completed) { create(:pdf_job, output_object_key: 'file1.pdf',
                                           status: 'completed',
