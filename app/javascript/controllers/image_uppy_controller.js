@@ -14,6 +14,7 @@ export default class extends Controller {
     return new Uppy({
       id: 'uppy_' + (new Date().getTime()),
       allowMultipleUploadBatches: false,
+      autoProceed: true,
       restrictions: {
         allowedFileTypes: ['.pdf'],
         maxNumberOfFiles: 1
@@ -25,10 +26,11 @@ export default class extends Controller {
   configureUppyPlugins() {
     this.uppy
       .use(XHRUpload, {
-          endpoint: '/image_jobs/create',
+          endpoint: '/image_jobs',
           fieldName: 'image',
           formData: true,
-        })
+          limit: 1,
+      })
       .use(Dashboard, {
         id: 'dashboard',
         target: this.element,
@@ -41,6 +43,13 @@ export default class extends Controller {
 
   registerUppyEventHandlers() {
       this.uppy
-        .on('complete', (_) => console.log('success'))
+        .on('complete', (e) => this.handleSuccess(e))
+  }
+
+  handleSuccess(res){
+    let jobId = res.successful[0].response.body.jobId;
+    if (jobId) {
+      window.location.href = `/image_jobs/${jobId}`;
+    }
   }
 }
