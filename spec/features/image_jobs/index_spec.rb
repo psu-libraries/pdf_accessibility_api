@@ -43,9 +43,7 @@ RSpec.feature 'Image Jobs index', :js do
     expect(page).to have_current_path(new_image_job_path)
   end
 
-  it 'updates status in real-time' do
-    # visit image_jobs_path
-    # TODO: Implement in 161
-    pending 'reason'
+  it 'updates status in real-time', skip: 'To be implemented in 161' do
+    raise 'not implemented'
   end
 end

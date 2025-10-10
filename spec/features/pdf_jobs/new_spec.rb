@@ -27,7 +27,7 @@ RSpec.feature 'New PDF job', :js do
 
       page
         .first('.uppy-Dashboard-input', visible: false)
-        .attach_file(Rails.root.join('spec', 'fixtures', 'files', 'lion.jpg'))
+        .attach_file(Rails.root.join('spec', 'fixtures', 'files', 'testing.pdf'))
       while page.has_no_selector?('.uppy-StatusBar-actionBtn--upload')
         sleep 0.1
       end

@@ -7,7 +7,9 @@ describe 'Image Jobs' do
 
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
-  let!(:mock_io) { { 'original_filename' => 'lion.jpg' } }
+  let!(:file_upload) { Rack::Test::UploadedFile.new(File.new("#{Rails.root}/spec/fixtures/files/lion.jpg"),
+                                                    'image/jpg',
+                                                    original_filename: 'lion.jpg')}
 
   describe 'GET image_jobs/new' do
     it 'gets a successful response' do
@@ -25,18 +27,28 @@ describe 'Image Jobs' do
     it 'creates a record to track the job status' do
       expect {
         post(
-          '/image_jobs', headers: valid_headers, params: { image: mock_io }
+          '/image_jobs', headers: valid_headers, params: { image: file_upload }
         )
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last
       expect(job.status).to eq 'processing'
+      expect(job.alt_text).to eq 'Generating...'
     end
 
-    it 'enqueues a job with GUIRemediationJob' do
+    it 'enqueues a job with ImageAltTextJob' do
       post(
-        '/image_jobs', headers: valid_headers, params: { image: mock_io }
+        '/image_jobs', headers: valid_headers, params: { image: file_upload }
       )
       expect(ImageAltTextJob).to have_received(:perform_later)
+    end
+
+    it 'returns valid JSON' do
+      post(
+        '/image_jobs', headers: valid_headers, params: { image: file_upload }
+      )
+      job = gui_user.jobs.last
+      expected_response = { 'jobId' => job.id }
+      expect(response.parsed_body).to eq(expected_response)
     end
   end
 end

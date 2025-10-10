@@ -22,8 +22,7 @@ class ImageJobsController < GUIAuthController
     job.output_object_key = object_key
     job.alt_text = 'Generating...'
     job.status = 'processing'
-    job.output_object_key =
-      job.uuid = SecureRandom.uuid
+    job.uuid = SecureRandom.uuid
     job.save!
 
     ImageAltTextJob.perform_later(job.uuid, uploaded_io.to_json)
