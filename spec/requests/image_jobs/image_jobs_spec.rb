@@ -24,6 +24,11 @@ describe 'Image Jobs' do
   end
 
   describe 'POST image_jobs' do
+    it 'gets a successful response' do
+      post '/image_jobs', headers: valid_headers, params: { image: file_upload }
+      expect(response).to have_http_status :ok
+    end
+
     it 'creates a record to track the job status' do
       expect {
         post(
@@ -32,7 +37,6 @@ describe 'Image Jobs' do
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last
       expect(job.status).to eq 'processing'
-      expect(job.alt_text).to eq 'Generating...'
     end
 
     it 'enqueues a job with ImageAltTextJob' do

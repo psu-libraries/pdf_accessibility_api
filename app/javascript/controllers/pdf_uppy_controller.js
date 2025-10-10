@@ -29,7 +29,8 @@ export default class extends Controller {
         inline: 'true',
         showProgressDetails: true,
         height: 350,
-        })
+        doneButtonHandler: null,
+      })
       .use(AwsS3, {
         getUploadParameters: async (file) => {
           const resp = await fetch('/pdf_jobs/sign', {

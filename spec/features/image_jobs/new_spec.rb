@@ -20,7 +20,6 @@ RSpec.feature 'New Image job', :js do
   it 'redirects to the job show page for a new job when one is created' do
     with_minio_env do
       visit new_image_job_path
-      # Wait for Uppy to load
       while page.has_no_selector?('.uppy-Dashboard-AddFiles')
         sleep 0.1
       end

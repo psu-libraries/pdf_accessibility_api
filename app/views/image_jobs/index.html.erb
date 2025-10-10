@@ -1,9 +1,4 @@
 <main class='container-fluid'>
-  <% flash.each do |_, msg| %>
-    <div class='alert'>
-      <%= msg %>
-    </div>
-  <% end %>
   <table id='jobs-table' class='jobs-table'>
     <thead>
       <tr>
@@ -14,8 +9,7 @@
     </thead>
     <tbody>
       <% @image_jobs.each do |job| %>
-
-  <tr data-controller="job"
+        <tr data-controller="job"
           data-job-id="<%= job.id %>"
           data-job-output-object-key="<%= job.output_object_key %>"
           data-job-status="<%= job.status %>"
@@ -23,8 +17,7 @@
           data-job-alt-text="<%= job.alt_text %>"
           id="<%= dom_id job %>">
           <td><%= link_to job.output_object_key, image_job_path(job) %></td>
-          <td><%= job.created_at.getlocal.strftime("%b %e, %Y %l:%M %p") %>
-          </td>
+          <td><%= job.created_at.getlocal.strftime("%b %e, %Y %l:%M %p") %></td>
           <td><span data-job-target="status"></span></td>
           <td class='d-none'>
             <span data-job-target="outputObjectKey"></span>
@@ -33,7 +26,6 @@
             <span data-job-target="finishedAt"></span>
           </td>
         </tr>
-
       <% end %>
     </tbody>
   </table>

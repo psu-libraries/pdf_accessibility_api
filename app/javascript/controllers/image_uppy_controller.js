@@ -19,7 +19,6 @@ export default class extends Controller {
         maxNumberOfFiles: 1
       }
     })
-      
   }
 
   configureUppyPlugins() {
@@ -42,7 +41,7 @@ export default class extends Controller {
 
   registerUppyEventHandlers() {
       this.uppy
-        .on('complete', (e) => this.handleSuccess(e))
+        .on('complete', (res) => this.handleSuccess(res))
   }
 
   handleSuccess(res){

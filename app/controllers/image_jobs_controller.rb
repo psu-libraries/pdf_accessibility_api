@@ -2,7 +2,6 @@
 
 class ImageJobsController < GUIAuthController
   protect_from_forgery with: :null_session, only: [:create]
-  add_flash_types :info, :error, :warning
   def index
     @image_jobs = current_user.image_jobs.order(created_at: :desc)
   end
@@ -20,7 +19,6 @@ class ImageJobsController < GUIAuthController
     object_key = "#{SecureRandom.hex(8)}_#{uploaded_io.original_filename}"
     job = current_user.image_jobs.build
     job.output_object_key = object_key
-    job.alt_text = 'Generating...'
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!
