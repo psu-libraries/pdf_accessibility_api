@@ -1256,10 +1256,10 @@
     namespace-emitter "^2.0.1"
     p-retry "^6.1.0"
 
-"@uppy/core@^4.5.2":
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/@uppy/core/-/core-4.5.2.tgz#81a7f573ca338004aece544876a07f9f6e1af32c"
-  integrity sha512-5XoPJNcqEXtxtw+vg8EyqUFe11JSbG3/aln83Y7+CLbs7WOovYdfwwKEt1aTbfg1+ijsxudLchya5yh72jaLqw==
+"@uppy/core@^4.3.2":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@uppy/core/-/core-4.5.3.tgz#31789fdbbf28183235d9749d1bd09af1c2c7aa09"
+  integrity sha512-52VLeBUY/j904h48lpPGykuWikkOOS4Lz/qkmalDiBQfNALb6iB1MOZs079IM3o/uMLYxzZRL80C3sKpkBUYcw==
   dependencies:
     "@transloadit/prettier-bytes" "^0.3.4"
     "@uppy/store-default" "^4.3.2"
@@ -1270,7 +1270,7 @@
     nanoid "^5.0.9"
     preact "^10.5.13"
 
-"@uppy/dashboard@^4.4.3":
+"@uppy/dashboard@^4.3.2":
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/@uppy/dashboard/-/dashboard-4.4.3.tgz#0271ab514c9cc1d3b9a0ffbb80de086741e7fac9"
   integrity sha512-IwgDDTbk9p4OoAJvvvx6sQSemKTIJq9IDSryNVgbbC6NiR9HSyRcu0+WdOZLiR9DOhDg2oYcoNgv7DMlrktI6g==
@@ -1336,6 +1336,14 @@
   dependencies:
     lodash "^4.17.21"
     preact "^10.5.13"
+
+"@uppy/xhr-upload@^4.3.2":
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/@uppy/xhr-upload/-/xhr-upload-4.4.2.tgz#c6354eebfc2b9ad4f5495d35dff9e67acd0192f1"
+  integrity sha512-CU66aVn4yghGklEkepCqFPulc6uygznApy2DpD+jCMLNB5q6yT1RPSrQUgRgXsYhpW1YhutZJWsrEnHEDS+Tcw==
+  dependencies:
+    "@uppy/companion-client" "^4.5.2"
+    "@uppy/utils" "^6.2.2"
 
 "@webassemblyjs/ast@1.14.1", "@webassemblyjs/ast@^1.14.1":
   version "1.14.1"
@@ -2733,9 +2741,9 @@ nanoid@^3.3.11:
   integrity sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==
 
 nanoid@^5.0.9:
-  version "5.1.5"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.1.5.tgz#f7597f9d9054eb4da9548cdd53ca70f1790e87de"
-  integrity sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==
+  version "5.1.6"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.1.6.tgz#30363f664797e7d40429f6c16946d6bd7a3f26c9"
+  integrity sha512-c7+7RQ+dMB5dPwwCp4ee1/iV/q2P6aK1mTZcfr1BTuVlyW9hJYiMPybJCcnBlQtuSmTIWNeazm/zqNoZSSElBg==
 
 negotiator@0.6.3:
   version "0.6.3"
@@ -2943,9 +2951,9 @@ postcss@^8.4.33:
     source-map-js "^1.2.1"
 
 preact@^10.5.13:
-  version "10.27.0"
-  resolved "https://registry.yarnpkg.com/preact/-/preact-10.27.0.tgz#7e614fb651cc1f49275bfb7682e811d759a5364f"
-  integrity sha512-/DTYoB6mwwgPytiqQTh/7SFRL98ZdiD8Sk8zIUVOxtwq4oWcwrcd1uno9fE/zZmUaUrFNYzbH14CPebOz9tZQw==
+  version "10.27.2"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.27.2.tgz#19b9009c1be801a76a0aaf0fe5ba665985a09312"
+  integrity sha512-5SYSgFKSyhCbk6SrXyMpqjb5+MQBgfvEKE/OC+PujcY34sOpqtr+0AZQtPYx5IA6VxynQ7rUPCtKzyovpj9Bpg==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"

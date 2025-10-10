@@ -1,45 +1,35 @@
 <main class='container-fluid'>
-  <% flash.each do |_, msg| %>
-    <div class='alert'>
-      <%= msg %>
-    </div>
-  <% end %>
   <table id='jobs-table' class='jobs-table'>
     <thead>
       <tr>
-        <th>Job</th>
+        <th>Image Alt-Text Job</th>
         <th>Started At</th>
         <th>Status</th>
       </tr>
     </thead>
     <tbody>
-      <% @pdf_jobs.each do |job| %>
-
-  <tr data-controller="job"
+      <% @image_jobs.each do |job| %>
+        <tr data-controller="job"
           data-job-id="<%= job.id %>"
           data-job-output-object-key="<%= job.output_object_key %>"
           data-job-status="<%= job.status %>"
           data-job-finished-at="<%= job.finished_at %>"
-          data-job-output-url="<%= job.output_url %>"
-          data-job-output-url-expired="<%= job.output_url_expired? %>"
-          data-job-processing-error-message="<%= job.processing_error_message %>"
+          data-job-alt-text="<%= job.alt_text %>"
           id="<%= dom_id job %>">
-          <td><%= link_to job.output_object_key, pdf_job_path(job) %></td>
-          <td><%= job.created_at.getlocal.strftime("%b %e, %Y %l:%M %p") %>
-          </td>
+          <td><%= link_to job.output_object_key, image_job_path(job) %></td>
+          <td><%= job.created_at.getlocal.strftime("%b %e, %Y %l:%M %p") %></td>
           <td><span data-job-target="status"></span></td>
           <td class='d-none'>
             <span data-job-target="outputObjectKey"></span>
-            <span data-job-target="downloadLink"></span>
+            <span data-job-target="altText"></span>
             <span data-job-target="processingErrorMessage"></span>
             <span data-job-target="finishedAt"></span>
           </td>
         </tr>
-
       <% end %>
     </tbody>
   </table>
   <div class='mt-4'>
-    <%= link_to I18n.t('pdf.index.link_to_upload'), new_pdf_job_path %>
+    <%= link_to I18n.t('image.index.link_to_upload'), new_image_job_path %>
   </div>
 </main>
