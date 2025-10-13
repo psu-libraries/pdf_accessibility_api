@@ -1,15 +1,19 @@
 en:
   heading: PDF Accessibility Remediation
-  upload:
-    heading: Remediate a PDF Document
-    subheading: Click 'Browse' to select your document
-    no_file: No file uploaded yet
-    error: File must be present
-    success: File uploaded!
-  index:
-    link_to_upload: Upload a new PDF
-  job_details:
-    expiration: Files will be available to download for 24 hours after they have been remediated.
+  pdf:
+    upload:
+      heading: Remediate a PDF Document
+    index:
+      link_to_upload: Upload a new PDF
+    job_details:
+      expiration: Files will be available to download for 24 hours after they have been remediated.
+  image:
+    heading: Image Alt-Text Generation
+    upload: 
+      heading: Generate alt-text for an image
+      subheading: Generation only available for jpg and png files
+    index:
+      link_to_upload: Generate alt-text for a new image
   footer:
     heading: PDF Accessibility Remediation
     description: ''

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Jobs show', :js do
+RSpec.feature 'PDF Jobs show', :js do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let(:job_attrs) do
     {
