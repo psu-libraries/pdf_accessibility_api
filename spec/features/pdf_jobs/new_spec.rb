@@ -15,6 +15,9 @@ RSpec.feature 'New PDF job', :js do
     expect(page).to have_content(I18n.t('pdf.upload.heading'))
     expect(page).to have_content('Drop files here')
     expect(page).to have_button('browse files')
+    expect(page).to have_content(I18n.t('pdf.privacy_notice.header'))
+    expect(page).to have_content(I18n.t('pdf.privacy_notice.adobe'))
+    expect(page).to have_content(I18n.t('pdf.privacy_notice.aws'))
   end
 
   it 'redirects to the job show page for a new job when one is created' do
