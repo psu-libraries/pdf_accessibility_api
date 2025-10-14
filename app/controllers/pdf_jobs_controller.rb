@@ -17,12 +17,11 @@ class PdfJobsController < GUIAuthController
   end
 
   def sign
-    filename     = params[:filename].presence || "upload/#{SecureRandom.uuid}"
-    content_type = params[:content_type].presence || 'application/pdf'
+    filename = params[:filename]
 
     object_key = "#{SecureRandom.hex(8)}_#{filename}"
     s3_handler = S3Handler.new(object_key)
-    render json: s3_handler.presigned_url_for_input(object_key, content_type)
+    render json: s3_handler.presigned_url_for_input
   end
 
   def complete
