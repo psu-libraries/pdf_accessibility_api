@@ -24,7 +24,7 @@ begin
 
   logger.info "Mock PDF remediation tool running..."
   loop do
-    bucket.objects.select { |o| o.key !~/result\/COMPLIANT/ }.each do |o|
+    bucket.objects(prefix: S3Handler::INPUT_PREFIX).each do |o|
       filename = o.key.gsub(S3Handler::INPUT_PREFIX, "")
       result_key = "#{S3Handler::OUTPUT_PREFIX}#{filename}"
 

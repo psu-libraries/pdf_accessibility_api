@@ -78,7 +78,7 @@ RSpec.describe S3Handler, type: :service do
       end
 
       it 'returns json with the url, headers, and object_key' do
-        expect(handler.presigned_url_for_input(object_key, content_type)).to eq(
+        expect(handler.presigned_url_for_input).to eq(
           {
             url: url,
             headers: { 'Content-Type' => content_type.to_s },
@@ -88,11 +88,11 @@ RSpec.describe S3Handler, type: :service do
       end
 
       it "calls the AWS Signer's #presigned_url method" do
-        handler.presigned_url_for_input(object_key, content_type)
+        handler.presigned_url_for_input
         expect(signer).to have_received(:presigned_url).with(
           :put_object,
           bucket: ENV.fetch('S3_BUCKET_NAME'),
-          key: object_key,
+          key: "#{S3Handler::INPUT_PREFIX}#{object_key}",
           content_type: content_type,
           expires_in: 900
         )

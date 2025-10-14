@@ -44,20 +44,21 @@ class S3Handler
     raise Error.new(e)
   end
 
-  def presigned_url_for_input(key, content_type)
+  def presigned_url_for_input
     signer = Aws::S3::Presigner.new(client: @s3_client)
+    key = "#{INPUT_PREFIX}#{@object_key}"
 
     url = signer.presigned_url(
       :put_object,
       bucket: @bucket.name,
       key: key,
-      content_type: content_type,
+      content_type: 'application/pdf',
       expires_in: 900 # 15 minutes
     )
     {
       url: url,
       headers: {
-        'Content-Type' => content_type
+        'Content-Type' => 'application/pdf'
       },
       object_key: @object_key
     }
