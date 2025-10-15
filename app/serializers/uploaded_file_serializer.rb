@@ -15,6 +15,7 @@ class UploadedFileSerializer < ActiveJob::Serializers::ObjectSerializer
   end
 
   private
+
     # Checks if an argument should be serialized by this serializer.
     def klass
       ActionDispatch::Http::UploadedFile
