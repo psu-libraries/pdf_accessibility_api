@@ -35,5 +35,8 @@ module PdfAccessibilityApi
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # load serializers
+    config.autoload_once_paths << "#{root}/app/serializers"
   end
 end
