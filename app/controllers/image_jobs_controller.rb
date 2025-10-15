@@ -22,8 +22,7 @@ class ImageJobsController < GUIAuthController
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!
-
-    ImageAltTextJob.perform_later(job.uuid, uploaded_io.to_json)
+    ImageAltTextJob.perform_later(job.uuid, uploaded_io)
     render json: { 'jobId' => job.id }
   end
 end
