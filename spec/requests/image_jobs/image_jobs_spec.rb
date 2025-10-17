@@ -43,7 +43,7 @@ describe 'Image Jobs' do
       post(
         '/image_jobs', headers: valid_headers, params: { image: file_upload }
       )
-      expect(ImageAltTextJob).to have_received(:perform_later)
+      expect(ImageAltTextJob).to have_received(:perform_later).with(gui_user.jobs.last.uuid, /.+lion\.jpg/)
     end
 
     it 'returns valid JSON' do

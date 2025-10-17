@@ -11,9 +11,9 @@ RSpec.describe ImageAltTextJob do
       process_image: alt_text_response
     )
   }
-  let!(:file_upload) { Rack::Test::UploadedFile.new(File.new("#{Rails.root}/spec/fixtures/files/lion.jpg"),
+  let!(:file_path) { Rack::Test::UploadedFile.new(File.new("#{Rails.root}/spec/fixtures/files/lion.jpg"),
                                                     'image/jpg',
-                                                    original_filename: 'lion.jpg')}
+                                                    original_filename: 'lion.jpg').path }
 
   before do
     allow(AltText::Client).to receive(:new).and_return alt_text_gem
@@ -22,7 +22,7 @@ RSpec.describe ImageAltTextJob do
   describe '#perform' do
     context 'when the job is called with job uuid and file' do
       before do
-        described_class.perform_now(job.uuid, file_upload)
+        described_class.perform_now(job.uuid, file_path)
       end
 
       it 'calls the Alt Text gem' do
@@ -35,7 +35,7 @@ RSpec.describe ImageAltTextJob do
         reloaded_job = job.reload
         expect(reloaded_job.status).to eq 'completed'
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(job.reload.alt_text).to eq('Generated Alt-text')
+        expect(job.reload.alt_text).to eq(alt_text_response)
       end
     end
 
@@ -43,7 +43,7 @@ RSpec.describe ImageAltTextJob do
       let(:alt_text_response) { nil }
 
       it 'updates the status and metadata of the given image job record' do
-        described_class.perform_now(job.uuid, file_upload, output_polling_timeout: 1)
+        described_class.perform_now(job.uuid, file_path, output_polling_timeout: 1)
         reloaded_job = job.reload
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
@@ -59,7 +59,7 @@ RSpec.describe ImageAltTextJob do
       end
 
       it 'updates the status and metadata of the given image job record' do
-        described_class.perform_now(job.uuid, file_upload)
+        described_class.perform_now(job.uuid, file_path)
         reloaded_job = job.reload
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
