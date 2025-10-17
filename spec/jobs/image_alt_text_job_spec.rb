@@ -12,8 +12,8 @@ RSpec.describe ImageAltTextJob do
     )
   }
   let!(:file_path) { Rack::Test::UploadedFile.new(File.new("#{Rails.root}/spec/fixtures/files/lion.jpg"),
-                                                    'image/jpg',
-                                                    original_filename: 'lion.jpg').path }
+                                                  'image/jpg',
+                                                  original_filename: 'lion.jpg').path }
 
   before do
     allow(AltText::Client).to receive(:new).and_return alt_text_gem
