@@ -15,14 +15,18 @@ class ImageJobsController < GUIAuthController
   end
 
   def create
-    uploaded_io = params[:image]
-    object_key = "#{SecureRandom.hex(8)}_#{uploaded_io.original_filename}"
+    uploads_tmp_dir = Rails.root.join('tmp/uploads')
+    uploaded_file = params[:image]
+    object_key = "#{SecureRandom.uuid}_#{uploaded_file.original_filename}"
+    tmp_path = uploads_tmp_dir.join(object_key).to_s
+    File.binwrite(tmp_path, uploaded_file.read)
     job = current_user.image_jobs.build
     job.output_object_key = object_key
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!
-    ImageAltTextJob.perform_later(job.uuid, uploaded_io)
+
+    ImageAltTextJob.perform_later(job.uuid, tmp_path)
     render json: { 'jobId' => job.id }
   end
 end

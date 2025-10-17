@@ -3,14 +3,11 @@
 class ImageAltTextJob < ApplicationJob
   include AppJobModule
 
-  def perform(job_uuid, uploaded_io, output_polling_timeout: OUTPUT_POLLING_TIMEOUT)
-    tmp_path = Rails.root.join('app', 'tmp', 'uploads', SecureRandom.hex + uploaded_io.original_filename).to_s
-    FileUtils.mkdir_p(File.dirname(tmp_path))
-    File.binwrite(tmp_path, uploaded_io.read)
+  def perform(job_uuid, tmp_path, output_polling_timeout: 10)
     client = AltText::Client.new(
       access_key: ENV.fetch('AWS_ACCESS_KEY_ID', nil),
       secret_key: ENV.fetch('AWS_SECRET_ACCESS_KEY', nil),
-      region: ENV.fetch('AWS_REGION', nil)
+      region: ENV.fetch('AWS_REGION', 'us-east-1')
     )
     job = Job.find_by!(uuid: job_uuid)
     timer = 0
