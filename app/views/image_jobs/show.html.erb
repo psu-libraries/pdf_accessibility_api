@@ -10,7 +10,7 @@
           data-job-alt-text="<%= @image_job.alt_text %>"
           data-job-processing-error-message="<%= @image_job.processing_error_message %>"
           id="<%= dom_id @image_job %>">
-    <li><strong>File Name:</strong> <%= @image_job.output_object_key %> </span> </li>
+    <li><strong>File Name:</strong> <%= @image_job.output_object_key %> </li>
     <li><strong>Job ID:</strong> <%= @image_job.uuid %></li>
     <li><strong>Started At:</strong> <%= @image_job.created_at.getlocal.strftime("%b %e, %Y %l:%M %p") if @image_job.created_at %></li>
     <li><strong>Finished At:</strong> <span data-target="job.finishedAt"></span></li>

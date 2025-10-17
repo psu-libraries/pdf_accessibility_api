@@ -3,7 +3,7 @@
 class ImageAltTextJob < ApplicationJob
   include AppJobModule
 
-  def perform(job_uuid, tmp_path, output_polling_timeout: 10)
+  def perform(job_uuid, tmp_path, output_polling_timeout: OUTPUT_POLLING_TIMEOUT)
     client = AltText::Client.new(
       access_key: ENV.fetch('AWS_ACCESS_KEY_ID', nil),
       secret_key: ENV.fetch('AWS_SECRET_ACCESS_KEY', nil),
