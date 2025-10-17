@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RemediationModule
+module AppJobModule
   OUTPUT_POLLING_INTERVAL = 10 # This value was picked somewhat arbitrarily. We may want to adjust.
   OUTPUT_POLLING_TIMEOUT = 3600 # The default 1-hour timeout is also arbitrary and should probably be adjusted.
   PRESIGNED_URL_EXPIRES_IN = 84_000
@@ -15,14 +15,14 @@ module RemediationModule
       timer += OUTPUT_POLLING_INTERVAL
 
       if timer > output_polling_timeout
-        record_failure_and_notify(job, 'Timed out waiting for output file')
+        update_with_failure(job, 'Timed out waiting for output file')
         return true
       end
     end
     update_job(job, output_url, object_key)
   rescue S3Handler::Error => e
     # We may want to retry the upload depending on the more specific nature of the failure.
-    record_failure_and_notify(job, "Failed to upload file to remediation input location:  #{e.message}")
+    update_with_failure(job, "Failed to upload file to remediation input location:  #{e.message}")
   end
 
   private
@@ -37,7 +37,7 @@ module RemediationModule
       )
     end
 
-    def record_failure_and_notify(job, message)
+    def update_with_failure(job, message)
       job.update(
         status: 'failed',
         finished_at: Time.zone.now,

@@ -6,6 +6,7 @@ export default class extends Controller {
   static targets = ['outputObjectKey',
     'status',
     'finishedAt',
+    'altText',
     'downloadLink',
     'processingErrorMessage'];
 
@@ -32,6 +33,7 @@ export default class extends Controller {
     this.data.set('outputUrl', data.output_url || '')
     this.data.set('outputUrlExpired', data.output_url_expired || 'false')
     this.data.set('processingErrorMessage', data.processing_error_message || '')
+    this.data.set('altText', data.alt_text || '')
     this.renderResult()
   }
 

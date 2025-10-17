@@ -16,9 +16,9 @@ At its core, the PDF Accessibility API is an interface to an S3 bucket with:
 - an input directory, where the API places files to be processed by the PDF_Accessibility application
 - an output directory, where the PDF_Accessibility application places the processed files to be retrieved
 
-The PDF Accessibility API acts as an intermediary to send and retrieve those files for clients. It has two major components: the API and the GUI.
+The PDF Accessibility API acts as an intermediary to send and retrieve those files for clients. It has two major components: the API and the GUI. Additionally, there is the option to only generate alt-text for a given image. This option is currently only available through a GUI.
 
-## API
+## PDF Remediation – API
 
 Refer to the Swagger documentation for endpoint and webhook details at `/api-docs`.
 
@@ -29,14 +29,20 @@ We use an `APIUser` model to store metadata for our API users and their associat
 - The client's `webhook_key` for authenticating with the client system when the final webhook request is sent.
 - An `email` and `name` to help identify the user.
 
-## GUI
+## PDF Remediation - GUI
 
-The GUI is still a work in progress, but its main components are:
+The PDF Remediation GUI's main components are:
 
-- `/jobs` — a list of your jobs.
-- `/jobs/new` — the page for uploading a file to remediate.
-- `/jobs/{id}` — detailed information about a job (linked from `/jobs`).
+- `/pdf_jobs` — a list of your jobs.
+- `/pdf_jobs/new` — the page for uploading a file to remediate.
+- `/pdf_jobs/{id}` — detailed information about a job (linked from `/pdf_jobs`).
 - `/sidekiq` — Sidekiq interface.
+
+## Image Alt Text - GUI
+There is also a standalone GUI just for images. This is for users who just want to generate alt-text for an image without going through the full - and pricy - PDF remediation process.
+- `/image_jobs` — a list of image jobs, their links, and their status.
+- `/image_jobs/new` — the upload page for a new image
+- `/image_jobs/{id}` — detailed information about an image, including any generated alt-text.
 
 ### Authentication and Authorization
 

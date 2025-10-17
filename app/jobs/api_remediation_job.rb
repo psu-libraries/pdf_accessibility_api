@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class APIRemediationJob < ApplicationJob
-  include RemediationModule
+  include AppJobModule
 
   def perform(job_uuid, output_polling_timeout: OUTPUT_POLLING_TIMEOUT)
     job = PdfJob.find_by!(uuid: job_uuid)
@@ -13,10 +13,10 @@ class APIRemediationJob < ApplicationJob
     s3.upload_to_input(file_path)
     poll_and_update(job_uuid, object_key, output_polling_timeout)
   rescue S3Handler::Error => e
-    record_failure_and_notify(job, "Failed to upload file to remediation input location:  #{e.message}")
+    update_with_failure(job, "Failed to upload file to remediation input location:  #{e.message}")
   rescue Down::Error => e
     # We may want to retry the download depending on the more specific nature of the failure.
-    record_failure_and_notify(job, "Failed to download file from source URL:  #{e.message}")
+    update_with_failure(job, "Failed to download file from source URL:  #{e.message}")
   ensure
     RemediationStatusNotificationJob.perform_later(job_uuid)
     tempfile&.close!

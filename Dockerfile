@@ -71,6 +71,7 @@ RUN RAILS_ENV=production \
   AWS_ACCESS_KEY_ID=key \
   AWS_SECRET_ACCESS_KEY=secret \
   AWS_REGION=us-east-1 \
+  LLM_MODEL=default \
   bundle exec rails assets:precompile && \
   rm -rf /app/.cache/ && \
   rm -rf /app/node_modules/.cache/ && \
