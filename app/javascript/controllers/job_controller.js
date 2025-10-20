@@ -3,12 +3,14 @@ import { DateTime } from 'luxon';
 import consumer from '../channels/consumer'
 
 export default class extends Controller {
-  static targets = ['outputObjectKey',
+  static targets = [
+    'outputObjectKey',
     'status',
     'finishedAt',
     'altText',
     'downloadLink',
-    'processingErrorMessage'];
+    'processingErrorMessage'
+  ];
 
   connect() {
     const id = this.data.get('id')
@@ -40,6 +42,7 @@ export default class extends Controller {
   renderResult() {
     this.outputObjectKeyTarget.textContent = this.data.get('outputObjectKey')
     this.statusTarget.textContent = this.data.get('status')
+    this.altTextTarget.textContent = this.data.get('altText')
     this.renderFinishedAt()
     this.renderOutputUrl()
     this.renderErrorMessage()
