@@ -67,7 +67,7 @@ export default class extends Controller {
   }
 
   renderOutputUrl() {
-    if (!this.hasdownloadLinkTarget) {
+    if (!this.hasDownloadLinkTarget) {
       return
     }
     const outputUrl = this.data.get('outputUrl')

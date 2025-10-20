@@ -12,5 +12,5 @@ class ImageJob < Job
                                 finished_at: finished_at,
                                 processing_error_message: processing_error_message
                               })
-      end
+    end
 end
