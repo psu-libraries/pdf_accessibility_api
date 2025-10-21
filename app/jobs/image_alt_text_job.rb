@@ -12,7 +12,7 @@ class ImageAltTextJob < ApplicationJob
     job = Job.find_by!(uuid: job_uuid)
     alt_text = client.process_image(
       tmp_path,
-      prompt: File.read('prompt.txt'),
+      prompt: File.read(Rails.root.join("prompt.txt")),
       model_id: ENV.fetch('LLM_MODEL', 'nil')
     )
     job.update(
