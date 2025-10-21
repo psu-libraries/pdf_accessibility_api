@@ -12,6 +12,7 @@ x-web_env: &web_env
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
       S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
       S3_ENDPOINT: "${S3_ENDPOINT}"
+      LLM_MODEL: "${LLM_MODEL}"
 services:
   web:
     user: 3000:3000

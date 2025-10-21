@@ -7,6 +7,9 @@ export AWS_REGION="us-east-1"
 export S3_ENDPOINT=http://docker.for.mac.localhost:9000 # Do not set if connecting to the real AWS S3 bucket
 export S3_BUCKET_NAME=pdf_accessibility_api # Default value for MinIO in the docker compose environment
 
+# Alt Text Gem Info
+export LLM_MODEL=default
+
 #---------------------------------
 # The below configurations are not
 # needed if using docker compose

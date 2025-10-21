@@ -48,7 +48,7 @@ RSpec.describe APIRemediationJob do
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
         expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_file\.pdf/
         expect(reloaded_job.output_url_expires_at).to be_within(1.minute)
-          .of(RemediationModule::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
+          .of(AppJobModule::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
       end
 
       it 'queues up a notification about the status of the job' do
