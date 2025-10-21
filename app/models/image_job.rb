@@ -6,6 +6,11 @@ class ImageJob < Job
   private
 
     def broadcast_to_job_channel
-      # To be implemented in #160
+      JobChannel.broadcast_to(self, {
+                                alt_text: alt_text,
+                                status: status,
+                                finished_at: finished_at,
+                                processing_error_message: processing_error_message
+                              })
     end
 end

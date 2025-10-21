@@ -3,12 +3,14 @@ import { DateTime } from 'luxon';
 import consumer from '../channels/consumer'
 
 export default class extends Controller {
-  static targets = ['outputObjectKey',
+  static targets = [
+    'outputObjectKey',
     'status',
     'finishedAt',
     'altText',
     'downloadLink',
-    'processingErrorMessage'];
+    'processingErrorMessage'
+  ];
 
   connect() {
     const id = this.data.get('id')
@@ -27,7 +29,9 @@ export default class extends Controller {
   }
 
   updateResult(data) {
-    this.data.set('outputObjectKey', data.output_object_key || '')
+    if (this.hasOutputObjectKeyTarget) {
+      this.data.set('outputObjectKey', data.output_object_key || '')
+    }
     this.data.set('status', data.status || '')
     this.data.set('finishedAt', data.finished_at || '')
     this.data.set('outputUrl', data.output_url || '')
@@ -38,7 +42,12 @@ export default class extends Controller {
   }
 
   renderResult() {
-    this.outputObjectKeyTarget.textContent = this.data.get('outputObjectKey')
+    if (this.hasOutputObjectKeyTarget) {
+      this.outputObjectKeyTarget.textContent = this.data.get('outputObjectKey')
+    }
+    if (this.hasAltTextTarget) {
+      this.altTextTarget.textContent = this.data.get('altText')
+    }
     this.statusTarget.textContent = this.data.get('status')
     this.renderFinishedAt()
     this.renderOutputUrl()
@@ -58,6 +67,9 @@ export default class extends Controller {
   }
 
   renderOutputUrl() {
+    if (!this.hasDownloadLinkTarget) {
+      return
+    }
     const outputUrl = this.data.get('outputUrl')
     const outputUrlExpired = this.data.get('outputUrlExpired')
 
