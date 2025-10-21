@@ -7,6 +7,12 @@ en:
       link_to_upload: Upload a new PDF
     job_details:
       expiration: Files will be available to download for 24 hours after they have been remediated.
+    privacy_notice:
+      header: Accessible Version Generation Privacy Notice
+      description: When your PDF is downloaded for the first time, an accessible version will be created to meet ADA Title II requirements
+      adobe: Your file will be temporarily processed by Adobe to generate an accessible format.
+      aws: Images will be temporarily sent to AWS Bedrock for AI-generated alt-text.
+      manual_review: The accessible PDF will be added as a new version in ScholarSphere and reviewed manually by the Libraries’ Adaptive Technology and Services team.
   image:
     heading: Image Alt-Text Generation
     upload: 

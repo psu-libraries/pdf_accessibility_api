@@ -7,6 +7,13 @@
   <div>
     <h2><%= I18n.t('pdf.upload.heading') %></h2>
   </div>
+  <div>
+    <strong><%= t('pdf.privacy_notice.header') %></strong>
+    <ul>
+      <li><%= t('pdf.privacy_notice.adobe') %></li>
+      <li><%= t('pdf.privacy_notice.aws') %></li>
+    </ul>
+  </div>
 
   <section>
     <%= form_with url: pdf_jobs_path, id: 'file-uploader' do |form| %>
