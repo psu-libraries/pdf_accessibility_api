@@ -52,8 +52,13 @@ RSpec.describe S3Handler, type: :service do
       end
 
       it 'returns a presigned url if output file exists' do
-        allow(s3_object).to receive(:presigned_url).with(:get, expires_in: 3600).and_return('http://fake-url')
+        allow(s3_object).to receive(:presigned_url).with(:get,
+                                                         response_content_type: 'application/pdf',
+                                                         expires_in: 3600).and_return('http://fake-url')
         url = handler.presigned_url_for_output
+        expect(s3_object).to have_received(:presigned_url).with(:get,
+                                                                response_content_type: 'application/pdf',
+                                                                expires_in: 3600)
         expect(url).to eq('http://fake-url')
       end
 
