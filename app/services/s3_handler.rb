@@ -39,7 +39,9 @@ class S3Handler
     obj = find_file(prefix: OUTPUT_PREFIX)
     return nil unless obj
 
-    obj.presigned_url(:get, expires_in: expires_in)
+    obj.presigned_url(:get,
+                      response_content_type: 'application/pdf',
+                      expires_in: expires_in)
   rescue Aws::Errors::ServiceError => e
     raise Error.new(e)
   end
