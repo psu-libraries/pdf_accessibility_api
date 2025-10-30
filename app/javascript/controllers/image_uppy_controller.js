@@ -2,6 +2,7 @@ import { Controller } from 'stimulus'
 import Uppy from '@uppy/core';
 import Dashboard from '@uppy/dashboard'
 import XHRUpload from '@uppy/xhr-upload';
+import { checkForForbiddenCharacters } from './shared_uppy'
 
 export default class extends Controller {
   connect() {
@@ -41,6 +42,7 @@ export default class extends Controller {
 
   registerUppyEventHandlers() {
       this.uppy
+        .on('upload', (_, files) => checkForForbiddenCharacters(files))
         .on('complete', (res) => this.handleSuccess(res))
   }
 
