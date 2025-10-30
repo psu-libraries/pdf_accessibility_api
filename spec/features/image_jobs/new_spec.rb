@@ -35,4 +35,25 @@ RSpec.feature 'New Image job', :js do
       expect(page).to have_current_path(image_job_path(Job.last))
     end
   end
+
+  it 'shows alert and does not proceed if the filename contains a special character' do
+    with_minio_env do
+      visit new_image_job_path
+      while page.has_no_selector?('.uppy-Dashboard-AddFiles')
+        sleep 0.1
+      end
+
+      page
+        .first('.uppy-Dashboard-input', visible: false)
+        .attach_file(Rails.root.join('spec', 'fixtures', 'files', 'lion_with_$$$.jpg'))
+      while page.has_no_selector?('.uppy-StatusBar-actionBtn--upload')
+        sleep 0.1
+      end
+      click_button 'Upload 1 file'
+      sleep 0.1
+      expect(page.driver.browser.switch_to.alert.text).to include('File names can only contain letters')
+      page.driver.browser.switch_to.alert.accept
+      expect(page).to have_current_path(new_image_job_path)
+    end
+  end
 end
