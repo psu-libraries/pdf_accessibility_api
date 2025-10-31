@@ -16,6 +16,16 @@ RSpec.describe APIRemediationJob do
       path: 'path/to/file'
     )
   }
+  let(:special_chars) { 'special%characters!.pdf' }
+  let!(:special_chars_job) { create(:pdf_job, source_url: "https://test.com/#{special_chars}") }
+  let(:special_chars_file) {
+    instance_double(
+      Tempfile,
+      close!: nil,
+      original_filename: special_chars,
+      path: 'path/to/file'
+    )
+  }
   let(:s3) {
     instance_spy(
       S3Handler,
@@ -28,6 +38,7 @@ RSpec.describe APIRemediationJob do
 
   before do
     allow(Down).to receive(:download).with('https://test.com/file.pdf').and_return file
+    allow(Down).to receive(:download).with('https://test.com/special%characters!.pdf').and_return special_chars_file
     allow(S3Handler).to receive(:new).and_return s3
     allow(RemediationStatusNotificationJob).to receive(:perform_later)
     allow(File).to receive(:delete).with(file_path)
@@ -59,6 +70,18 @@ RSpec.describe APIRemediationJob do
       it 'closes the temporarily downloaded file' do
         described_class.perform_now(job.uuid)
         expect(file).to have_received(:close!)
+      end
+
+      context 'when the file has a special character' do
+        it 'saves that special character to the jobs output_key' do
+          described_class.perform_now(special_chars_job.uuid)
+          expect(special_chars_job.reload.output_object_key).to eq(special_chars)
+        end
+
+        it 'strips the special character for the s3 bucket' do
+          described_class.perform_now(special_chars_job.uuid)
+          expect(S3Handler).to have_received(:new).with(match /[a-f0-9]{16}_specialcharacters\.pdf/)
+        end
       end
     end
 

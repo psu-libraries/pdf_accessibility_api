@@ -4,6 +4,7 @@ class GUIRemediationJob < ApplicationJob
   include AppJobModule
 
   def perform(job_uuid, object_key, output_polling_timeout: OUTPUT_POLLING_TIMEOUT)
-    poll_and_update(job_uuid, object_key, output_polling_timeout)
+    s3_handler = S3Handler.new(object_key)
+    poll_and_update(job_uuid, s3_handler, output_polling_timeout)
   end
 end
