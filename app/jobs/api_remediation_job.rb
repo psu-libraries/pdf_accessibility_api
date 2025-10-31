@@ -7,7 +7,9 @@ class APIRemediationJob < ApplicationJob
     job = PdfJob.find_by!(uuid: job_uuid)
     tempfile = Down.download(job.source_url)
     original_filename = tempfile&.original_filename
-    object_key = "#{SecureRandom.hex(8)}_#{original_filename}"
+    job.update!(output_object_key: original_filename)
+    safe_original_filename = original_filename.gsub(/[^A-Za-z0-9.\-_ ]/, '')
+    object_key = "#{SecureRandom.hex(8)}_#{safe_original_filename}"
     file_path = tempfile&.path
     s3 = S3Handler.new(object_key)
     s3.upload_to_input(file_path)

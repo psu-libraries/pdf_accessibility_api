@@ -10,7 +10,7 @@ module AppJobModule
     s3 = S3Handler.new(object_key)
 
     timer = 0
-    until output_url = s3.presigned_url_for_output(expires_in: PRESIGNED_URL_EXPIRES_IN)
+    until output_url = s3.presigned_url_for_output(job.output_object_key, expires_in: PRESIGNED_URL_EXPIRES_IN)
       sleep OUTPUT_POLLING_INTERVAL
       timer += OUTPUT_POLLING_INTERVAL
 
@@ -27,12 +27,11 @@ module AppJobModule
 
   private
 
-    def update_job(job, output_url, object_key)
+    def update_job(job, output_url, _object_key)
       job.update(
         status: 'completed',
         finished_at: Time.zone.now,
         output_url: output_url,
-        output_object_key: object_key,
         output_url_expires_at: PRESIGNED_URL_EXPIRES_IN.seconds.from_now
       )
     end
