@@ -27,7 +27,7 @@ RSpec.describe ImageAltTextJob do
 
       it 'calls the Alt Text gem' do
         expect(alt_text_gem).to have_received(:process_image).with(
-          /.+\.jpg/, prompt: File.read('prompt.txt'), model_id: ENV.fetch('LLM_MODEL', nil)
+          /.+\.jpg/, prompt: File.read('prompt.txt'), model_id: ENV.fetch('LLM_MODEL', 'default')
         )
       end
 
