@@ -13,7 +13,7 @@ class ImageAltTextJob < ApplicationJob
     alt_text = client.process_image(
       tmp_path,
       prompt: Rails.root.join('prompt.txt').read,
-      model_id: ENV.fetch('LLM_MODEL', 'nil')
+      model_id: ENV.fetch('LLM_MODEL', 'default')
     )
     job.update(
       status: 'completed',
