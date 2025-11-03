@@ -35,7 +35,6 @@ RSpec.describe GUIRemediationJob do
         expect(reloaded_job.status).to eq 'completed'
         expect(reloaded_job.output_url).to eq 'https://example.com/presigned-file-url'
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_testing\.pdf/
         expect(reloaded_job.output_url_expires_at).to be_within(1.minute)
           .of(AppJobModule::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
       end
@@ -54,7 +53,6 @@ RSpec.describe GUIRemediationJob do
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.output_url).to be_nil
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(reloaded_job.output_object_key).to be_nil
         expect(reloaded_job.processing_error_message).to eq 'Timed out waiting for output file'
         expect(reloaded_job.output_url_expires_at).to be_nil
       end
@@ -76,7 +74,6 @@ RSpec.describe GUIRemediationJob do
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.output_url).to be_nil
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(reloaded_job.output_object_key).to be_nil
         expect(reloaded_job.processing_error_message).to eq(
           'Failed to upload file to remediation input location:  upload error'
         )

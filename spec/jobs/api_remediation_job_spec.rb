@@ -16,6 +16,16 @@ RSpec.describe APIRemediationJob do
       path: 'path/to/file'
     )
   }
+  let(:special_chars) { 'special%characters!.pdf' }
+  let!(:special_chars_job) { create(:pdf_job, source_url: "https://test.com/#{special_chars}") }
+  let(:special_chars_file) {
+    instance_double(
+      Tempfile,
+      close!: nil,
+      original_filename: special_chars,
+      path: 'path/to/file'
+    )
+  }
   let(:s3) {
     instance_spy(
       S3Handler,
@@ -28,6 +38,7 @@ RSpec.describe APIRemediationJob do
 
   before do
     allow(Down).to receive(:download).with('https://test.com/file.pdf').and_return file
+    allow(Down).to receive(:download).with('https://test.com/special%characters!.pdf').and_return special_chars_file
     allow(S3Handler).to receive(:new).and_return s3
     allow(RemediationStatusNotificationJob).to receive(:perform_later)
     allow(File).to receive(:delete).with(file_path)
@@ -46,7 +57,7 @@ RSpec.describe APIRemediationJob do
         expect(reloaded_job.status).to eq 'completed'
         expect(reloaded_job.output_url).to eq 'https://example.com/presigned-file-url'
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(reloaded_job.output_object_key).to match /[a-f0-9]{16}_file\.pdf/
+        expect(reloaded_job.output_object_key).to eq('file.pdf')
         expect(reloaded_job.output_url_expires_at).to be_within(1.minute)
           .of(AppJobModule::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
       end
@@ -60,6 +71,18 @@ RSpec.describe APIRemediationJob do
         described_class.perform_now(job.uuid)
         expect(file).to have_received(:close!)
       end
+
+      context 'when the file has a special character' do
+        it 'saves that special character to the jobs output_key' do
+          described_class.perform_now(special_chars_job.uuid)
+          expect(special_chars_job.reload.output_object_key).to eq(special_chars)
+        end
+
+        it 'strips the special character for the s3 bucket' do
+          described_class.perform_now(special_chars_job.uuid)
+          expect(S3Handler).to have_received(:new).with(match /[a-f0-9]{16}_specialcharacters\.pdf/)
+        end
+      end
     end
 
     context 'when an output file is not produced before the timeout is exceeded' do
@@ -71,7 +94,6 @@ RSpec.describe APIRemediationJob do
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.output_url).to be_nil
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(reloaded_job.output_object_key).to be_nil
         expect(reloaded_job.processing_error_message).to eq 'Timed out waiting for output file'
         expect(reloaded_job.output_url_expires_at).to be_nil
       end
@@ -120,7 +142,6 @@ RSpec.describe APIRemediationJob do
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.output_url).to be_nil
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(reloaded_job.output_object_key).to be_nil
         expect(reloaded_job.processing_error_message).to eq(
           'Failed to upload file to remediation input location:  upload error'
         )

@@ -14,6 +14,7 @@ RSpec.describe S3Handler, type: :service do
     let(:content_type) { 'application/pdf' }
     let(:signer) { instance_double Aws::S3::Presigner }
     let(:url) { 'www.response_example.com' }
+    let(:original_filename) { 'original.pdf' }
 
     before do
       allow(ENV).to receive(:fetch).with('AWS_REGION').and_return('us-east-1')
@@ -52,26 +53,27 @@ RSpec.describe S3Handler, type: :service do
       end
 
       it 'returns a presigned url if output file exists' do
-        allow(s3_object).to receive(:presigned_url).with(:get,
-                                                         response_content_type: 'application/pdf',
-                                                         expires_in: 3600).and_return('http://fake-url')
-        url = handler.presigned_url_for_output
+        allow(s3_object).to receive(:presigned_url).and_return('http://fake-url')
+        url = handler.presigned_url_for_output(original_filename)
         expect(s3_object).to have_received(:presigned_url).with(:get,
                                                                 response_content_type: 'application/pdf',
+                                                                response_content_disposition: "attachment; filename=\"#{
+                                                                  object_key}\"; filename*=UTF-8''ACCESSIBLE_VERSION_#{
+                                                                  original_filename}",
                                                                 expires_in: 3600)
         expect(url).to eq('http://fake-url')
       end
 
       it 'returns nil if output file does not exist' do
         allow(s3_object).to receive(:exists?).and_return(false)
-        expect(handler.presigned_url_for_output).to be_nil
+        expect(handler.presigned_url_for_output(original_filename)).to be_nil
       end
 
       context 'when an error is raised while retrieving the URL' do
         before { allow(s3_object).to receive(:presigned_url).and_raise(Aws::Errors::ServiceError.new(nil, 'AWS error')) }
 
         it 're-raises an S3Handler::Error' do
-          expect { handler.presigned_url_for_output }.to raise_error(S3Handler::Error, 'AWS error')
+          expect { handler.presigned_url_for_output(original_filename) }.to raise_error(S3Handler::Error, 'AWS error')
         end
       end
     end

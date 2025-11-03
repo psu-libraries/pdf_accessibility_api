@@ -35,12 +35,15 @@ class S3Handler
     raise Error.new(e)
   end
 
-  def presigned_url_for_output(expires_in: 3600)
+  def presigned_url_for_output(original_filename, expires_in: 3600)
     obj = find_file(prefix: OUTPUT_PREFIX)
     return nil unless obj
 
     obj.presigned_url(:get,
                       response_content_type: 'application/pdf',
+                      response_content_disposition: %(attachment; filename="#{
+                        @object_key}"; filename*=UTF-8''ACCESSIBLE_VERSION_#{
+                          URI.encode_www_form_component(original_filename)}),
                       expires_in: expires_in)
   rescue Aws::Errors::ServiceError => e
     raise Error.new(e)
