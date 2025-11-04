@@ -210,13 +210,20 @@ workflows:
                 - main
                 - /preview\/.*/
       - deploy-application:
-          name: deploy-image
+          name: deploy-application
           context:
             - org-global
           filters:
             branches:
               only:
                 - main
+      - deploy-application:
+          name: deploy-preview
+          context:
+            - org-global
+          filters:
+            branches:
+              only:
                 - /preview\/.*/
           requires:
             - build-and-push
@@ -226,14 +233,20 @@ workflows:
           context:
             - org-global
           filters:
-            tags:
-              only: /^v\d+\.\d+\.\d+.*/
             branches:
               ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+.*/
           requires:
             - build-and-push
             - test-application
       - test-application:
+          name: test-application
           context:
             - org-global
-          name: test-application
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/
+                - /^v\d+\.\d+\.\d+.*/
