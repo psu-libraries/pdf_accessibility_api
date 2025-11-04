@@ -7,6 +7,18 @@ orbs:
 
 parameters:
 
+  GHA_Action:
+    type: string
+    default: ""
+  GHA_Actor:
+    type: string
+    default: ""
+  GHA_Event:
+    type: string
+    default: ""
+  GHA_Meta:
+    type: string
+    default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
     default: "v4.3.0"
@@ -81,6 +93,25 @@ jobs:
           registry: $REGISTRY_HOST
           tag: $TAG
 
+  delete-deployment:
+    parameters:
+      delete_branch:
+        type: string
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+    environment:
+      CONFIG_REPO: git@github.com:psu-libraries/pdfapi-config.git
+      DELETE_BRANCH: << parameters.delete_branch >>
+    steps:
+      - clone-pdfapi-config
+      - run:
+          name: Delete Deployment
+          command: |
+            export TRIGGERED_BY="$CIRCLE_USERNAME"
+            cd pdfapi-config
+            ./bin/delete-deployment
+
   deploy-application:
     executor:
       name: ci-utils
@@ -153,13 +184,24 @@ jobs:
 
 workflows:
 
+  delete-deployment:
+    when:
+      equal: [ "delete", << pipeline.parameters.GHA_Event >> ]
+    jobs:
+      - delete-deployment:
+          name: delete-deployment
+          context: [org-global]
+          delete_branch: << pipeline.parameters.GHA_Meta >>
+          filters:
+            branches:
+              only: main
+
   docker_push:
+    unless:
+      equal: [ "delete", << pipeline.parameters.GHA_Event >> ]
     jobs:
       - build-and-push:
-          context:
-            - org-global
           name: build-and-push
-      - deploy-application:
           context:
             - org-global
           filters:
@@ -167,11 +209,20 @@ workflows:
               only:
                 - main
                 - /preview\/.*/
+      - deploy-application:
           name: deploy-image
+          context:
+            - org-global
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/
           requires:
             - build-and-push
             - test-application
       - release-image:
+          name: release-image
           context:
             - org-global
           filters:
@@ -179,7 +230,6 @@ workflows:
               only: /^v\d+\.\d+\.\d+.*/
             branches:
               ignore: /.*/
-          name: release-image
           requires:
             - build-and-push
             - test-application
