@@ -244,9 +244,3 @@ workflows:
           name: test-application
           context:
             - org-global
-          filters:
-            branches:
-              only:
-                - main
-                - /preview\/.*/
-                - /^v\d+\.\d+\.\d+.*/
