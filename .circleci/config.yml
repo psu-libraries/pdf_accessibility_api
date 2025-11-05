@@ -138,7 +138,7 @@ jobs:
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
     environment:
-      CONFIG_REPO: git@github.com:psu-libraries/pdf_accessibility_api.git
+      CONFIG_REPO: git@github.com:psu-libraries/pdfapi-config.git
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       FROM_TAG: << parameters.from_tag >>
       TO_TAG: << parameters.to_tag >>
@@ -162,7 +162,7 @@ jobs:
           REGISTRY_HOST: harbor.k8s.libraries.psu.edu
           REGISTRY_REPO: library/pdf_accessibility_api
           GITHUB_USER: 'psu-stewardship-bot'
-          CONFIG_REPO: git@github.com:psu-libraries/pdf_accessibility_api.git
+          CONFIG_REPO: git@github.com:psu-libraries/pdfapi-config.git
     steps:
       - checkout
       - setup_remote_docker:
