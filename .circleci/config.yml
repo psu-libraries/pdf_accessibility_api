@@ -236,9 +236,6 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v\d+\.\d+\.\d+.*/
-          requires:
-            - build-and-push
-            - test-application
       - test-application:
           name: test-application
           context:
