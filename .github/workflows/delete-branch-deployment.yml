@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Trigger CircleCI Pipeline
         id: delete-deployment
-        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
+        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.2.0
         with:
           # pass name of the branch deleted to CircleCI
           GHA_Meta: "${{ github.event.ref }}"
