@@ -129,24 +129,29 @@ jobs:
             ./bin/generate_application
 
   release-image:
-    executor:
+    parameters:
+      to_tag:
+        type: string
+      from_tag:
+        type: string
+    executor: 
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
     environment:
       CONFIG_REPO: git@github.com:psu-libraries/pdf_accessibility_api.git
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
-      REGISTRY_REPO: library/pdf_accessibility_api
-      GITHUB_USER: 'psu-stewardship-bot'
-    steps:
+      FROM_TAG: << parameters.from_tag >>
+      TO_TAG: << parameters.to_tag >>
+    steps:  
       - clone-pdfapi-config
       - run:
-          name: "Release"
+          name: Tag & Release Image
           command: |
             export TRIGGERED_BY="$CIRCLE_USERNAME"
             export REGISTRY_REPO="$CIRCLE_PROJECT_REPONAME"
-            /usr/local/bin/tag-image
+            /usr/local/bin/image-tag
             cd pdf_accessibility_api
-            ./bin/pr-release clusters/prod/manifests/prod.yaml
+            /usr/local/bin/image-release-pr clusters/prod/manifests/prod.yaml
 
   test-application:
     docker:
@@ -234,6 +239,8 @@ workflows:
           name: release-image
           context:
             - org-global
+          from_tag: "<< pipeline.git.revision >>"
+          to_tag: "<< pipeline.git.tag >>"
           filters:
             branches:
               ignore: /.*/
