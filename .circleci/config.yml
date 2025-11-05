@@ -148,7 +148,6 @@ jobs:
             cd pdf_accessibility_api
             ./bin/pr-release clusters/prod/manifests/prod.yaml
 
-  # TODO: use docker run instead of docker-compose exec
   test-application:
     docker:
       - image: cimg/ruby:3.4.1
