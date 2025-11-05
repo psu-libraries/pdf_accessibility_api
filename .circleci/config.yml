@@ -150,7 +150,7 @@ jobs:
             export TRIGGERED_BY="$CIRCLE_USERNAME"
             export REGISTRY_REPO="$CIRCLE_PROJECT_REPONAME"
             /usr/local/bin/image-tag
-            cd pdf_accessibility_api
+            cd pdfapi-config
             /usr/local/bin/image-release-pr clusters/prod/manifests/prod.yaml
 
   test-application:
