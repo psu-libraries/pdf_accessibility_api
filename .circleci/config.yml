@@ -216,6 +216,9 @@ workflows:
             branches:
               only:
                 - main
+          requires:
+            - build-and-push
+            - test-application
       - deploy-application:
           name: deploy-preview
           context:
