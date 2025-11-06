@@ -128,6 +128,22 @@ jobs:
             cd pdfapi-config
             ./bin/generate_application
 
+  deploy-preview-app:
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+    environment:
+      CONFIG_REPO: git@github.com:psu-libraries/pdfapi-config.git
+    steps:
+      - clone-pdfapi-config
+      - compute-docker-tag
+      - run:
+          name: Generate Preview Application
+          command: |
+            export TRIGGERED_BY="$CIRCLE_USERNAME"
+            cd pdfapi-config
+            ./bin/deploy-preview-app
+
   release-image:
     parameters:
       to_tag:
@@ -224,14 +240,15 @@ workflows:
           requires:
             - build-and-push
             - test-application
-      - deploy-application:
-          name: deploy-preview
+      - deploy-preview-app:
+          name: deploy-preview-app
           context:
             - org-global
           filters:
             branches:
               only:
                 - /preview\/.*/
+          ojs_version: '3.3.0-15'
           requires:
             - build-and-push
             - test-application
