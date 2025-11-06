@@ -213,6 +213,8 @@ workflows:
               only:
                 - main
                 - /preview\/.*/
+          requires:
+            - test-application
       - deploy-application:
           name: deploy-application
           context:
