@@ -59,9 +59,9 @@ executors:
 jobs:
 
   build-image:
-    environment:
-      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
-      REGISTRY_REPO: "library/$CIRCLE_PROJECT_REPONAME"
+    # environment:
+    #   REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+    #   REGISTRY_REPO: "library/$CIRCLE_PROJECT_REPONAME"
     executor:
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
@@ -83,9 +83,9 @@ jobs:
       - docker/check:
           registry: $REGISTRY_HOST
       - docker/build:
-          image: $REGISTRY_REPO
-          registry: $REGISTRY_HOST
-          tag: $TAG
+          # image: $REGISTRY_REPO
+          # registry: $REGISTRY_HOST
+          # tag: $TAG
           extra_build_args: "--target production"
           use-buildkit: true
 
@@ -97,6 +97,7 @@ jobs:
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
     steps:
+      - setup_remote_docker
       - compute-docker-tag
       - docker/push:
           image: $REGISTRY_REPO
