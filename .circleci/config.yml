@@ -58,7 +58,21 @@ executors:
 
 jobs:
 
-  build-and-push:
+  push-image:
+    environment:
+      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      REGISTRY_REPO: "library/$CIRCLE_PROJECT_REPONAME"
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+    steps:
+      - compute-docker-tag
+      - docker/push:
+          image: $REGISTRY_REPO
+          registry: $REGISTRY_HOST
+          tag: $TAG
+
+  build-image:
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_REPO: "library/$CIRCLE_PROJECT_REPONAME"
@@ -88,10 +102,6 @@ jobs:
           tag: $TAG
           extra_build_args: "--target production"
           use-buildkit: true
-      - docker/push:
-          image: $REGISTRY_REPO
-          registry: $REGISTRY_HOST
-          tag: $TAG
 
   delete-deployment:
     parameters:
@@ -216,12 +226,21 @@ workflows:
             branches:
               only: main
 
-  docker_push:
+  docker-push:
     unless:
       equal: [ "delete", << pipeline.parameters.GHA_Event >> ]
     jobs:
-      - build-and-push:
-          name: build-and-push
+      - build-image:
+          name: build-image
+          context:
+            - org-global
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/
+      - push-image:
+          name: push-image
           context:
             - org-global
           filters:
@@ -230,6 +249,7 @@ workflows:
                 - main
                 - /preview\/.*/
           requires:
+            - build-image
             - test-application
       - deploy-application:
           name: deploy-application
@@ -240,8 +260,7 @@ workflows:
               only:
                 - main
           requires:
-            - build-and-push
-            - test-application
+            - push-image
       - deploy-preview-app:
           name: deploy-preview-app
           context:
@@ -251,8 +270,7 @@ workflows:
               only:
                 - /preview\/.*/
           requires:
-            - build-and-push
-            - test-application
+            - push-image
       - release-image:
           name: release-image
           context:
