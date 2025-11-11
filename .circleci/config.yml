@@ -219,6 +219,9 @@ jobs:
         environment:
           GITHUB_USER: 'psu-stewardship-bot'
           MYSQL_PASSWORD: pdf_accessibility_api
+          RAILS_ENV: test
+          REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+          REGISTRY_REPO: library/pdf_accessibility_api
     steps:
       - checkout
       - setup_remote_docker:
