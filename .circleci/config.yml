@@ -88,6 +88,15 @@ jobs:
           tag: $TAG
           extra_build_args: "--target production"
           use-buildkit: true
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - docker-image-info
+      - run:
+          name: Save image info for push job
+          command: |
+            mkdir -p /tmp/docker-image-info
+            echo "$REGISTRY_HOST/$REGISTRY_REPO:$TAG" > /tmp/docker-image-info/image-name.txt
 
   push-image:
     environment:
@@ -98,7 +107,18 @@ jobs:
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
     steps:
       - setup_remote_docker
+      - checkout
       - compute-docker-tag
+      - attach_workspace:
+          at: /tmp
+      - docker/check:
+          registry: $REGISTRY_HOST
+      - docker/build:
+          image: $REGISTRY_REPO
+          registry: $REGISTRY_HOST
+          tag: $TAG
+          extra_build_args: "--target production"
+          use-buildkit: true
       - docker/push:
           image: $REGISTRY_REPO
           registry: $REGISTRY_HOST
@@ -240,6 +260,10 @@ workflows:
               only:
                 - main
                 - /preview\/.*/
+      - test-application:
+          name: test-application
+          context:
+            - org-global
       - push-image:
           name: push-image
           context:
@@ -283,7 +307,3 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v\d+\.\d+\.\d+.*/
-      - test-application:
-          name: test-application
-          context:
-            - org-global
