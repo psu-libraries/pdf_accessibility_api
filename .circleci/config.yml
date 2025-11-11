@@ -217,11 +217,12 @@ jobs:
     docker:
       - image: cimg/ruby:3.4.1
         environment:
-          RAILS_ENV: test
+          GITHUB_USER: 'psu-stewardship-bot'
           MYSQL_PASSWORD: pdf_accessibility_api
+          RAILS_ENV: test
           REGISTRY_HOST: harbor.k8s.libraries.psu.edu
           REGISTRY_REPO: library/pdf_accessibility_api
-          GITHUB_USER: 'psu-stewardship-bot'
+          CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
     steps:
       - checkout
       - setup_remote_docker:
