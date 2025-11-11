@@ -222,10 +222,10 @@ jobs:
           RAILS_ENV: test
           REGISTRY_HOST: harbor.k8s.libraries.psu.edu
           REGISTRY_REPO: library/pdf_accessibility_api
-          CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
     steps:
       - checkout
       - setup_remote_docker:
+          version: docker24
           docker_layer_caching: true
       - run:
           name: Install dependencies
