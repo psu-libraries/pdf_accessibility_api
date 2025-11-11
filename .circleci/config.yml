@@ -22,17 +22,23 @@ parameters:
   CI_UTILS_IMAGE_TAG:
     type: string
     default: "v4.3.0"
+  CONFIG_REPO_NAME:
+    type: string
+    default: "pdfapi-config"
+  CONFIG_REPO_URL:
+    type: string
+    default: "git@github.com:psu-libraries/pdfapi-config.git"
 
 commands:
 
-  clone-pdfapi-config:
+  clone-config-repo:
     steps:
       - add_ssh_keys
       - run:
           name: Prepare GitHub Access
           command: |
             ssh-keyscan github.com > ~/.ssh/known_hosts
-            git clone git@github.com:psu-libraries/pdfapi-config.git
+            git clone $CONFIG_REPO_URL
 
   compute-docker-tag:
     steps:
@@ -135,15 +141,16 @@ jobs:
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
     environment:
-      CONFIG_REPO: git@github.com:psu-libraries/pdfapi-config.git
+      CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
+      CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
       DELETE_BRANCH: << parameters.delete_branch >>
     steps:
-      - clone-pdfapi-config
+      - clone-config-repo
       - run:
           name: Delete Deployment
           command: |
             export TRIGGERED_BY="$CIRCLE_USERNAME"
-            cd pdfapi-config
+            cd $CONFIG_REPO_NAME
             ./bin/delete-deployment
 
   deploy-application:
@@ -151,15 +158,16 @@ jobs:
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
     environment:
-      CONFIG_REPO: git@github.com:psu-libraries/pdfapi-config.git
+      CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
+      CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
     steps:
-      - clone-pdfapi-config
+      - clone-config-repo
       - compute-docker-tag
       - run:
           name: Generate Application
           command: |
             export TRIGGERED_BY="$CIRCLE_USERNAME"
-            cd pdfapi-config
+            cd $CONFIG_REPO_NAME
             ./bin/generate_application
 
   deploy-preview-app:
@@ -167,15 +175,16 @@ jobs:
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
     environment:
-      CONFIG_REPO: git@github.com:psu-libraries/pdfapi-config.git
+      CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
+      CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
     steps:
-      - clone-pdfapi-config
+      - clone-config-repo
       - compute-docker-tag
       - run:
           name: Generate Preview Application
           command: |
             export TRIGGERED_BY="$CIRCLE_USERNAME"
-            cd pdfapi-config
+            cd $CONFIG_REPO_NAME
             ./bin/deploy-preview-app
 
   release-image:
@@ -188,19 +197,20 @@ jobs:
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
     environment:
-      CONFIG_REPO: git@github.com:psu-libraries/pdfapi-config.git
+      CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
+      CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       FROM_TAG: << parameters.from_tag >>
       TO_TAG: << parameters.to_tag >>
     steps:  
-      - clone-pdfapi-config
+      - clone-config-repo
       - run:
           name: Tag & Release Image
           command: |
             export TRIGGERED_BY="$CIRCLE_USERNAME"
             export REGISTRY_REPO="$CIRCLE_PROJECT_REPONAME"
             /usr/local/bin/image-tag
-            cd pdfapi-config
+            cd $CONFIG_REPO_NAME
             /usr/local/bin/image-release-pr clusters/prod/manifests/prod.yaml
 
   test-application:
@@ -212,7 +222,6 @@ jobs:
           REGISTRY_HOST: harbor.k8s.libraries.psu.edu
           REGISTRY_REPO: library/pdf_accessibility_api
           GITHUB_USER: 'psu-stewardship-bot'
-          CONFIG_REPO: git@github.com:psu-libraries/pdfapi-config.git
     steps:
       - checkout
       - setup_remote_docker:
