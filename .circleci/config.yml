@@ -66,7 +66,8 @@ jobs:
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
     steps:
-      - setup_remote_docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - checkout
       - run:
           name: Checkout Branch
@@ -106,7 +107,8 @@ jobs:
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
     steps:
-      - setup_remote_docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - checkout
       - compute-docker-tag
       - attach_workspace:
@@ -119,6 +121,7 @@ jobs:
           tag: $TAG
           extra_build_args: "--target production"
           use-buildkit: true
+          cache_from: $REGISTRY_REPO:$TAG
       - docker/push:
           image: $REGISTRY_REPO
           registry: $REGISTRY_HOST
