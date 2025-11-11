@@ -167,6 +167,7 @@ jobs:
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
     environment:
+      clusters: << parameters.clusters >>
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
     parameters:
@@ -198,6 +199,7 @@ jobs:
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
     environment:
+      clusters: << parameters.clusters >>
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
     parameters:
@@ -341,7 +343,7 @@ workflows:
           name: deploy-preview-app
           context:
             - org-global
-          clusters: "dev,uldev"
+          clusters: "uldev"
           filters:
             branches:
               only:
