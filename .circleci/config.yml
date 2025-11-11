@@ -219,13 +219,13 @@ jobs:
         environment:
           GITHUB_USER: 'psu-stewardship-bot'
           MYSQL_PASSWORD: pdf_accessibility_api
-          RAILS_ENV: test
-          REGISTRY_HOST: harbor.k8s.libraries.psu.edu
-          REGISTRY_REPO: library/pdf_accessibility_api
+          # RAILS_ENV: test
+          # REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+          # REGISTRY_REPO: library/pdf_accessibility_api
     steps:
       - checkout
       - setup_remote_docker:
-          # version: docker24
+          version: docker24
           docker_layer_caching: true
       - run:
           name: Install dependencies
