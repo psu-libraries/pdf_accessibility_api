@@ -88,15 +88,15 @@ jobs:
           tag: $TAG
           extra_build_args: "--target production"
           use-buildkit: true
-      - persist_to_workspace:
-          root: /tmp
-          paths:
-            - docker-image-info
       - run:
           name: Save image info for push job
           command: |
             mkdir -p /tmp/docker-image-info
             echo "$REGISTRY_HOST/$REGISTRY_REPO:$TAG" > /tmp/docker-image-info/image-name.txt
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - docker-image-info
 
   push-image:
     environment:
