@@ -159,7 +159,7 @@ jobs:
           command: |
             export TRIGGERED_BY="$CIRCLE_USERNAME"
             cd $CONFIG_REPO_NAME
-            ./bin/delete-deployment
+            ./bin/ci-delete-manifest
 
   deploy-application:
     executor:
@@ -220,8 +220,7 @@ jobs:
                 export TARGET_CLUSTER="$cluster"
                 echo "Processing cluster: $TARGET_CLUSTER"
                 cd $CONFIG_REPO_NAME
-                # ./bin/ci-write-manifest
-                ./bin/deploy-preview-app
+                ./bin/ci-write-manifest
                 echo "Finished processing $TARGET_CLUSTER"
                 git status
             done
