@@ -31,6 +31,12 @@ parameters:
   REGISTRY_HOST:
     type: string
     default: "harbor.k8s.libraries.psu.edu"
+  CLUSTERS_DEV:
+    type: string
+    default: "uldev"
+  CLUSTERS_PROD:
+    type: string
+    default: "prod"
 
 commands:
 
@@ -102,6 +108,10 @@ jobs:
           extra_build_args: "--target production"
           use-buildkit: true
       - run:
+          name: Save Docker image
+          command: |
+            docker save $REGISTRY_HOST/$REGISTRY_REPO:$TAG -o /tmp/docker-image.tar
+      - run:
           name: Save image info for push job
           command: |
             mkdir -p /tmp/docker-image-info
@@ -109,6 +119,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp
           paths:
+            - docker-image.tar
             - docker-image-info
 
   push-image:
@@ -121,20 +132,17 @@ jobs:
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
     steps:
       - setup_remote_docker:
-          docker_layer_caching: true
+          docker_layer_caching: false
       - checkout
       - compute-docker-tag
       - attach_workspace:
           at: /tmp
+      - run:
+          name: Load Docker image
+          command: |
+            docker load -i /tmp/docker-image.tar
       - docker/check:
           registry: $REGISTRY_HOST
-      - docker/build:
-          image: $REGISTRY_REPO
-          registry: $REGISTRY_HOST
-          tag: $TAG
-          extra_build_args: "--target production"
-          use-buildkit: true
-          cache_from: $REGISTRY_REPO:$TAG
       - docker/push:
           image: $REGISTRY_REPO
           registry: $REGISTRY_HOST
@@ -241,7 +249,7 @@ jobs:
             bundle _$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)_ install
       - run:
           name: Build and run containers
-          command: docker-compose -f docker-compose.yml build --no-cache && docker-compose -f docker-compose.yml up --force-recreate -d
+          command: docker-compose -f docker-compose.yml build && docker-compose -f docker-compose.yml up --force-recreate -d
       - run:
           name: Wait for mysql to be ready
           command: docker-compose exec web bash ./wait_for_db.sh
@@ -250,7 +258,7 @@ jobs:
           command: docker-compose exec -T web bundle exec niftany
       - run:
           name: "Run tests"
-          command: RAILS_ENV=test docker-compose exec -it web bundle exec rspec
+          command: RAILS_ENV=test docker-compose exec -T web bundle exec rspec
 
 workflows:
 
@@ -283,21 +291,11 @@ workflows:
           name: deploy-application
           context:
             - org-global
-          clusters: "uldev"
+          clusters: << pipeline.parameters.CLUSTERS_DEV >>
           filters:
             branches:
               only:
                 - main
-          requires:
-            - push-image
-      - deploy-application:
-          name: deploy-application
-          context:
-            - org-global
-          clusters: "uldev"
-          filters:
-            branches:
-              only:
                 - /preview\/.*/
           requires:
             - push-image
@@ -315,7 +313,7 @@ workflows:
             - test-application
       - release-image:
           name: release-image
-          clusters: "prod"
+          clusters: << pipeline.parameters.CLUSTERS_PROD >>
           context:
             - org-global
           from_tag: "<< pipeline.git.revision >>"
