@@ -279,10 +279,28 @@ workflows:
               only:
                 - main
                 - /preview\/.*/
-      - test-application:
-          name: test-application
+      - deploy-application:
+          name: deploy-application
           context:
             - org-global
+          clusters: "uldev"
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - push-image
+      - deploy-application:
+          name: deploy-application
+          context:
+            - org-global
+          clusters: "uldev"
+          filters:
+            branches:
+              only:
+                - /preview\/.*/
+          requires:
+            - push-image
       - push-image:
           name: push-image
           context:
@@ -295,28 +313,6 @@ workflows:
           requires:
             - build-image
             - test-application
-      - deploy-application:
-          name: deploy-application
-          context:
-            - org-global
-          clusters: "uldev"
-          filters:
-            branches:
-              only:
-                - main
-          requires:
-            - push-image
-      - deploy-application:
-          name: deploy-application
-          context:
-            - org-global
-          clusters: "uldev"
-          filters:
-            branches:
-              only:
-                - /preview\/.*/
-          requires:
-            - push-image
       - release-image:
           name: release-image
           clusters: "prod"
@@ -329,3 +325,12 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v\d+\.\d+\.\d+.*/
+      - test-application:
+          name: test-application
+          context:
+            - org-global
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/
