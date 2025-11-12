@@ -226,7 +226,7 @@ jobs:
       - run:
           name: Tag & Release Image
           command: |
-            export CONFIG_REPO="$CONFIG_REPO"
+            export CONFIG_REPO="$CONFIG_REPO_URL"
             export TRIGGERED_BY="$CIRCLE_USERNAME"
             export REGISTRY_REPO="$CIRCLE_PROJECT_REPONAME"
             /usr/local/bin/image-tag
