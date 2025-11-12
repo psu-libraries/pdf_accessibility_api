@@ -110,12 +110,12 @@ jobs:
       - run:
           name: Save Docker image
           command: |
-            docker save $REGISTRY_HOST/$REGISTRY_REPO:$TAG -o /tmp/docker-image.tar
+            docker save $REGISTRY_HOST/library/$CIRCLE_PROJECT_REPONAME:$TAG -o /tmp/docker-image.tar
       - run:
           name: Save image info for push job
           command: |
             mkdir -p /tmp/docker-image-info
-            echo "$REGISTRY_HOST/$REGISTRY_REPO:$TAG" > /tmp/docker-image-info/image-name.txt
+            echo "$REGISTRY_HOST/library/$CIRCLE_PROJECT_REPONAME:$TAG" > /tmp/docker-image-info/image-name.txt
       - persist_to_workspace:
           root: /tmp
           paths:
