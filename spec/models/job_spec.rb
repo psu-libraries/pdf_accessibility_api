@@ -19,6 +19,7 @@ RSpec.describe Job do
     it { is_expected.to have_db_column(:output_object_key).of_type(:text) }
     it { is_expected.to have_db_column(:processing_error_message).of_type(:text) }
     it { is_expected.to have_db_column(:output_url_expires_at).of_type(:datetime).with_options(null: true) }
+    it { is_expected.to have_db_column(:page_count).of_type(:integer).with_options(null: true) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
@@ -28,6 +29,7 @@ RSpec.describe Job do
 
   describe 'validations' do
     it { is_expected.to validate_inclusion_of(:status).in_array ['processing', 'completed', 'failed'] }
+    it { is_expected.to validate_numericality_of(:page_count).is_greater_than(0).only_integer.allow_nil }
 
     context 'when the owner is an APIUSer' do
       it 'validates the format of source_url' do

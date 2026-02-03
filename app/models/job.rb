@@ -9,6 +9,7 @@ class Job < ApplicationRecord
   end
 
   validates :status, inclusion: { in: statuses }
+  validates :page_count, numericality: { greater_than: 0, only_integer: true }, allow_nil: true
 
   def completed?
     status == 'completed'
