@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_06_134207) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_03_200259) do
   create_table "api_users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -46,6 +46,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_06_134207) do
     t.text "prompt"
     t.string "llm_model"
     t.text "alt_text"
+    t.integer "page_count"
     t.index ["owner_type", "owner_id"], name: "index_jobs_on_owner"
     t.index ["uuid"], name: "index_jobs_on_uuid"
   end
