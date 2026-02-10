@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class APIUser < ApplicationRecord
+  belongs_to :unit, optional: true
+
   has_many :jobs, as: :owner, dependent: :restrict_with_exception
   has_many :pdf_jobs, as: :owner, dependent: :restrict_with_exception
 

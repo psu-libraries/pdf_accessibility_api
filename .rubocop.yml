@@ -26,6 +26,10 @@ RSpec/MultipleMemoizedHelpers:
 RSpec/NestedGroups:
   Enabled: false
 
+Layout/LineLength:
+  Exclude:
+    - 'spec/models/unit_spec.rb'
+
 # Rubocop doesn't seem to understand the rswag DSL.
 # Exclude the rswag spec file spec/requests/api/v1/api-docs/jobs_spec.rb
 # from RSpec/EmptyExampleGroup.  Without this, autocorrect will delete 
