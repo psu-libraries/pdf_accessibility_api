@@ -4,6 +4,9 @@ inherit_gem:
 Metrics/BlockLength:
   Exclude:
     - 'config/environments/development.rb'
+    - 'app/models/api_user.rb'
+    - 'app/models/job.rb'
+    - 'config/routes.rb'
 
 Metrics/CyclomaticComplexity:
   Exclude:
