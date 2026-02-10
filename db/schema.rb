@@ -19,7 +19,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_03_200259) do
     t.text "webhook_endpoint"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "unit_id"
     t.index ["api_key"], name: "index_api_users_on_api_key", unique: true
+    t.index ["unit_id"], name: "index_api_users_on_unit_id"
     t.index ["webhook_key"], name: "index_api_users_on_webhook_key", unique: true
   end
 
@@ -27,6 +29,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_03_200259) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "unit_id"
+    t.index ["unit_id"], name: "index_gui_users_on_unit_id"
   end
 
   create_table "jobs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -50,4 +54,15 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_03_200259) do
     t.index ["owner_type", "owner_id"], name: "index_jobs_on_owner"
     t.index ["uuid"], name: "index_jobs_on_uuid"
   end
+
+  create_table "units", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "name"
+    t.integer "daily_page_limit", default: 30, null: false
+    t.integer "overall_page_limit", default: 25000, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "api_users", "units"
+  add_foreign_key "gui_users", "units"
 end

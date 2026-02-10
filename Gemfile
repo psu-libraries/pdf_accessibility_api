@@ -9,7 +9,7 @@ gem 'rails', '~> 7.2.2', '>= 7.2.2.1'
 
 gem 'shakapacker'
 # Use mysql as the database for Active Record
-gem 'mysql2'
+gem 'mysql2', '~> 0.5.7'
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '>= 5.0'
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
@@ -78,6 +78,8 @@ group :test do
   gem 'shoulda-matchers'
 end
 
+gem 'rails_admin'
 gem 'rails_warden', '~> 0.6.0'
 
 gem 'bugsnag', '~> 6.28'
+gem 'sassc-rails'

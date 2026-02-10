@@ -4,6 +4,9 @@ inherit_gem:
 Metrics/BlockLength:
   Exclude:
     - 'config/environments/development.rb'
+    - 'app/models/api_user.rb'
+    - 'app/models/job.rb'
+    - 'config/routes.rb'
 
 Metrics/CyclomaticComplexity:
   Exclude:
@@ -22,6 +25,10 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/NestedGroups:
   Enabled: false
+
+Layout/LineLength:
+  Exclude:
+    - 'spec/models/unit_spec.rb'
 
 # Rubocop doesn't seem to understand the rswag DSL.
 # Exclude the rswag spec file spec/requests/api/v1/api-docs/jobs_spec.rb

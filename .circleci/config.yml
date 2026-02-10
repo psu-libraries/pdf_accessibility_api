@@ -249,9 +249,20 @@ jobs:
           command: |
             gem install bundler -v "$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)"
             bundle _$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)_ install
+      - attach_workspace:
+          at: /tmp
       - run:
-          name: Build and run containers
-          command: docker-compose -f docker-compose.yml build && docker-compose -f docker-compose.yml up --force-recreate -d
+          name: Load Docker image from build-image
+          command: |
+            if [ -f /tmp/docker-image.tar ]; then
+              docker load -i /tmp/docker-image.tar
+            else
+              echo "No persisted image found; falling back to local build"
+              docker-compose -f docker-compose.yml build
+            fi
+      - run:
+          name: Start services (no-build when image available)
+          command: docker-compose -f docker-compose.yml up --force-recreate -d --no-build
       - run:
           name: Wait for mysql to be ready
           command: docker-compose exec web bash ./wait_for_db.sh
@@ -284,11 +295,7 @@ workflows:
           name: build-image
           context:
             - org-global
-          filters:
-            branches:
-              only:
-                - main
-                - /preview\/.*/
+
       - deploy-application:
           name: deploy-application
           context:
@@ -329,8 +336,6 @@ workflows:
           name: test-application
           context:
             - org-global
-          filters:
-            branches:
-              only:
-                - main
-                - /preview\/.*/
+          requires:
+            - build-image
+
