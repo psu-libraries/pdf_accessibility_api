@@ -23,6 +23,7 @@ class Job < ApplicationRecord
         field :status
         field :owner_type
         field :owner_id
+        field :page_count
         field :created_at
         field :finished_at
       end
@@ -31,6 +32,7 @@ class Job < ApplicationRecord
         field :uuid
         field :type
         field :status
+        field :page_count
         field :llm_model
         field :prompt
         field :alt_text
