@@ -2,9 +2,7 @@
 
 RailsAdmin.config do |config|
   config.authenticate_with do
-    extend AdminAccessHelper
-
-    unless admin_user?
+    unless AdminUserChecker.admin_user?(request)
       render plain: 'Forbidden', status: :forbidden
     end
   end
