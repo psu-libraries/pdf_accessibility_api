@@ -4,6 +4,7 @@ RailsAdmin.config do |config|
   config.included_models = [
     'GuiUser',
     'ApiUser',
-    'Job'
+    'Job',
+    'Unit'
   ]
 end
