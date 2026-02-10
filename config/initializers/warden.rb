@@ -13,7 +13,7 @@ Warden::Strategies.add(:http_header_auth) do
 
   def authenticate!
     user = request.env[Rails.application.config_for(:warden)['remote_user_header']]
-    authorized_users = Rails.application.config_for(:warden)['authorized_users'].split(',')
+    authorized_users = Rails.application.config_for(:warden)['admin_users'].split(',')
     if authorized_users.include?(user)
       email = env['HTTP_X_AUTH_REQUEST_EMAIL']
       success! GUIUser.find_or_create_by!(email:)
