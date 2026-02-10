@@ -33,6 +33,11 @@ RSpec.describe 'RailsAdmin access' do
       get '/admin/job', headers: admin_headers
       expect(response).to have_http_status(:ok)
     end
+
+    it 'allows access to Unit model' do
+      get '/admin/unit', headers: admin_headers
+      expect(response).to have_http_status(:ok)
+    end
   end
 
   context 'when user is not an admin' do
