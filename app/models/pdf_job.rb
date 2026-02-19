@@ -27,14 +27,9 @@ class PdfJob < Job
 
     def page_count_within_quota
       total_quota = owner.unit.overall_page_limit
-      daily_quota = owner.unit.daily_page_limit
 
       if page_count + owner.unit.total_pages_processed > total_quota
         errors.add(:page_count, "exceeds the unit's overall page limit of #{total_quota}")
-      end
-
-      if page_count + owner.total_pages_processed_today > daily_quota
-        errors.add(:page_count, "exceeds the owner's daily page limit of #{daily_quota}")
       end
     end
 
