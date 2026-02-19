@@ -16,7 +16,7 @@ class APIRemediationJob < ApplicationJob
     poll_and_update(job_uuid, s3_handler, output_polling_timeout)
   rescue S3Handler::Error => e
     update_with_failure(job, "Failed to upload file to remediation input location:  #{e.message}")
-  rescue Down::Error => e
+  rescue Down::Error, ActiveRecord::RecordInvalid => e
     # We may want to retry the download depending on the more specific nature of the failure.
     update_with_failure(job, "Failed to download file from source URL:  #{e.message}")
   ensure

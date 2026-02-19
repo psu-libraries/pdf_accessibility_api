@@ -4,6 +4,8 @@ class PdfJob < Job
   belongs_to :owner, polymorphic: true
   validates :source_url, format: { with: URI::RFC2396_PARSER.make_regexp }, if: -> { owner_type == 'APIUser' }
 
+  validates :page_count_within_quota, if: :page_count_set_from_nil?
+
   delegate :webhook_endpoint, :webhook_key, to: :owner, prefix: false
 
   def output_url_expired?
@@ -21,5 +23,19 @@ class PdfJob < Job
                                 finished_at: finished_at,
                                 processing_error_message: processing_error_message
                               })
+    end
+
+    def page_count_within_quota
+      total_quota = owner.unit.overall_page_limit
+
+      if page_count + owner.unit.total_pages_processed > total_quota
+        errors.add(:page_count, "exceeds the unit's overall page limit of #{total_quota}")
+      end
+    end
+
+    def page_count_set_from_nil?
+      will_save_change_to_page_count? &&
+        page_count_in_database.nil? &&
+        page_count.present?
     end
 end
