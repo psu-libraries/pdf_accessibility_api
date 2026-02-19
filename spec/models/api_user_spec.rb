@@ -55,4 +55,23 @@ RSpec.describe APIUser do
       expect(api_user.webhook_key[0..6]).to eq 'wh_key_'
     end
   end
+
+  describe '#total_pages_processed_today' do
+    let(:api_user) { create(:api_user) }
+
+    it 'sums the page_count of jobs created in the last 24 hours' do
+      create(:pdf_job, owner: api_user, page_count: 3, created_at: 2.hours.ago)
+      create(:pdf_job, owner: api_user, page_count: 5, created_at: 23.hours.ago)
+
+      create(:pdf_job, owner: api_user, page_count: 100, created_at: 25.hours.ago)
+
+      expect(api_user.total_pages_processed_today).to eq(8)
+    end
+
+    it 'returns 0 when there are no recent jobs' do
+      create(:pdf_job, owner: api_user, page_count: 10, created_at: 25.hours.ago)
+
+      expect(api_user.total_pages_processed_today).to eq(0)
+    end
+  end
 end

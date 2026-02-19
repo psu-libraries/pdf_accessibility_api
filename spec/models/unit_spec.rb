@@ -26,4 +26,29 @@ RSpec.describe Unit do
     it { is_expected.to validate_presence_of(:daily_page_limit) }
     it { is_expected.to validate_presence_of(:overall_page_limit) }
   end
+
+  describe '#total_pages_processed' do
+    let(:unit) { create(:unit) }
+
+    it 'sums the page_count of jobs for API users in the unit' do
+      api_user1 = create(:api_user, unit: unit)
+      api_user2 = create(:api_user, unit: unit)
+
+      create(:pdf_job, owner: api_user1, page_count: 3)
+      create(:pdf_job, owner: api_user1, page_count: 2)
+      create(:pdf_job, owner: api_user2, page_count: 5)
+
+      other_unit = create(:unit)
+      other_user = create(:api_user, unit: other_unit)
+      create(:pdf_job, owner: other_user, page_count: 100)
+
+      expect(unit.total_pages_processed).to eq(10)
+    end
+
+    it 'returns 0 when there are no jobs for API users in the unit' do
+      create(:api_user, unit: unit)
+
+      expect(unit.total_pages_processed).to eq(0)
+    end
+  end
 end

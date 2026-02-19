@@ -11,6 +11,10 @@ class APIUser < ApplicationRecord
   validates :webhook_endpoint, presence: true
   validates :webhook_endpoint, format: { with: URI::RFC2396_PARSER.make_regexp('https') }
 
+  def total_pages_processed_today
+    jobs.where(created_at: (24.hours.ago)..).sum(:page_count)
+  end
+
   RailsAdmin.config do |config|
     config.model 'ApiUser' do
       list do
