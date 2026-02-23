@@ -255,7 +255,7 @@ jobs:
           name: Load Docker image from build-image
           command: |
             if [ -f /tmp/docker-image.tar ]; then
-              docker load -i /tmp/docker-image.tar
+              docker tag "$(docker load -i /tmp/docker-image.tar | awk '/Loaded image: / { print $3 }' | tail -n 1)" project-web:latest
             else
               echo "No persisted image found; falling back to local build"
               docker-compose -f docker-compose.yml build
