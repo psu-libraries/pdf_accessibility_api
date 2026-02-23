@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class PageCountQuotaValidator
-  class QuotaExceededError < StandardError; end
-  class MissingUnitError < StandardError; end
-  class InvalidPageCountError < StandardError; end
+  class Error < StandardError; end
+
+  class QuotaExceededError < Error; end
+  class MissingUnitError < Error; end
+  class InvalidPageCountError < Error; end
 
   def self.validate!(owner:, page_count:)
     unit = owner&.unit

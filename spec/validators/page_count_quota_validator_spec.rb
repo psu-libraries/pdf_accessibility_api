@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe PageCountWithinQuotaValidator do
+RSpec.describe PageCountQuotaValidator do
   describe '.validate!' do
     let(:unit) { create(:unit, overall_page_limit: 10) }
     let(:api_user) { create(:api_user, unit: unit) }
@@ -18,7 +18,7 @@ RSpec.describe PageCountWithinQuotaValidator do
     it 'raises when page_count would exceed quota' do
       expect {
         described_class.validate!(owner: api_user, page_count: 4)
-      }.to raise_error(PageCountWithinQuotaValidator::QuotaExceededError)
+      }.to raise_error(PageCountQuotaValidator::QuotaExceededError)
     end
 
     it 'raises when owner has no unit' do
@@ -26,17 +26,17 @@ RSpec.describe PageCountWithinQuotaValidator do
 
       expect {
         described_class.validate!(owner: unitless_user, page_count: 1)
-      }.to raise_error(PageCountWithinQuotaValidator::MissingUnitError)
+      }.to raise_error(PageCountQuotaValidator::MissingUnitError)
     end
 
     it 'raises when page_count is not a positive integer' do
       expect {
         described_class.validate!(owner: api_user, page_count: 0)
-      }.to raise_error(PageCountWithinQuotaValidator::InvalidPageCountError)
+      }.to raise_error(PageCountQuotaValidator::InvalidPageCountError)
 
       expect {
         described_class.validate!(owner: api_user, page_count: 'nope')
-      }.to raise_error(PageCountWithinQuotaValidator::InvalidPageCountError)
+      }.to raise_error(PageCountQuotaValidator::InvalidPageCountError)
     end
   end
 end
