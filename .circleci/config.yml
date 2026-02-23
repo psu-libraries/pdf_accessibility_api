@@ -325,6 +325,3 @@ workflows:
           name: test-application
           context:
             - org-global
-          requires:
-            - build-image
-
