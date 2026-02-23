@@ -70,6 +70,9 @@ services:
       MYSQL_DATABASE: pdf_accessibility_api
       MYSQL_USER: pdf_accessibility_api
       MYSQL_PASSWORD: pdf_accessibility_api
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
     image: mariadb:10.4.6
     ports:
     - "3306:3306"
