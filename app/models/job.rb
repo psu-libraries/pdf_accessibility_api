@@ -4,6 +4,8 @@ class Job < ApplicationRecord
   after_commit :broadcast_to_job_channel
   belongs_to :owner, polymorphic: true
 
+  scope :processing_pdfjobs, -> { where(status: 'processing', type: 'PdfJob') }
+
   def self.statuses
     ['processing', 'completed', 'failed']
   end

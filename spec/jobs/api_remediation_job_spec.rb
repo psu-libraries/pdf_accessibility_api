@@ -53,23 +53,6 @@ RSpec.describe APIRemediationJob do
         expect(s3).to have_received(:upload_to_input).with('path/to/file')
       end
 
-      it 'updates the status and metadata of the given job record' do
-        described_class.perform_now(job.uuid)
-        reloaded_job = job.reload
-        expect(reloaded_job.status).to eq 'completed'
-        expect(reloaded_job.output_url).to eq 'https://example.com/presigned-file-url'
-        expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(reloaded_job.output_object_key).to eq('file.pdf')
-        expect(reloaded_job.page_count).to eq(2)
-        expect(reloaded_job.output_url_expires_at).to be_within(1.minute)
-          .of(AppJobModule::PRESIGNED_URL_EXPIRES_IN.seconds.from_now)
-      end
-
-      it 'queues up a notification about the status of the job' do
-        described_class.perform_now(job.uuid)
-        expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
-      end
-
       it 'closes the temporarily downloaded file' do
         described_class.perform_now(job.uuid)
         expect(file).to have_received(:close!)
@@ -105,30 +88,6 @@ RSpec.describe APIRemediationJob do
           )
           expect(s3).not_to have_received(:upload_to_input)
         end
-      end
-    end
-
-    context 'when an output file is not produced before the timeout is exceeded' do
-      let(:output_url) { nil }
-
-      it 'updates the status and metadata of the given job record' do
-        described_class.perform_now(job.uuid, output_polling_timeout: 1)
-        reloaded_job = job.reload
-        expect(reloaded_job.status).to eq 'failed'
-        expect(reloaded_job.output_url).to be_nil
-        expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(reloaded_job.processing_error_message).to eq 'Timed out waiting for output file'
-        expect(reloaded_job.output_url_expires_at).to be_nil
-      end
-
-      it 'queues up a notification about the status of the job' do
-        described_class.perform_now(job.uuid, output_polling_timeout: 1)
-        expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
-      end
-
-      it 'closes the temporarily downloaded file' do
-        described_class.perform_now(job.uuid, output_polling_timeout: 1)
-        expect(file).to have_received(:close!)
       end
     end
 

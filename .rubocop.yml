@@ -10,11 +10,11 @@ Metrics/BlockLength:
 
 Metrics/CyclomaticComplexity:
   Exclude:
-    - 'app/jobs/remediation_job.rb'
+    - 'app/services/check_s3_for_final_files_service.rb'
 
 Metrics/PerceivedComplexity:
   Exclude:
-    - 'app/jobs/remediation_job.rb'
+    - 'app/services/check_s3_for_final_files_service.rb'
 
 Rails/NotNullColumn:
   Exclude:

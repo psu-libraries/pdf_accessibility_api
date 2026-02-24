@@ -31,7 +31,6 @@ class PdfJobsController < GUIAuthController
     pdf_job.uuid = SecureRandom.uuid
     pdf_job.output_object_key = object_key
     pdf_job.save!
-    GUIRemediationJob.perform_later(pdf_job.uuid, object_key)
     render json: { job_id: pdf_job.id }, status: :created
   end
 end
