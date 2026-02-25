@@ -41,6 +41,22 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+  s3_poller:
+    user: 3000:3000
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    tty: true
+    stdin_open: true
+    <<: *web_env
+    build:
+      context: .
+      target: dev
+    command: bundle exec rake s3:check_final_files_loop
+    volumes:
+      - bundle-data:/app/vendor/bundle
   worker:
     user: 3000:3000
     depends_on:

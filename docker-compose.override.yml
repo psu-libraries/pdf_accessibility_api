@@ -4,6 +4,11 @@ services:
       - type: bind
         source: ./
         target: /app
+  s3_poller:
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
   worker:
     volumes:
       - type: bind
