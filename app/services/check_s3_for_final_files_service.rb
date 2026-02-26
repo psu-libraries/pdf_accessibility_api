@@ -25,6 +25,7 @@ class CheckS3ForFinalFilesService
         processing_jobs = Job.processing_pdfjobs
 
         if processing_jobs.none?
+          Rails.logger.debug('No processing jobs found')
           break if run_once
 
           # Back off when there are no processing jobs
@@ -55,6 +56,7 @@ class CheckS3ForFinalFilesService
     def check_job(job)
       if job.created_at < CHECK_S3_FAILED_LIMIT.seconds.ago
         update_with_failure(job, 'Timed out waiting for output file')
+        Rails.logger.warn("Job #{job.uuid} timed out waiting for output file")
         RemediationStatusNotificationJob.perform_later(job.uuid) if job.owner.instance_of?(::APIUser)
         return
       end
@@ -64,6 +66,7 @@ class CheckS3ForFinalFilesService
                                                        expires_in: AppJobModule::PRESIGNED_URL_EXPIRES_IN)
       if output_url.present?
         update_job(job, output_url)
+        Rails.logger.info("Job #{job.uuid} marked completed with output_url present")
         RemediationStatusNotificationJob.perform_later(job.uuid) if job.owner.instance_of?(::APIUser)
       end
     end
