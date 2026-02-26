@@ -10,6 +10,7 @@ RSpec.describe CheckS3ForFinalFilesService do
       :pdf_job,
       status: 'processing',
       output_object_key: 'output-key',
+      filename: 'original.pdf',
       created_at: 10.minutes.ago
     )
   end
@@ -25,7 +26,7 @@ RSpec.describe CheckS3ForFinalFilesService do
         s3_handler = instance_double(S3Handler)
         allow(S3Handler).to receive(:new).with('output-key').and_return(s3_handler)
         allow(s3_handler).to receive(:presigned_url_for_output)
-          .with('output-key', expires_in: AppJobModule::PRESIGNED_URL_EXPIRES_IN)
+          .with('original.pdf', expires_in: AppJobModule::PRESIGNED_URL_EXPIRES_IN)
           .and_return('https://example.com/output.pdf')
 
         service.call(run_once: true)
@@ -46,6 +47,7 @@ RSpec.describe CheckS3ForFinalFilesService do
             owner: owner,
             status: 'processing',
             output_object_key: 'output-key',
+            filename: 'original.pdf',
             created_at: 10.minutes.ago
           )
         end
@@ -54,7 +56,7 @@ RSpec.describe CheckS3ForFinalFilesService do
           s3_handler = instance_double(S3Handler)
           allow(S3Handler).to receive(:new).with('output-key').and_return(s3_handler)
           allow(s3_handler).to receive(:presigned_url_for_output)
-            .with('output-key', expires_in: AppJobModule::PRESIGNED_URL_EXPIRES_IN)
+            .with('original.pdf', expires_in: AppJobModule::PRESIGNED_URL_EXPIRES_IN)
             .and_return('https://example.com/output.pdf')
 
           service.call(run_once: true)
@@ -114,6 +116,42 @@ RSpec.describe CheckS3ForFinalFilesService do
           expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
           expect(RemediationStatusNotificationJob).not_to have_received(:perform_later)
         end
+      end
+    end
+
+    context 'when an error occurs while checking a job' do
+      it 'rescues the error and reports it to Bugsnag' do
+        allow(Bugsnag).to receive(:notify)
+        allow(S3Handler).to receive(:new).and_raise(StandardError, 'error')
+
+        expect { service.call(run_once: true) }.not_to raise_error
+        expect(Bugsnag).to have_received(:notify)
+        expect(job.reload.status).to eq('processing')
+      end
+    end
+
+    context 'when the OS sends a termination signal' do
+      it 'stops after the current iteration' do
+        traps = {}
+        allow(Signal).to receive(:trap) do |signal, &block|
+          traps[signal] = block
+        end
+
+        allow(Job).to receive(:processing_pdfjobs).once.and_call_original
+
+        # rubocop:disable RSpec/SubjectStub
+        allow(service).to receive(:sleep) do
+          traps['TERM']&.call
+        end
+        # rubocop:enable RSpec/SubjectStub
+
+        s3_handler = instance_double(S3Handler)
+        allow(S3Handler).to receive(:new).and_return(s3_handler)
+        allow(s3_handler).to receive(:presigned_url_for_output).and_return(nil)
+
+        # Run in `loop`; we expect it to terminate
+        expect { service.call(run_once: false) }.not_to raise_error
+        expect(Job).to have_received(:processing_pdfjobs).once
       end
     end
   end

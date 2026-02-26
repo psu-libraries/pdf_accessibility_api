@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-# This service class is meant to run continually in the background
+# This service class is made to run continously in the background.
+# However, it can also be run once by passing `run_once: true` to the `call` method.
 class CheckS3ForFinalFilesService
   include AppJobModule
 
-  CHECK_S3_PER_JOB_INTERVAL = 1 # Throttle S3 checks while iterating processing jobs
+  CHECK_S3_PER_JOB_INTERVAL = 0.5 # Throttle S3 checks while iterating processing jobs
   CHECK_S3_IDLE_INTERVAL = 10 # Back off when there are no processing jobs
   CHECK_S3_FAILED_LIMIT = 3600 # 1 hour limit before marking job as failed
 
@@ -20,19 +21,18 @@ class CheckS3ForFinalFilesService
     end
 
     loop do
-      processed_any = false
-
       ActiveRecord::Base.connection_pool.with_connection do
         processing_jobs = Job.processing_pdfjobs
 
         if processing_jobs.none?
           break if run_once
 
+          # Back off when there are no processing jobs
+          sleep CHECK_S3_IDLE_INTERVAL
           next
         end
 
         processing_jobs.find_each do |job|
-          processed_any = true
           check_job(job)
           sleep CHECK_S3_PER_JOB_INTERVAL
           break if stop_requested
@@ -45,8 +45,6 @@ class CheckS3ForFinalFilesService
       end
 
       break if run_once || stop_requested
-
-      sleep CHECK_S3_IDLE_INTERVAL unless processed_any
     ensure
       ActiveRecord::Base.connection_handler.clear_active_connections!
     end
