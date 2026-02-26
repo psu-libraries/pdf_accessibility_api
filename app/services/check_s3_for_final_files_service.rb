@@ -62,7 +62,7 @@ class CheckS3ForFinalFilesService
       end
 
       s3_handler = S3Handler.new(job.output_object_key)
-      output_url = s3_handler.presigned_url_for_output(job.output_object_key,
+      output_url = s3_handler.presigned_url_for_output(job.filename,
                                                        expires_in: AppJobModule::PRESIGNED_URL_EXPIRES_IN)
       if output_url.present?
         update_job(job, output_url)

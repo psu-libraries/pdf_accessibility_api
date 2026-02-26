@@ -69,7 +69,8 @@ export default class extends Controller {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           output_url: res.successful[0].uploadURL,
-          object_key: res.successful[0].meta.objectKey
+          object_key: res.successful[0].meta.objectKey,
+          filename: res.successful[0].meta.name
         })
       })
       .then(r => r.json())
