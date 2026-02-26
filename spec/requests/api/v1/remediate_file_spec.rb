@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# End-to-end test for remediation upload through the API.
 describe 'requesting a file remediation via the API', :active_job_inline do
   let!(:api_user) { create(:api_user, webhook_endpoint: 'https://example.com/webhooks') }
   let(:http_client) { instance_double Faraday::Connection }
@@ -36,6 +37,13 @@ describe 'requesting a file remediation via the API', :active_job_inline do
         headers: { 'HTTP_X_API_KEY' => api_user.api_key }
       )
     end
+
+    # In a live environment, CheckS3ForFinalFilesService will be running in a
+    # background process.  Since that process does not run in the test environment,
+    # we manually run the check once here.  The sleep gives time for the file to
+    # reach minio before checking.
+    sleep 3
+    CheckS3ForFinalFilesService.new.call(run_once: true)
 
     job = api_user.jobs.last
 
