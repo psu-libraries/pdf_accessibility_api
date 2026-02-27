@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module AppJobModule
-  PRESIGNED_URL_EXPIRES_IN = 3600 # 1 hour
+  PRESIGNED_URL_EXPIRES_IN = 84_000 # 24 hours
 
   private
 

@@ -59,9 +59,14 @@ RSpec.describe APIRemediationJob do
       end
 
       context 'when the file has a special character' do
-        it 'saves that special character to the jobs output_key' do
+        it 'saves that special character to the jobs filename' do
           described_class.perform_now(special_chars_job.uuid)
-          expect(special_chars_job.reload.output_object_key).to eq(special_chars)
+          expect(special_chars_job.reload.filename).to eq special_chars
+        end
+
+        it 'strips the special character for output_object_key' do
+          described_class.perform_now(special_chars_job.uuid)
+          expect(special_chars_job.reload.output_object_key).to match(/[a-f0-9]{16}_specialcharacters\.pdf/)
         end
 
         it 'strips the special character for the s3 bucket' do

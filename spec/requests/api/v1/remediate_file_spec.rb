@@ -41,8 +41,8 @@ describe 'requesting a file remediation via the API', :active_job_inline do
     # In a live environment, CheckS3ForFinalFilesService will be running in a
     # background process.  Since that process does not run in the test environment,
     # we manually run the check once here.  The sleep gives time for the file to
-    # reach minio before checking.
-    sleep 3
+    # reach minio and be processed before checking.
+    sleep 7
     CheckS3ForFinalFilesService.new.call(run_once: true)
 
     job = api_user.jobs.last
