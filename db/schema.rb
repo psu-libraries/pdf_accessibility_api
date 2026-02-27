@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_03_200259) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_26_120000) do
   create_table "api_users", charset: "utf8mb4", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -57,7 +57,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_03_200259) do
 
   create_table "units", charset: "utf8mb4", force: :cascade do |t|
     t.string "name"
-    t.integer "daily_page_limit", default: 30, null: false
+    t.integer "user_daily_page_limit", default: 30, null: false
     t.integer "overall_page_limit", default: 25000, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

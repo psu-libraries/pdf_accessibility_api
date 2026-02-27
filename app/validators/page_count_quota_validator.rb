@@ -21,7 +21,7 @@ class PageCountQuotaValidator
       raise QuotaExceededError, "page_count exceeds the unit's overall page limit of #{total_quota}"
     end
 
-    todays_quota = unit.daily_page_limit
+    todays_quota = unit.user_daily_page_limit
     todays_processed = owner.total_pages_processed_last_24_hours
 
     if page_count_int + todays_processed > todays_quota
