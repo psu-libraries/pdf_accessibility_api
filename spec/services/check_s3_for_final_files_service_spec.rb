@@ -204,6 +204,40 @@ RSpec.describe CheckS3ForFinalFilesService do
       end
     end
 
+    context 'when there are many processing jobs' do
+      let(:owner) { create(:api_user) }
+
+      let!(:jobs) do
+        (1..25).map do |i|
+          create(
+            :pdf_job,
+            owner: owner,
+            status: 'processing',
+            object_key: "bulk-key-#{i}",
+            filename: "file-#{i}.pdf",
+            created_at: 10.minutes.ago
+          )
+        end
+      end
+
+      it 'iterates through all processing jobs' do
+        job.update(status: 'completed') # Mark the original job as completed so it doesn't interfere
+
+        s3_handler = instance_double(S3Handler)
+        allow(s3_handler).to receive(:presigned_url_for_output).and_return(nil)
+
+        seen_keys = []
+        allow(S3Handler).to receive(:new) do |key|
+          seen_keys << key
+          s3_handler
+        end
+
+        service.call(run_once: true)
+
+        expect(seen_keys).to match_array(jobs.map(&:object_key))
+      end
+    end
+
     context 'when the OS sends a termination signal' do
       it 'stops after the current iteration' do
         traps = {}
