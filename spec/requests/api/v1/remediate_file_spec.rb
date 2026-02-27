@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'timeout'
 
 # End-to-end test for remediation upload through the API.
 describe 'requesting a file remediation via the API', :active_job_inline do
@@ -38,14 +39,18 @@ describe 'requesting a file remediation via the API', :active_job_inline do
       )
     end
 
-    # In a live environment, CheckS3ForFinalFilesService will be running in a
-    # background process.  Since that process does not run in the test environment,
-    # we manually run the check once here.  The sleep gives time for the file to
-    # reach minio and be processed before checking.
-    sleep 7
-    CheckS3ForFinalFilesService.new.call(run_once: true)
+    # In production, CheckS3ForFinalFilesService runs continuously.
+    # In specs, we poll deterministically until the job completes.
+    service = CheckS3ForFinalFilesService.new
+    allow(service).to receive(:sleep) # speed up per-job throttle
 
     job = api_user.jobs.last
+    Timeout.timeout(60) do
+      until job.reload.completed?
+        service.call(run_once: true)
+        sleep 0.2
+      end
+    end
 
     expect(request).to have_received(:body=).with(
       "{\"event_type\":\"job.succeeded\",\"job\":{\"uuid\":\"#{job.uuid}\"," \
