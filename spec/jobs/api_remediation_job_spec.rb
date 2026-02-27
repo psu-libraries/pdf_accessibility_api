@@ -64,9 +64,9 @@ RSpec.describe APIRemediationJob do
           expect(special_chars_job.reload.filename).to eq special_chars
         end
 
-        it 'strips the special character for output_object_key' do
+        it 'strips the special character for object_key' do
           described_class.perform_now(special_chars_job.uuid)
-          expect(special_chars_job.reload.output_object_key).to match(/[a-f0-9]{16}_specialcharacters\.pdf/)
+          expect(special_chars_job.reload.object_key).to match(/[a-f0-9]{16}_specialcharacters\.pdf/)
         end
 
         it 'strips the special character for the s3 bucket' do
@@ -107,7 +107,7 @@ RSpec.describe APIRemediationJob do
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.output_url).to be_nil
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(reloaded_job.output_object_key).to be_nil
+        expect(reloaded_job.object_key).to be_nil
         expect(reloaded_job.processing_error_message).to eq 'Failed to process job: Down::Error: download error'
         expect(reloaded_job.output_url_expires_at).to be_nil
       end

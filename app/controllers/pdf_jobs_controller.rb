@@ -30,7 +30,7 @@ class PdfJobsController < GUIAuthController
     pdf_job = current_user.pdf_jobs.build
     pdf_job.status = 'processing'
     pdf_job.uuid = SecureRandom.uuid
-    pdf_job.output_object_key = object_key
+    pdf_job.object_key = object_key
     pdf_job.filename = filename
     pdf_job.save!
     render json: { job_id: pdf_job.id }, status: :created

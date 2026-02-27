@@ -2,7 +2,7 @@
   <h2>Job Details</h2>
   <ul data-controller="job"
           data-job-id="<%= @pdf_job.id %>"
-          data-job-output-object-key="<%= @pdf_job.output_object_key %>"
+      data-job-object-key="<%= @pdf_job.object_key %>"
           data-job-status="<%= @pdf_job.status %>"
           data-job-finished-at="<%= @pdf_job.finished_at&.iso8601 %>"
           data-job-output-url="<%= @pdf_job.output_url %>"

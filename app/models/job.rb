@@ -40,7 +40,7 @@ class Job < ApplicationRecord
         field :alt_text
         field :source_url
         field :output_url
-        field :output_object_key
+        field :object_key
         field :output_url_expires_at
         field :processing_error_message
         field :owner_type

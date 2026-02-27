@@ -9,7 +9,7 @@ RSpec.describe CheckS3ForFinalFilesService do
     create(
       :pdf_job,
       status: 'processing',
-      output_object_key: 'output-key',
+      object_key: 'object-key',
       filename: 'original.pdf',
       created_at: 10.minutes.ago
     )
@@ -24,7 +24,7 @@ RSpec.describe CheckS3ForFinalFilesService do
     context 'when S3 has an output file available' do
       it 'marks the job completed and stores the output URL' do
         s3_handler = instance_double(S3Handler)
-        allow(S3Handler).to receive(:new).with('output-key').and_return(s3_handler)
+        allow(S3Handler).to receive(:new).with('object-key').and_return(s3_handler)
         allow(s3_handler).to receive(:presigned_url_for_output)
           .with('original.pdf', expires_in: AppJobModule::PRESIGNED_URL_EXPIRES_IN)
           .and_return('https://example.com/output.pdf')
@@ -46,7 +46,7 @@ RSpec.describe CheckS3ForFinalFilesService do
             :pdf_job,
             owner: owner,
             status: 'processing',
-            output_object_key: 'output-key',
+            object_key: 'object-key',
             filename: 'original.pdf',
             created_at: 10.minutes.ago
           )
@@ -54,7 +54,7 @@ RSpec.describe CheckS3ForFinalFilesService do
 
         it 'does not queue a remediation status notification' do
           s3_handler = instance_double(S3Handler)
-          allow(S3Handler).to receive(:new).with('output-key').and_return(s3_handler)
+          allow(S3Handler).to receive(:new).with('object-key').and_return(s3_handler)
           allow(s3_handler).to receive(:presigned_url_for_output)
             .with('original.pdf', expires_in: AppJobModule::PRESIGNED_URL_EXPIRES_IN)
             .and_return('https://example.com/output.pdf')
@@ -76,7 +76,7 @@ RSpec.describe CheckS3ForFinalFilesService do
         create(
           :pdf_job,
           status: 'processing',
-          output_object_key: 'output-key',
+          object_key: 'object-key',
           created_at: 2.hours.ago
         )
       end
@@ -100,7 +100,7 @@ RSpec.describe CheckS3ForFinalFilesService do
             :pdf_job,
             owner: owner,
             status: 'processing',
-            output_object_key: 'output-key',
+            object_key: 'object-key',
             created_at: 2.hours.ago
           )
         end
@@ -130,12 +130,12 @@ RSpec.describe CheckS3ForFinalFilesService do
       end
     end
 
-    context 'when the job is missing output_object_key' do
+    context 'when the job is missing object_key' do
       let!(:job) do
         create(
           :pdf_job,
           status: 'processing',
-          output_object_key: nil,
+          object_key: nil,
           filename: 'original.pdf',
           created_at: 10.minutes.ago
         )
@@ -156,7 +156,7 @@ RSpec.describe CheckS3ForFinalFilesService do
         create(
           :pdf_job,
           status: 'processing',
-          output_object_key: 'output-key',
+          object_key: 'object-key',
           filename: nil,
           created_at: 10.minutes.ago
         )
@@ -177,7 +177,7 @@ RSpec.describe CheckS3ForFinalFilesService do
         create(
           :pdf_job,
           status: 'processing',
-          output_object_key: nil,
+          object_key: nil,
           filename: nil,
           created_at: 10.minutes.ago
         )
@@ -185,7 +185,7 @@ RSpec.describe CheckS3ForFinalFilesService do
 
       it 'reloads the job before checking S3' do
         stale_job = PdfJob.find(job.id)
-        PdfJob.where(id: job.id).update_all(output_object_key: 'output-key', filename: 'original.pdf') # rubocop:disable Rails/SkipsModelValidations
+        PdfJob.where(id: job.id).update_all(object_key: 'object-key', filename: 'original.pdf') # rubocop:disable Rails/SkipsModelValidations
 
         processing_jobs = instance_double(ActiveRecord::Relation)
         allow(processing_jobs).to receive(:none?).and_return(false)
@@ -193,14 +193,14 @@ RSpec.describe CheckS3ForFinalFilesService do
         allow(Job).to receive(:processing_pdfjobs).and_return(processing_jobs)
 
         s3_handler = instance_double(S3Handler)
-        allow(S3Handler).to receive(:new).with('output-key').and_return(s3_handler)
+        allow(S3Handler).to receive(:new).with('object-key').and_return(s3_handler)
         allow(s3_handler).to receive(:presigned_url_for_output)
           .with('original.pdf', expires_in: AppJobModule::PRESIGNED_URL_EXPIRES_IN)
           .and_return(nil)
 
         service.call(run_once: true)
 
-        expect(S3Handler).to have_received(:new).with('output-key')
+        expect(S3Handler).to have_received(:new).with('object-key')
       end
     end
 

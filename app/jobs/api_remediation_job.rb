@@ -16,7 +16,7 @@ class APIRemediationJob < ApplicationJob
 
     safe_original_filename = original_filename.gsub(/[^A-Za-z0-9.\-_ ]/, '')
     object_key = "#{SecureRandom.hex(8)}_#{safe_original_filename}"
-    job.update!(output_object_key: object_key)
+    job.update!(object_key: object_key)
     file_path = tempfile&.path
     s3_handler = S3Handler.new(object_key)
     s3_handler.upload_to_input(file_path)

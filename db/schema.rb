@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_26_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_27_120000) do
   create_table "api_users", charset: "utf8mb4", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -41,7 +41,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_26_120000) do
     t.datetime "updated_at", null: false
     t.datetime "finished_at"
     t.text "output_url"
-    t.text "output_object_key"
+    t.text "object_key"
     t.text "processing_error_message"
     t.string "owner_type", null: false
     t.bigint "owner_id", null: false

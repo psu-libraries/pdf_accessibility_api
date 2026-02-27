@@ -64,9 +64,9 @@ class CheckS3ForFinalFilesService
         return
       end
 
-      return if job.output_object_key.blank? || job.filename.blank?
+      return if job.object_key.blank? || job.filename.blank?
 
-      s3_handler = S3Handler.new(job.output_object_key)
+      s3_handler = S3Handler.new(job.object_key)
       output_url = s3_handler.presigned_url_for_output(job.filename,
                                                        expires_in: AppJobModule::PRESIGNED_URL_EXPIRES_IN)
       if output_url.present?
