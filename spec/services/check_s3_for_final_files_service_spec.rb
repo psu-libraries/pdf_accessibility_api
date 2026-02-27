@@ -130,6 +130,80 @@ RSpec.describe CheckS3ForFinalFilesService do
       end
     end
 
+    context 'when the job is missing output_object_key' do
+      let!(:job) do
+        create(
+          :pdf_job,
+          status: 'processing',
+          output_object_key: nil,
+          filename: 'original.pdf',
+          created_at: 10.minutes.ago
+        )
+      end
+
+      it 'skips checking S3' do
+        allow(S3Handler).to receive(:new)
+
+        service.call(run_once: true)
+
+        expect(S3Handler).not_to have_received(:new)
+        expect(job.reload.status).to eq('processing')
+      end
+    end
+
+    context 'when the job is missing filename' do
+      let!(:job) do
+        create(
+          :pdf_job,
+          status: 'processing',
+          output_object_key: 'output-key',
+          filename: nil,
+          created_at: 10.minutes.ago
+        )
+      end
+
+      it 'skips checking S3' do
+        allow(S3Handler).to receive(:new)
+
+        service.call(run_once: true)
+
+        expect(S3Handler).not_to have_received(:new)
+        expect(job.reload.status).to eq('processing')
+      end
+    end
+
+    context 'when the job record is stale in memory' do
+      let!(:job) do
+        create(
+          :pdf_job,
+          status: 'processing',
+          output_object_key: nil,
+          filename: nil,
+          created_at: 10.minutes.ago
+        )
+      end
+
+      it 'reloads the job before checking S3' do
+        stale_job = PdfJob.find(job.id)
+        PdfJob.where(id: job.id).update_all(output_object_key: 'output-key', filename: 'original.pdf') # rubocop:disable Rails/SkipsModelValidations
+
+        processing_jobs = instance_double(ActiveRecord::Relation)
+        allow(processing_jobs).to receive(:none?).and_return(false)
+        allow(processing_jobs).to receive(:find_each).and_yield(stale_job)
+        allow(Job).to receive(:processing_pdfjobs).and_return(processing_jobs)
+
+        s3_handler = instance_double(S3Handler)
+        allow(S3Handler).to receive(:new).with('output-key').and_return(s3_handler)
+        allow(s3_handler).to receive(:presigned_url_for_output)
+          .with('original.pdf', expires_in: AppJobModule::PRESIGNED_URL_EXPIRES_IN)
+          .and_return(nil)
+
+        service.call(run_once: true)
+
+        expect(S3Handler).to have_received(:new).with('output-key')
+      end
+    end
+
     context 'when the OS sends a termination signal' do
       it 'stops after the current iteration' do
         traps = {}

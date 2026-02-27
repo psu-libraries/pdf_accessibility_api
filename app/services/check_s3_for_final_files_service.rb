@@ -54,12 +54,17 @@ class CheckS3ForFinalFilesService
   private
 
     def check_job(job)
+      # Reload just in case the job was updated by another process since we queried
+      job.reload
+
       if job.created_at < CHECK_S3_FAILED_LIMIT.seconds.ago
         update_with_failure(job, 'Timed out waiting for output file')
         Rails.logger.warn("Job #{job.uuid} timed out waiting for output file")
         RemediationStatusNotificationJob.perform_later(job.uuid) if job.owner.instance_of?(::APIUser)
         return
       end
+
+      return if job.output_object_key.blank? || job.filename.blank?
 
       s3_handler = S3Handler.new(job.output_object_key)
       output_url = s3_handler.presigned_url_for_output(job.filename,
