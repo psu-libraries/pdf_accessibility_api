@@ -37,24 +37,24 @@ describe 'requesting a file remediation via the API', :active_job_inline do
         },
         headers: { 'HTTP_X_API_KEY' => api_user.api_key }
       )
-    end
 
-    # In production, CheckS3ForFinalFilesService runs continuously.
-    # In specs, we poll deterministically until the job completes.
-    service = CheckS3ForFinalFilesService.new
-    allow(service).to receive(:sleep) # speed up per-job throttle
+      # In production, CheckS3ForFinalFilesService runs continuously.
+      # In specs, we poll deterministically until the job completes.
+      service = CheckS3ForFinalFilesService.new
+      allow(service).to receive(:sleep) # speed up per-job throttle
 
-    job = api_user.jobs.last
-    Timeout.timeout(60) do
-      until job.reload.completed?
-        service.call(run_once: true)
-        sleep 0.2
+      job = api_user.jobs.last
+      Timeout.timeout(60) do
+        until job.reload.completed?
+          service.call(run_once: true)
+          sleep 0.2
+        end
       end
-    end
 
-    expect(request).to have_received(:body=).with(
-      "{\"event_type\":\"job.succeeded\",\"job\":{\"uuid\":\"#{job.uuid}\"," \
-      "\"status\":\"completed\",\"output_url\":#{job.output_url.to_json}}}"
-    )
+      expect(request).to have_received(:body=).with(
+        "{\"event_type\":\"job.succeeded\",\"job\":{\"uuid\":\"#{job.uuid}\"," \
+        "\"status\":\"completed\",\"output_url\":#{job.output_url.to_json}}}"
+      )
+    end
   end
 end
