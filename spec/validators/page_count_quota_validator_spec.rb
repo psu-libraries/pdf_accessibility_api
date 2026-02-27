@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe PageCountQuotaValidator do
   describe '.validate!' do
-    let(:unit) { create(:unit, overall_page_limit: 10, daily_page_limit: 100) }
+    let(:unit) { create(:unit, overall_page_limit: 10, user_daily_page_limit: 100) }
     let(:api_user) { create(:api_user, unit: unit) }
 
     before do
@@ -30,7 +30,7 @@ RSpec.describe PageCountQuotaValidator do
 
     context "when page_count exceeds user's daily quota" do
       before do
-        unit.update(daily_page_limit: 9)
+        unit.update(user_daily_page_limit: 9)
       end
 
       it 'raises QuotaExceededError' do
