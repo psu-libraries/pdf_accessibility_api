@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GUIUser < ApplicationRecord
+  include OwnerHelpers
+
   belongs_to :unit, optional: true
 
   has_many :jobs, as: :owner, dependent: :restrict_with_exception
