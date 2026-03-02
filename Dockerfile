@@ -42,6 +42,10 @@ FROM base AS dev-mock-remediation-tool
 
 ENTRYPOINT ["entrypoints/dev-mock-remediation-tool.sh"]
 
+FROM base AS s3-poller
+
+ENTRYPOINT ["entrypoints/s3-poller.sh"]
+
 FROM base AS dev
 
 USER root

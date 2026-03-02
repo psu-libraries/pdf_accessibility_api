@@ -55,8 +55,7 @@ services:
       RAILS_LOG_TO_STDOUT: "1"
     build:
       context: .
-      target: dev
-    command: bundle exec rake s3:check_final_files_loop
+      target: s3-poller
     volumes:
       - bundle-data:/app/vendor/bundle
   worker:
