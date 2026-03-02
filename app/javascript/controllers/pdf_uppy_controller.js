@@ -88,6 +88,7 @@ export default class extends Controller {
           page_count: res.successful[0].meta.pageCount
         })
       })
+      .then(r => r.json())
       .then(data => {
         if (data.job_id) {
           window.location.href = `/pdf_jobs/${data.job_id}`;
@@ -96,6 +97,6 @@ export default class extends Controller {
   }
 
   handleUploadError(error) {
-    this.uppy.info(error?.message || 'Upload failed', 'error', 8000)
+    this.uppy.info(error?.message, 'error', 8000)
   }
 }
