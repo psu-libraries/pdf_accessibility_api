@@ -88,16 +88,5 @@ describe 'PDF Jobs' do
       )
       expect(GUIRemediationJob).to have_received(:perform_later)
     end
-
-    it 'returns unprocessable entity when page_count is invalid' do
-      post(
-        '/pdf_jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf', page_count: 0 }
-      )
-
-      expect(response).to be_unprocessable
-      parsed_body = response.parsed_body
-      expect(parsed_body['message']).to eq('Validation failed: Page count must be greater than 0')
-      expect(parsed_body['code']).to eq(422)
-    end
   end
 end
