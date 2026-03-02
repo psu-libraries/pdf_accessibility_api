@@ -54,6 +54,7 @@ describe 'PDF Jobs' do
     end
 
     it 'returns unprocessable entity when page count exceeds quota' do
+      job_count_before = PdfJob.count
       allow(PageCountQuotaValidator).to receive(:validate!).and_raise(
         PageCountQuotaValidator::QuotaExceededError,
         "page_count exceeds the unit's overall page limit of 5"
@@ -67,6 +68,7 @@ describe 'PDF Jobs' do
       parsed_body = response.parsed_body
       expect(parsed_body['message']).to eq("Page count exceeds the unit's overall page limit of 5")
       expect(parsed_body['code']).to eq(422)
+      expect(PdfJob.count).to eq(job_count_before)
     end
   end
 
