@@ -69,12 +69,6 @@ export default class extends Controller {
       .on('complete', (res) => this.handleComplete(res))
   }
 
-  async getPageCount(file) {
-    const arrayBuffer = await file.data.arrayBuffer()
-    const pdfDoc = await PDFDocument.load(arrayBuffer)
-    return pdfDoc.getPageCount()
-  }
-
   handleComplete(res) {
     if (res.successful == undefined || res.successful.length == 0) {
       return;
@@ -98,5 +92,11 @@ export default class extends Controller {
 
   handleUploadError(error) {
     this.uppy.info(error?.message, 'error', 8000)
+  }
+
+  async getPageCount(file) {
+    const arrayBuffer = await file.data.arrayBuffer()
+    const pdfDoc = await PDFDocument.load(arrayBuffer)
+    return pdfDoc.getPageCount()
   }
 }
