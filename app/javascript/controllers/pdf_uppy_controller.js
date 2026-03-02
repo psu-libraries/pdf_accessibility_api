@@ -65,6 +65,7 @@ export default class extends Controller {
   registerUppyEventHandlers() {
     this.uppy
       .on('upload', (_, files) => checkForForbiddenCharacters(files))
+      .on('upload-error', (_file, error) => this.handleUploadError(error))
       .on('complete', (res) => this.handleComplete(res))
   }
 
@@ -87,11 +88,14 @@ export default class extends Controller {
           page_count: res.successful[0].meta.pageCount
         })
       })
-      .then(r => r.json())
       .then(data => {
         if (data.job_id) {
           window.location.href = `/pdf_jobs/${data.job_id}`;
         }
       })
+  }
+
+  handleUploadError(error) {
+    this.uppy.info(error?.message || 'Upload failed', 'error', 8000)
   }
 }

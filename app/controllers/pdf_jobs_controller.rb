@@ -26,7 +26,8 @@ class PdfJobsController < GUIAuthController
     s3_handler = S3Handler.new(object_key)
     render json: s3_handler.presigned_url_for_input
   rescue PageCountQuotaValidator::Error => e
-    render json: { message: e.message, code: 422 }, status: :unprocessable_entity
+    render json: { message: e.message.humanize,
+                   code: 422 }, status: :unprocessable_entity
   end
 
   def complete
@@ -40,7 +41,5 @@ class PdfJobsController < GUIAuthController
     pdf_job.save!
     GUIRemediationJob.perform_later(pdf_job.uuid, object_key)
     render json: { job_id: pdf_job.id }, status: :created
-  rescue ActiveRecord::RecordInvalid => e
-    render json: { message: e.message, code: 422 }, status: :unprocessable_entity
   end
 end

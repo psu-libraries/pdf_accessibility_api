@@ -65,7 +65,7 @@ describe 'PDF Jobs' do
 
       expect(response).to be_unprocessable
       parsed_body = response.parsed_body
-      expect(parsed_body['message']).to eq("page_count exceeds the unit's overall page limit of 5")
+      expect(parsed_body['message']).to eq("Page count exceeds the unit's overall page limit of 5")
       expect(parsed_body['code']).to eq(422)
     end
   end
