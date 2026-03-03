@@ -3,13 +3,7 @@
 require 'rails_helper'
 
 describe 'PDF Jobs' do
-<<<<<<< HEAD
-  before { allow(GUIRemediationJob).to receive(:perform_later) }
-
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu', unit: create(:unit)) }
-=======
-  let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
->>>>>>> main
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
   let!(:original_filename) { 'testing.pdf' }
 
