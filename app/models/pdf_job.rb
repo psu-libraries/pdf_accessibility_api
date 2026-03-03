@@ -14,7 +14,7 @@ class PdfJob < Job
 
     def broadcast_to_job_channel
       JobChannel.broadcast_to(self, {
-                                output_object_key: output_object_key,
+                                object_key: object_key,
                                 status: status,
                                 output_url: output_url,
                                 output_url_expired: output_url_expired?,

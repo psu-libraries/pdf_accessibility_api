@@ -2,7 +2,7 @@
 
 RailsAdmin.config do |config|
   config.authenticate_with do
-    unless AdminUserChecker.admin_user?(request)
+    unless AdminUserChecker.admin_user?(request, user: warden.user)
       render plain: 'Forbidden', status: :forbidden
     end
   end

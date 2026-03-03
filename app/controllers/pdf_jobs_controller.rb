@@ -18,20 +18,29 @@ class PdfJobsController < GUIAuthController
 
   def sign
     filename = params[:filename]
+    page_count = params[:page_count]
+
+    PageCountQuotaValidator.validate!(owner: current_user, page_count: page_count)
 
     object_key = "#{SecureRandom.hex(8)}_#{filename}"
     s3_handler = S3Handler.new(object_key)
     render json: s3_handler.presigned_url_for_input
+  rescue PageCountQuotaValidator::Error => e
+    render json: { message: e.message.humanize,
+                   code: 422 }, status: :unprocessable_entity
   end
 
   def complete
     object_key = params[:object_key]
+    page_count = params[:page_count]
+    filename = params[:filename]
     pdf_job = current_user.pdf_jobs.build
     pdf_job.status = 'processing'
     pdf_job.uuid = SecureRandom.uuid
-    pdf_job.output_object_key = object_key
+    pdf_job.object_key = object_key
+    pdf_job.filename = filename
+    pdf_job.page_count = page_count
     pdf_job.save!
-    GUIRemediationJob.perform_later(pdf_job.uuid, object_key)
     render json: { job_id: pdf_job.id }, status: :created
   end
 end
