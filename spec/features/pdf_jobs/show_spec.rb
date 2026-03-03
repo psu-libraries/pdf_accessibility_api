@@ -7,7 +7,7 @@ RSpec.feature 'PDF Jobs show', :js do
   let(:job_attrs) do
     {
       source_url: 'https://example.com/file1.pdf',
-      output_object_key: 'file1.pdf',
+      object_key: 'file1.pdf',
       uuid: 'abc123',
       created_at: Time.new(2024, 7, 22, 10, 30),
       finished_at: Time.new(2024, 7, 22, 11, 0, 0, '-04:00'),

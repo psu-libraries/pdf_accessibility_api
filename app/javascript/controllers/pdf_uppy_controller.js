@@ -79,7 +79,8 @@ export default class extends Controller {
         body: JSON.stringify({
           output_url: res.successful[0].uploadURL,
           object_key: res.successful[0].meta.objectKey,
-          page_count: res.successful[0].meta.pageCount
+          page_count: res.successful[0].meta.pageCount,
+          filename: res.successful[0].meta.name
         })
       })
       .then(r => r.json())
