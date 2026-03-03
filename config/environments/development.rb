@@ -59,6 +59,13 @@ Rails.application.configure do
   # Highlight code that enqueued background job in logs.
   config.active_job.verbose_enqueue_logs = true
 
+  # Log to STDOUT in containers (e.g., so `docker compose logs` shows output).
+  if ENV['RAILS_LOG_TO_STDOUT'].present?
+    config.logger = ActiveSupport::Logger.new($stdout)
+      .tap  { |logger| logger.formatter = Logger::Formatter.new }
+      .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+  end
+
   # Suppress logger output for asset requests.
   # config.assets.quiet = true
 

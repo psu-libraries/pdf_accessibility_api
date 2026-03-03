@@ -1,18 +1,17 @@
 x-web_env: &web_env
-  environment:
-      REDIS_HOST: redis
-      REDIS_PASSWORD: ${REDIS_PASSWORD:-redispassword}
-      API_BEARER_TOKEN: 
-      MYSQL_DB: pdf_accessibility_api
-      MYSQL_USER: root
-      MYSQL_PORT: 3306
-      MYSQL_HOST: db
-      AWS_REGION: "${AWS_REGION}"
-      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
-      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
-      S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
-      S3_ENDPOINT: "${S3_ENDPOINT}"
-      LLM_MODEL: "${LLM_MODEL}"
+  REDIS_HOST: redis
+  REDIS_PASSWORD: ${REDIS_PASSWORD:-redispassword}
+  API_BEARER_TOKEN:
+  MYSQL_DB: pdf_accessibility_api
+  MYSQL_USER: root
+  MYSQL_PORT: 3306
+  MYSQL_HOST: db
+  AWS_REGION: "${AWS_REGION}"
+  AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+  AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+  S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
+  S3_ENDPOINT: "${S3_ENDPOINT}"
+  LLM_MODEL: "${LLM_MODEL}"
 services:
   web:
     user: 3000:3000
@@ -25,7 +24,8 @@ services:
         condition: service_started
     tty: true
     stdin_open: true
-    <<: *web_env
+    environment:
+      <<: *web_env
     build:
       context: .
       target: dev
@@ -41,12 +41,31 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+  s3_poller:
+    user: 3000:3000
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    tty: true
+    stdin_open: true
+    environment:
+      <<: *web_env
+      RAILS_LOG_TO_STDOUT: "1"
+    build:
+      context: .
+      target: dev
+    command: bundle exec rake s3:check_final_files_loop
+    volumes:
+      - bundle-data:/app/vendor/bundle
   worker:
     user: 3000:3000
     depends_on:
       web:
         condition: service_healthy
-    <<: *web_env
+    environment:
+      <<: *web_env
     build:
       context: .
       target: dev-worker
@@ -58,7 +77,8 @@ services:
     depends_on:
       web:
         condition: service_healthy
-    <<: *web_env
+    environment:
+      <<: *web_env
     build:
       context: .
       target: dev-mock-remediation-tool

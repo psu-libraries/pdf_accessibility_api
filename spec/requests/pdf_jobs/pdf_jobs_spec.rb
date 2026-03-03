@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 describe 'PDF Jobs' do
-  before { allow(GUIRemediationJob).to receive(:perform_later) }
-
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
   let!(:original_filename) { 'testing.pdf' }
@@ -63,13 +61,6 @@ describe 'PDF Jobs' do
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last
       expect(job.status).to eq 'processing'
-    end
-
-    it 'enqueues a job with GUIRemediationJob' do
-      post(
-        '/pdf_jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf' }
-      )
-      expect(GUIRemediationJob).to have_received(:perform_later)
     end
   end
 end
