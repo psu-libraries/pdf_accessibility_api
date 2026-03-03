@@ -4,11 +4,15 @@ require 'sidekiq/web'
 require 'admin_user_checker'
 
 Rails.application.routes.draw do
+  sidekiq_admin_constraint = lambda do |req|
+    AdminUserChecker.admin_user?(req, user: req.env['warden']&.user)
+  end
+
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   mount ActionCable.server => '/cable'
   mount Rswag::Api::Engine => '/api-docs'
   mount Rswag::Ui::Engine => '/api-docs'
-  mount Sidekiq::Web => '/sidekiq', :constraints => ->(req) { AdminUserChecker.admin_user?(req) }
+  mount Sidekiq::Web => '/sidekiq', :constraints => sidekiq_admin_constraint
 
   get '/sidekiq', to: ->(_env) {
     [
@@ -16,7 +20,7 @@ Rails.application.routes.draw do
       { 'Content-Type' => 'text/plain' },
       ['Unauthorized']
     ]
-  }, constraints: ->(req) { !AdminUserChecker.admin_user?(req) }
+  }, constraints: ->(req) { !sidekiq_admin_constraint.call(req) }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
