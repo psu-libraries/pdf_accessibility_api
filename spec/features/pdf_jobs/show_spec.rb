@@ -32,8 +32,7 @@ RSpec.feature 'PDF Jobs show', :js do
     expect(page).to have_content('Jul 22, 2024 11:00 AM')
     expect(page).to have_content('completed')
     expect(page).to have_link('Click to download', href: 'http://example.com/result1.pdf')
-    expect(page).to have_content('Errors:')
-    expect(page).to have_content('None')
+    expect(page).not_to have_content('Errors:')
     expect(page).to have_link('<< Jobs List', href: pdf_jobs_path)
   end
 
@@ -72,7 +71,7 @@ RSpec.feature 'PDF Jobs show', :js do
     expect(page).to have_content('Status: processing')
     expect(page).to have_content('Finished At:')
     expect(page).to have_content('Download: Not available')
-    expect(page).to have_content('Errors: None')
+    expect(page).not_to have_content('Errors')
 
     job.update!(status: 'completed', finished_at: Time.new(2024, 7, 22, 11, 0, 0, '-04:00'),
                 output_url: 'http://example.com/result1.pdf', processing_error_message: 'Something went wrong')

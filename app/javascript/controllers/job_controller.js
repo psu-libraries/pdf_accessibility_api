@@ -88,9 +88,7 @@ export default class extends Controller {
     const processingErrorMessage = this.data.get('processingErrorMessage')
 
     if (processingErrorMessage) {
-      this.processingErrorMessageTarget.innerHTML = '<pre>' + processingErrorMessage + '</pre>'
-    } else {
-      this.processingErrorMessageTarget.innerHTML = 'None'
+      this.processingErrorMessageTarget.innerHTML = '<li><strong>Errors:<pre>' + processingErrorMessage + '</pre></strong></li>'
     }
   }
 }
