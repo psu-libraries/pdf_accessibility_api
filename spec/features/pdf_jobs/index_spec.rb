@@ -14,7 +14,7 @@ RSpec.feature 'PDF Jobs index', :js do
                                            owner: gui_user) }
 
   before do
-    login_as(gui_user)
+    login_gui_user(gui_user)
   end
 
   it 'shows jobs and their metadata in the table' do

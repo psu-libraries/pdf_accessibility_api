@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 require 'sidekiq/web'
-require 'admin_user_checker'
 
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   mount ActionCable.server => '/cable'
   mount Rswag::Api::Engine => '/api-docs'
   mount Rswag::Ui::Engine => '/api-docs'
-  mount Sidekiq::Web => '/sidekiq', :constraints => ->(req) { AdminUserChecker.admin_user?(req) }
+  mount Sidekiq::Web => '/sidekiq', :constraints => ->(req) { req.session[:admin] == true }
 
   get '/sidekiq', to: ->(_env) {
     [
@@ -16,7 +15,7 @@ Rails.application.routes.draw do
       { 'Content-Type' => 'text/plain' },
       ['Unauthorized']
     ]
-  }, constraints: ->(req) { !AdminUserChecker.admin_user?(req) }
+  }, constraints: ->(req) { req.session[:admin] != true }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -43,5 +42,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get "/auth/azure_oauth/callback", to: "sessions#create"
+  get "/auth/failure", to: "sessions#failure"
+  delete "/logout", to: "sessions#destroy"
   get '/unauthorized', to: 'errors#unauthorized'
 end

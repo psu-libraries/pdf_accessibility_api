@@ -13,6 +13,9 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'capybara/rspec'
 require 'selenium/webdriver'
+require 'omniauth'
+
+OmniAuth.config.test_mode = true
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -90,11 +93,6 @@ RSpec.configure do |config|
     options.add_argument('--disable-dev-shm-usage')
 
     Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
-  end
-
-  config.include Warden::Test::Helpers
-  config.after do
-    Warden.test_reset!
   end
 
   config.after(:suite) do

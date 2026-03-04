@@ -46,10 +46,7 @@ There is also a standalone GUI just for images. This is for users who just want 
 
 ### Authentication and Authorization
 
-- The application uses a remote user header (default: `HTTP_X_AUTH_REQUEST_EMAIL`) to determine the current user, typically set by Azure.
-- The list of users authorized to access the application is controlled by the `AUTHORIZED_USERS` environment variable (comma-separated emails).
-- Access to the Sidekiq web UI is controlled by the `SIDEKIQ_USERS` environment variable.
-- You can customize the remote user header and user lists via environment variables or `config/warden.yml`.
+- The application uses Azure AD to check for User Managed Group (UMG) membership using OAuth token. Only members of the PDF Remediation Tool user group will be allowed to access the application. Values for the necessary Azure variables can be found in Vault.
 
 ## Development Setup
 
