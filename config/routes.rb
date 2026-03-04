@@ -41,6 +41,8 @@ Rails.application.routes.draw do
 
   resources :image_jobs, only: [:index, :show, :new, :create]
 
+  get '/help', to: 'application#help', as: :help_page
+
   namespace :api do
     namespace :v1 do
       post '/jobs', to: 'jobs#create'
