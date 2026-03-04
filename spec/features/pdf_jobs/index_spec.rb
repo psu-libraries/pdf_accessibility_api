@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.feature 'PDF Jobs index', :js do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
-  let!(:job_completed) { create(:pdf_job, object_key: 'file1.pdf',
+  let!(:job_completed) { create(:pdf_job, filename: 'file1.pdf',
                                           status: 'completed',
                                           created_at: Time.new(2024, 7, 22, 10, 30),
                                           owner: gui_user) }
-  let!(:job_processing) { create(:pdf_job, object_key: 'file2.pdf',
+  let!(:job_processing) { create(:pdf_job, filename: 'file2.pdf',
                                            status: 'processing',
                                            created_at: Time.new(2024, 7, 21, 9, 0),
                                            owner: gui_user) }

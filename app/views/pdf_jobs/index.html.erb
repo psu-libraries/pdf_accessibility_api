@@ -17,19 +17,17 @@
 
   <tr data-controller="job"
           data-job-id="<%= job.id %>"
-      data-job-object-key="<%= job.object_key %>"
           data-job-status="<%= job.status %>"
           data-job-finished-at="<%= job.finished_at %>"
           data-job-output-url="<%= job.output_url %>"
           data-job-output-url-expired="<%= job.output_url_expired? %>"
           data-job-processing-error-message="<%= job.processing_error_message %>"
           id="<%= dom_id job %>">
-      <td><%= link_to job.object_key, pdf_job_path(job) %></td>
+      <td><%= link_to job.filename, pdf_job_path(job) %></td>
           <td><%= job.created_at.getlocal.strftime("%b %e, %Y %l:%M %p") %>
           </td>
           <td><span data-job-target="status"></span></td>
           <td class='d-none'>
-            <span data-job-target="outputObjectKey"></span>
             <span data-job-target="downloadLink"></span>
             <span data-job-target="processingErrorMessage"></span>
             <span data-job-target="finishedAt"></span>
