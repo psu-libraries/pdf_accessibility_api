@@ -1,4 +1,7 @@
 <main class="container-fluid">
+  <% pages_used = @current_user.total_pages_processed_last_24_hours %>
+  <% page_limit = @unit.user_daily_page_limit %>
+  <% pages_left = page_limit - pages_used %>
   <% flash.each do |_, msg| %>
     <div class='alert'>
       <%= msg %>
@@ -9,6 +12,9 @@
   <div class="region-content-wrapper col-lg-8 px-xl-5">
     <div>
       <h2><%= I18n.t('pdf.upload.heading') %></h2>
+    </div>
+    <div class="mb-3">
+      <p><%= I18n.t('pdf.upload.remaining_pages', pages_used:, pages_left:)%></p>
     </div>
     <div>
       <strong><%= t('pdf.privacy_notice.header') %></strong>
