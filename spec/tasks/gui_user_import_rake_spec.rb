@@ -41,11 +41,13 @@ RSpec.describe 'gui_users:import', type: :task do
       expect(gui_user_one).to be_present
       expect(gui_user_one.unit).to be_present
       expect(gui_user_one.unit.name).to eq('Main Campus')
+      expect(gui_user_one.unit.user_daily_page_limit).to eq(50)
 
       gui_user_two = GUIUser.find_by(email: 'another.user@example.com')
       expect(gui_user_two).to be_present
       expect(gui_user_two.unit).to be_present
       expect(gui_user_two.unit.name).to eq('Another Campus')
+      expect(gui_user_two.unit.user_daily_page_limit).to eq(50)
     ensure
       csv&.close
       csv&.unlink

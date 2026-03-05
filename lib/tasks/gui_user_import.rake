@@ -17,7 +17,9 @@ namespace :gui_users do
       next if email.blank? || location_name.blank?
 
       gui_user = GUIUser.find_or_create_by!(email: email)
-      unit = Unit.find_or_create_by!(name: location_name)
+      unit = Unit.find_or_create_by!(name: location_name) do |new_unit|
+        new_unit.user_daily_page_limit = 50
+      end
 
       gui_user.update!(unit: unit)
     end
