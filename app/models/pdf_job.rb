@@ -6,6 +6,10 @@ class PdfJob < Job
 
   delegate :webhook_endpoint, :webhook_key, to: :owner, prefix: false
 
+  def self.not_expired
+    where("output_url_expires_at > ?", Time.zone.now)
+  end
+
   def output_url_expired?
     output_url_expires_at.present? && output_url_expires_at < Time.zone.now
   end
