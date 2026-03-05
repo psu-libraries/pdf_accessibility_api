@@ -1,3 +1,11 @@
 <main class='container-fluid'>
-  <h2>Help</h2>
+  <h2 class="title page-title h1"><%= I18n.t('pdf.help_page.heading')%></h2>
+  <h3 class="h5"><%= I18n.t('pdf.help_page.subheading')%></h3>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.bullet_one_a'), bullet_b: I18n.t('pdf.help_page.bullet_one_b')%>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.bullet_two_a'), bullet_b: I18n.t('pdf.help_page.bullet_two_b')%>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.bullet_three_a'), bullet_b: I18n.t('pdf.help_page.bullet_three_b')%>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.bullet_four_a'), bullet_b: I18n.t('pdf.help_page.bullet_four_b')%>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.bullet_five_a').html_safe, bullet_b: I18n.t('pdf.help_page.bullet_five_b').html_safe %>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.bullet_six_a'), bullet_b: I18n.t('pdf.help_page.bullet_six_b')%>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.bullet_seven_a'), bullet_b: I18n.t('pdf.help_page.bullet_seven_b')%>
 </main>

@@ -3,6 +3,7 @@ en:
   pdf:
     upload:
       heading: Remediate a PDF Document
+      remaining_pages: You have remediated %{pages_used} pages so far. You have %{pages_left} pages remaining.
     index:
       link_to_upload: Upload a new PDF
     job_details:
@@ -37,23 +38,23 @@ en:
         bullet_one: Fillable form fields
         bullet_two: Color contrast issues
         bullet_three: Some complex tables, images, or layouts
-      block_six:
-        heading: Help and support 
-        subheading: Resources and support are available to help you successfully remediate your documents and ensure they meet accessibility standards 
-        bullet_one_a: Get started with the Quick Start Guide
-        bullet_one_b: Follow these simple steps to prepare, submit, and review your document. (Link to Quick Start Guide)
-        bullet_two_a: Prepare your file for submission 
-        bullet_two_b: Reviewing the file preparation guidelines helps ensure accurate and reliable remediation results. (Link to File Preparation Guidelines)
-        bullet_three_a: Review and finalize your remediated document
-        bullet_three_b: Use the manual review guide to confirm accessibility and make any necessary adjustments.  (Link to Manual Review Guidelines)
-        bullet_four_a: Connect with your Accessibility Liaison (Penn State login required)
-        bullet_four_b: Accessibility Liaisons are available across the University to provide guidance and support.
-        bullet_five_a: Report a technical issue
-        bullet_five_b: Submit a request if you encounter a problem with the tool so our team can assist. (Link to ServiceNow form)
-        bullet_six_a: Share feedback or suggestions
-        bullet_six_b: Your feedback helps us continue improving accessibility services and tools.
-        bullet_seven_a: Contact the Accessibility Team
-        bullet_seven_b: "For additional assistance, please contact: accessibility@psu.edu"
+    help_page:
+      heading: Help and support 
+      subheading: Resources and support are available to help you successfully remediate your documents and ensure they meet accessibility standards 
+      bullet_one_a: Get started with the Quick Start Guide
+      bullet_one_b: <a href="">Follow these simple steps</a> to prepare, submit, and review your document.
+      bullet_two_a: Prepare your file for submission 
+      bullet_two_b: Reviewing the <a href="">file preparation guidelines</a> helps ensure accurate and reliable remediation results. (Link to File Preparation Guidelines)
+      bullet_three_a: Review and finalize your remediated document
+      bullet_three_b: Use the <a href="">manual review guide</a> to confirm accessibility and make any necessary adjustments.
+      bullet_four_a: Connect with your Accessibility Liaison (Penn State login required)
+      bullet_four_b: Accessibility Liaisons are available across the University to provide guidance and support.
+      bullet_five_a: Report a technical issue
+      bullet_five_b: <a href="">Submit a request</a> if you encounter a problem with the tool so our team can assist.
+      bullet_six_a: Share feedback or suggestions
+      bullet_six_b: Your feedback helps us continue improving accessibility services and tools.
+      bullet_seven_a: Contact the Accessibility Team
+      bullet_seven_b: "For additional assistance, please contact: accessibility@psu.edu"
   image:
     heading: Image Alt-Text Generation
     upload: 
@@ -65,5 +66,11 @@ en:
     heading: PDF Accessibility Remediation
     description: ''
     copyright_statement: 'Copyright © 2025 The Pennsylvania State University'
+  external_links:
+    quick_start_guide: "https://libraries.psu.edu/about/accessibility/pdf-remediation-tool/pdf-accessibility-tool-quick-start-guide"
+    file_preparation_guidelines:
+    service_now: "https://libraries.psu.edu/about/accessibility/pdf-remediation-tool/pdf-accessibility-tool-help-and-support-report-technical"
+    microsoft_form: 
+    accessibility_liason: "https://pennstateoffice365.sharepoint.com/:x:/r/sites/ALCG/_layouts/15/guestaccess.aspx?e=swxxxA&share=Ec1Bg75X-yZAjDAPCO4kv6QBM75xhvLB1XleWDIX7IG7Bg"
   authentication:
     no_auth: You are not authorized to use this resource.
