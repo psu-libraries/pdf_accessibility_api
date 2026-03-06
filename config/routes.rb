@@ -3,6 +3,10 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  sidekiq_admin_constraint = lambda do |req|
+    AdminUserChecker.admin_user?(req, user: req.env['warden']&.user)
+  end
+
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   mount ActionCable.server => '/cable'
   mount Rswag::Api::Engine => '/api-docs'
@@ -42,8 +46,8 @@ Rails.application.routes.draw do
     end
   end
 
-  get "/auth/azure_oauth/callback", to: "sessions#create"
-  get "/auth/failure", to: "sessions#failure"
-  delete "/logout", to: "sessions#destroy"
+  get '/auth/azure_oauth/callback', to: 'sessions#create'
+  get '/auth/failure', to: 'sessions#failure'
+  delete '/logout', to: 'sessions#destroy'
   get '/unauthorized', to: 'errors#unauthorized'
 end

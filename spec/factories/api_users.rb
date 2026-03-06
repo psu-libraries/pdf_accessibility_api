@@ -3,5 +3,6 @@
 FactoryBot.define do
   factory :api_user do
     webhook_endpoint { 'https://test.com/endpoint' }
+    unit
   end
 end

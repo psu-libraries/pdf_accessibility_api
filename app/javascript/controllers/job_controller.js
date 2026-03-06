@@ -30,7 +30,7 @@ export default class extends Controller {
 
   updateResult(data) {
     if (this.hasOutputObjectKeyTarget) {
-      this.data.set('outputObjectKey', data.output_object_key || '')
+      this.data.set('objectKey', data.object_key || '')
     }
     this.data.set('status', data.status || '')
     this.data.set('finishedAt', data.finished_at || '')
@@ -43,7 +43,7 @@ export default class extends Controller {
 
   renderResult() {
     if (this.hasOutputObjectKeyTarget) {
-      this.outputObjectKeyTarget.textContent = this.data.get('outputObjectKey')
+      this.outputObjectKeyTarget.textContent = this.data.get('objectKey')
     }
     if (this.hasAltTextTarget) {
       this.altTextTarget.textContent = this.data.get('altText')

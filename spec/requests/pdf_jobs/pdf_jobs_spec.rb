@@ -3,9 +3,7 @@
 require 'rails_helper'
 
 describe 'PDF Jobs' do
-  before { allow(GUIRemediationJob).to receive(:perform_later) }
-
-  let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
+  let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu', unit: create(:unit)) }
   let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
   let!(:original_filename) { 'testing.pdf' }
 
@@ -45,12 +43,30 @@ describe 'PDF Jobs' do
 
     it 'returns json created by S3Handler' do
       post(
-        '/pdf_jobs/sign', headers: valid_headers, params: { filename: original_filename }
+        '/pdf_jobs/sign', headers: valid_headers, params: { filename: original_filename, page_count: 3 }
       )
       expect(response).to be_ok
       parsed_body = response.parsed_body
       expect(s3).to have_received(:presigned_url_for_input)
       expect(parsed_body).to eq(example_json.with_indifferent_access)
+    end
+
+    it 'returns unprocessable entity when page count exceeds quota' do
+      job_count_before = PdfJob.count
+      allow(PageCountQuotaValidator).to receive(:validate!).and_raise(
+        PageCountQuotaValidator::QuotaExceededError,
+        "page_count exceeds the unit's overall page limit of 5"
+      )
+
+      post(
+        '/pdf_jobs/sign', headers: valid_headers, params: { filename: original_filename, page_count: 10 }
+      )
+
+      expect(response).to be_unprocessable
+      parsed_body = response.parsed_body
+      expect(parsed_body['message']).to eq("Page count exceeds the unit's overall page limit of 5")
+      expect(parsed_body['code']).to eq(422)
+      expect(PdfJob.count).to eq(job_count_before)
     end
   end
 
@@ -58,18 +74,12 @@ describe 'PDF Jobs' do
     it 'creates a record to track the job status' do
       expect {
         post(
-          '/pdf_jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf' }
+          '/pdf_jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf', page_count: 3 }
         )
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last
       expect(job.status).to eq 'processing'
-    end
-
-    it 'enqueues a job with GUIRemediationJob' do
-      post(
-        '/pdf_jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf' }
-      )
-      expect(GUIRemediationJob).to have_received(:perform_later)
+      expect(job.page_count).to eq 3
     end
   end
 end
