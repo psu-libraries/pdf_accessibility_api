@@ -3,10 +3,6 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  sidekiq_admin_constraint = lambda do |req|
-    AdminUserChecker.admin_user?(req, user: req.env['warden']&.user)
-  end
-
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   mount ActionCable.server => '/cable'
   mount Rswag::Api::Engine => '/api-docs'
