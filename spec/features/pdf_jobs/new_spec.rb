@@ -7,7 +7,7 @@ RSpec.feature 'New PDF job', :js do
   let!(:unit) { create(:unit, user_daily_page_limit: 10, overall_page_limit: 50) }
 
   before do
-    login_as(gui_user)
+    login_gui_user(gui_user)
   end
 
   it 'shows content and submit button' do

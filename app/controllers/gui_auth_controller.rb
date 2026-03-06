@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class GUIAuthController < ApplicationController
-  before_action :authenticate_gui_user
+  before_action :require_login
 
-  def authenticate_gui_user
-    request.env['warden'].authenticate!
+    def require_login
+    redirect_to "/auth/azure_oauth" unless current_user
   end
 end
