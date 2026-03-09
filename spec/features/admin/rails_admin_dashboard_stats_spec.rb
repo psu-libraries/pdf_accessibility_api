@@ -11,6 +11,7 @@ RSpec.feature 'Rails Admin dashboard stats' do
 
   it 'shows the custom dashboard stats cards' do
     create(:pdf_job, page_count: 10, status: 'processing')
+    create(:pdf_job, page_count: 10, status: 'completed')
     create(:pdf_job, page_count: 10, status: 'completed', created_at: 2.days.ago)
     dead_set = instance_double(Sidekiq::DeadSet, size: 3)
     allow(Sidekiq::DeadSet).to receive(:new).and_return(dead_set)

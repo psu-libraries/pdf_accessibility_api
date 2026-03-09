@@ -9,7 +9,8 @@ class Unit < ApplicationRecord
   validates :overall_page_limit, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   def total_pages_processed
-    api_users.joins(:jobs).sum(:page_count) + gui_users.joins(:jobs).sum(:page_count)
+    api_users.joins(:jobs).where(jobs: { status: ['completed', 'processing'] }).sum(:page_count) +
+      gui_users.joins(:jobs).where(jobs: { status: ['completed', 'processing'] }).sum(:page_count)
   end
 
   RailsAdmin.config do |config|
