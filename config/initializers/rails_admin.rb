@@ -11,3 +11,7 @@ RailsAdmin.config do |config|
     warden.user
   end
 end
+
+Rails.application.config.to_prepare do
+  RailsAdmin::ApplicationController.helper(RailsAdmin::DashboardHelper)
+end

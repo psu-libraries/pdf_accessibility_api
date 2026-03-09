@@ -1,0 +1,47 @@
+<div class="container-fluid mt-5">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card text-center">
+        <div class="card-header">
+          Total Pages Processed
+        </div>
+        <div class="card-body">
+          <h2><%= rails_admin_total_pages_processed %></h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-center">
+        <div class="card-header">
+          Pages Processed Today
+        </div>
+        <div class="card-body">
+          <h2><%= rails_admin_pages_processed_today %></h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-center">
+        <div class="card-header">
+          Jobs Currently Processing
+        </div>
+        <div class="card-body">
+          <h2><%= rails_admin_processing_jobs_count %></h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-center">
+        <div class="card-header">
+          Sidekiq DeadSet
+        </div>
+        <div class="card-body">
+          <h2><%= rails_admin_sidekiq_dead_set_size %></h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
