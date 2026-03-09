@@ -19,7 +19,18 @@ class Unit < ApplicationRecord
         field :name
         field :user_daily_page_limit
         field :overall_page_limit
+        field :total_pages_processed
         field :created_at
+      end
+
+      show do
+        field :id
+        field :name
+        field :user_daily_page_limit
+        field :overall_page_limit
+        field :total_pages_processed
+        field :created_at
+        field :updated_at
       end
 
       edit do

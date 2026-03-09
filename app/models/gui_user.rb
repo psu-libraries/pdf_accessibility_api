@@ -10,15 +10,27 @@ class GUIUser < ApplicationRecord
   has_many :image_jobs, as: :owner, dependent: :restrict_with_exception
 
   RailsAdmin.config do |config|
-    config.model 'GuiUser' do
+    config.model 'GUIUser' do
       list do
         field :id
         field :email
+        field :unit
+        field :total_pages_processed_last_24_hours
         field :created_at
+      end
+
+      show do
+        field :id
+        field :email
+        field :unit
+        field :total_pages_processed_last_24_hours
+        field :created_at
+        field :updated_at
       end
 
       edit do
         field :email
+        field :unit
         field :created_at do
           read_only true
         end
