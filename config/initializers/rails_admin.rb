@@ -10,4 +10,9 @@ RailsAdmin.config do |config|
   config.current_user_method do
     warden.user
   end
+
+  config.navigation_static_label = 'Tools'
+  config.navigation_static_links = {
+    'Sidekiq' => '/sidekiq'
+  }
 end
