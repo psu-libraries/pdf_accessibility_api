@@ -81,8 +81,8 @@ end
 gem 'rails_admin'
 
 gem 'omniauth', '~> 2.0'
-gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'omniauth_openid_connect', '~> 0.6'
+gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 gem 'bugsnag', '~> 6.28'
 gem 'sassc-rails'

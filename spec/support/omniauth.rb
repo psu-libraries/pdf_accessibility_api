@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module OmniAuthHelpers
   def mock_azure_login(email:, admin: false)
-    groups = [ENV['AUTHORIZED_USERS_GROUP']]
-    groups << ENV['ADMIN_USERS_GROUP'] if admin
+    groups = [ENV.fetch('AUTHORIZED_USERS_GROUP', nil)]
+    groups << ENV.fetch('ADMIN_USERS_GROUP', nil) if admin
 
     OmniAuth.config.mock_auth[:azure_oauth] = OmniAuth::AuthHash.new(
       provider: 'azure_oauth',

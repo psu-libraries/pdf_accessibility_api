@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 module AuthHelpers
   def login_gui_user(user, admin: false)
     mock_azure_login(email: user.email, admin: admin)
 
     if respond_to?(:visit)
-      visit "/auth/azure_oauth"
+      visit '/auth/azure_oauth'
     else
-      get "/auth/azure_oauth/callback"
+      get '/auth/azure_oauth/callback'
     end
   end
 end
