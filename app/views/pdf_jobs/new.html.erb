@@ -8,26 +8,26 @@
     </div>
   <% end %>
   <div class="row g-4">
-  <%= render 'sidebar' %>
-  <div class="region-content-wrapper col-lg-8 px-xl-5">
-    <div>
-      <h2><%= I18n.t('pdf.upload.heading') %></h2>
-    </div>
-    <div class="mb-3">
-      <p><%= I18n.t('pdf.upload.remaining_pages', pages_used:, pages_left:)%></p>
-    </div>
-    <div>
-      <strong><%= t('pdf.privacy_notice.header') %></strong>
-      <ul>
-        <li><%= t('pdf.privacy_notice.adobe') %></li>
-        <li><%= t('pdf.privacy_notice.aws') %></li>
-      </ul>
-    </div>
+    <%= render 'sidebar' %>
+    <div class="region-content-wrapper col-lg-8 px-xl-5">
+      <div>
+        <h2><%= I18n.t('pdf.upload.heading') %></h2>
+      </div>
+      <div class="mb-3">
+        <p><%= I18n.t('pdf.upload.remaining_pages', pages_used:, pages_left:)%></p>
+      </div>
+      <div>
+        <strong><%= t('pdf.privacy_notice.header') %></strong>
+        <ul>
+          <li><%= t('pdf.privacy_notice.adobe') %></li>
+          <li><%= t('pdf.privacy_notice.aws') %></li>
+        </ul>
+      </div>
       <section>
         <%= form_with url: pdf_jobs_path, id: 'file-uploader' do |form| %>
         <div
           data-controller="pdf-uppy"
-          data-uppy-parent-form="file-uploader">
+          data-uppy-parent-form="file-uploader"></div>
         <% end %>
       </section>
     </div>

@@ -60,6 +60,12 @@ en:
       subheading: Generation only available for jpg and png files
     index:
       link_to_upload: Generate alt-text for a new image
+    quick_guide:
+      heading: To be completed
+      block_one:
+          heading: TBD
+          bullet_one: TBD
+          bullet_two: TBD
   footer:
     heading: PDF Accessibility Remediation
     description: ''
