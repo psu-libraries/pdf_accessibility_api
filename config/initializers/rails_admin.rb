@@ -16,3 +16,7 @@ RailsAdmin.config do |config|
     'Sidekiq' => '/sidekiq'
   }
 end
+
+Rails.application.config.to_prepare do
+  RailsAdmin::ApplicationController.helper(RailsAdmin::DashboardHelper)
+end

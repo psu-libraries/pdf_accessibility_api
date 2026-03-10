@@ -7,6 +7,8 @@ Metrics/BlockLength:
     - 'app/models/api_user.rb'
     - 'app/models/job.rb'
     - 'config/routes.rb'
+    - 'app/models/gui_user.rb'
+    - 'app/models/unit.rb'
 
 Metrics/CyclomaticComplexity:
   Exclude:
