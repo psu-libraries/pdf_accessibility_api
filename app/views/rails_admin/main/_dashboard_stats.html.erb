@@ -1,0 +1,47 @@
+<div id="dashboard-stats" class="container-fluid mt-5">
+  <div class="row">
+    <div class="col-sm-6 col-lg-3 mb-3">
+      <div class="card text-center h-100">
+        <div class="card-header bg-transparent border-0 pb-0">
+          <h2 class="h6 text-muted mb-0">Total PDF Pages Processed</h2>
+        </div>
+        <div class="card-body pt-2 d-flex align-items-center justify-content-center">
+          <p class="display-6 fw-semibold mb-0"><%= total_pdf_pages_processed %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3 mb-3">
+      <div class="card text-center h-100">
+        <div class="card-header bg-transparent border-0 pb-0">
+          <h2 class="h6 text-muted mb-0">PDF Pages Processed Today</h2>
+        </div>
+        <div class="card-body pt-2 d-flex align-items-center justify-content-center">
+          <p class="display-6 fw-semibold mb-0"><%= pdf_pages_processed_today %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3 mb-3">
+      <div class="card text-center h-100">
+        <div class="card-header bg-transparent border-0 pb-0">
+          <h2 class="h6 text-muted mb-0">PDF Jobs Currently Processing</h2>
+        </div>
+        <div class="card-body pt-2 d-flex align-items-center justify-content-center">
+          <p class="display-6 fw-semibold mb-0"><%= pdf_processing_jobs_count %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3 mb-3">
+      <div class="card text-center h-100">
+        <div class="card-header bg-transparent border-0 pb-0">
+          <h2 class="h6 text-muted mb-0">Sidekiq DeadSet</h2>
+        </div>
+        <div class="card-body pt-2 d-flex align-items-center justify-content-center">
+          <p class="display-6 fw-semibold mb-0"><%= sidekiq_dead_set_size %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
