@@ -41,20 +41,18 @@ en:
     help_page:
       heading: Help and support 
       subheading: Resources and support are available to help you successfully remediate your documents and ensure they meet accessibility standards 
-      bullet_one_a: Get started with the Quick Start Guide
-      bullet_one_b: <a href="">Follow these simple steps</a> to prepare, submit, and review your document.
-      bullet_two_a: Prepare your file for submission 
-      bullet_two_b: Reviewing the <a href="">file preparation guidelines</a> helps ensure accurate and reliable remediation results. (Link to File Preparation Guidelines)
-      bullet_three_a: Review and finalize your remediated document
-      bullet_three_b: Use the <a href="">manual review guide</a> to confirm accessibility and make any necessary adjustments.
-      bullet_four_a: Connect with your Accessibility Liaison (Penn State login required)
-      bullet_four_b: Accessibility Liaisons are available across the University to provide guidance and support.
-      bullet_five_a: Report a technical issue
-      bullet_five_b: <a href="">Submit a request</a> if you encounter a problem with the tool so our team can assist.
-      bullet_six_a: Share feedback or suggestions
-      bullet_six_b: Your feedback helps us continue improving accessibility services and tools.
-      bullet_seven_a: Contact the Accessibility Team
-      bullet_seven_b: "For additional assistance, please contact: accessibility@psu.edu"
+      quick_start: Get started with the Quick Start Guide
+      quick_start_details: <a href="%{link}" target="_blank">Follow these simple steps</a> to prepare, submit, and review your document.
+      review: Review and finalize your remediated document
+      review_details: Use the <a href="%{link}" target="_blank">manual review guide</a> to confirm accessibility and make any necessary adjustments.
+      a11y_liaison: Connect with your Accessibility Liaison (Penn State login required)
+      a11y_liaison_details: <a href="%{link}" target="_blank">Accessibility Liaisons</a> are available across the University to provide guidance and support.
+      report_issue: Report a technical issue
+      report_issue_details: <a href="%{link}" target="_blank">Submit a request</a> if you encounter a problem with the tool so our team can assist.
+      feedback: Share feedback or suggestions
+      feedback_details: <a href="%{link}" target="_blank">Your feedback</a> helps us continue improving accessibility services and tools.
+      contact_a11y: Contact the Accessibility Team
+      contact_a11y_details: "For additional assistance, please contact: %{email}"
   image:
     heading: Image Alt-Text Generation
     upload: 
@@ -68,9 +66,10 @@ en:
     copyright_statement: 'Copyright © 2025 The Pennsylvania State University'
   external_links:
     quick_start_guide: "https://libraries.psu.edu/about/accessibility/pdf-remediation-tool/pdf-accessibility-tool-quick-start-guide"
-    file_preparation_guidelines:
-    service_now: "https://libraries.psu.edu/about/accessibility/pdf-remediation-tool/pdf-accessibility-tool-help-and-support-report-technical"
-    microsoft_form: 
+    manual_review_guide: "https://libraries.psu.edu/about/accessibility/pdf-remediation-tool/pdf-remediation-tool-manual-review-guide"
     accessibility_liason: "https://pennstateoffice365.sharepoint.com/:x:/r/sites/ALCG/_layouts/15/guestaccess.aspx?e=swxxxA&share=Ec1Bg75X-yZAjDAPCO4kv6QBM75xhvLB1XleWDIX7IG7Bg"
+    report_issue: "https://libraries.psu.edu/about/accessibility/pdf-remediation-tool/pdf-accessibility-tool-help-and-support-report-technical"
+    feedback: "https://forms.office.com/pages/responsepage.aspx?id=RY30fNs9iUOpwcEVUm61Lj2q48fpUh5Cu3oHEhc-CzxUMEs3NVBSWlU5SlVPVDdEVUFRNlRRNEFaMi4u&route=shorturl"
+    a11y_email: "accessibility@psu.edu"
   authentication:
     no_auth: You are not authorized to use this resource.
