@@ -1,4 +1,5 @@
 import 'frontend'
+import '@fortawesome/fontawesome-free/css/all.css';
 
 import { Application } from 'stimulus'
 import { definitionsFromContext } from 'stimulus/webpack-helpers'

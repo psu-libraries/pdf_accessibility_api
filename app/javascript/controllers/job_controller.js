@@ -48,10 +48,19 @@ export default class extends Controller {
     if (this.hasAltTextTarget) {
       this.altTextTarget.textContent = this.data.get('altText')
     }
-    this.statusTarget.textContent = this.data.get('status')
+    this.renderStatus()
     this.renderFinishedAt()
     this.renderOutputUrl()
     this.renderErrorMessage()
+  }
+
+  renderStatus() {
+    let status = this.data.get('status');
+    if (status.includes('processing')){
+      this.statusTarget.innerHTML = `${status} <i class="fa-solid fa-spinner fa-spin-pulse"></i>`
+      return
+    }
+    this.statusTarget.textContent = status;
   }
 
   renderFinishedAt() {
