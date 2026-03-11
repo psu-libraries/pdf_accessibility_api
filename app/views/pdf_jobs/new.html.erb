@@ -1,6 +1,6 @@
 <main class="container-fluid">
   <% pages_used = @current_user.total_pages_processed_last_24_hours %>
-  <% page_limit = @unit.user_daily_page_limit %>
+  <% page_limit = @unit&.user_daily_page_limit || 50 %>
   <% pages_left = page_limit - pages_used %>
   <% flash.each do |_, msg| %>
     <div class='alert'>
