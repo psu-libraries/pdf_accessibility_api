@@ -3,7 +3,7 @@ en:
   pdf:
     upload:
       heading: Remediate a PDF Document
-      remaining_pages: You have remediated %{pages_used} pages so far. You have %{pages_left} pages remaining.
+      remaining_pages: You have remediated %{pages_used} pages so far. You have %{pages_left} pages remaining today.
     index:
       link_to_upload: Upload a new PDF
     job_details:
