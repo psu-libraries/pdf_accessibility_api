@@ -6,7 +6,7 @@ class CheckS3ForFinalFilesService
   include AppJobModule
 
   CHECK_S3_PER_JOB_INTERVAL = 1 # Throttle S3 checks while iterating processing jobs
-  CHECK_S3_IDLE_INTERVAL = 10 # Back off when there are no processing jobs
+  CHECK_S3_IDLE_INTERVAL = 10 # Back off to avoid excessive S3 checking
   CHECK_S3_FAILED_LIMIT = 3600 # 1 hour limit before marking job as failed
 
   def call(run_once: false)
