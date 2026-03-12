@@ -36,7 +36,7 @@ RSpec.describe 'RailsAdmin content' do
   end
 
   before do
-    login_as(admin_user)
+    login_gui_user(admin_user, admin: true)
   end
 
   it 'shows Unit list and show content' do

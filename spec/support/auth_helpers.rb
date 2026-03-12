@@ -2,12 +2,14 @@
 
 module AuthHelpers
   def login_gui_user(user, admin: false)
-    mock_azure_login(email: user.email, admin: admin)
+    with_mock_auth_env do
+      mock_azure_login(email: user.email, admin: admin)
 
-    if respond_to?(:visit)
-      visit '/auth/azure_oauth'
-    else
-      get '/auth/azure_oauth/callback'
+      if respond_to?(:visit)
+        visit '/auth/azure_oauth/callback'
+      else
+        get '/auth/azure_oauth/callback'
+      end
     end
   end
 end

@@ -4,17 +4,20 @@ require 'rails_helper'
 
 describe 'PDF Jobs' do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu', unit: create(:unit)) }
-  let!(:valid_headers) { { 'HTTP_X_AUTH_REQUEST_EMAIL' => gui_user.email } }
   let!(:original_filename) { 'testing.pdf' }
+
+  before do
+    login_gui_user(gui_user)
+  end
 
   describe 'GET pdf_jobs/new' do
     it 'gets a successful response' do
-      get '/pdf_jobs/new', headers: valid_headers
+      get '/pdf_jobs/new'
       expect(response).to have_http_status :ok
     end
 
     it 'displays page' do
-      get '/pdf_jobs/new', headers: valid_headers
+      get '/pdf_jobs/new'
       expect(response.body).to include(I18n.t('heading'))
     end
   end
@@ -43,7 +46,7 @@ describe 'PDF Jobs' do
 
     it 'returns json created by S3Handler' do
       post(
-        '/pdf_jobs/sign', headers: valid_headers, params: { filename: original_filename, page_count: 3 }
+        '/pdf_jobs/sign', params: { filename: original_filename, page_count: 3 }
       )
       expect(response).to be_ok
       parsed_body = response.parsed_body
@@ -59,7 +62,7 @@ describe 'PDF Jobs' do
       )
 
       post(
-        '/pdf_jobs/sign', headers: valid_headers, params: { filename: original_filename, page_count: 10 }
+        '/pdf_jobs/sign', params: { filename: original_filename, page_count: 10 }
       )
 
       expect(response).to be_unprocessable
@@ -74,7 +77,7 @@ describe 'PDF Jobs' do
     it 'creates a record to track the job status' do
       expect {
         post(
-          '/pdf_jobs/complete', headers: valid_headers, params: { object_key: '12345678_testing.pdf', page_count: 3 }
+          '/pdf_jobs/complete', params: { object_key: '12345678_testing.pdf', page_count: 3 }
         )
       }.to(change { gui_user.jobs.count }.by(1))
       job = gui_user.jobs.last

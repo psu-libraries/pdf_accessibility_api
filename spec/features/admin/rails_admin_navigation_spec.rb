@@ -6,7 +6,7 @@ RSpec.feature 'Rails Admin navigation' do
   let!(:admin_user) { create(:gui_user, email: 'test1@psu.edu') }
 
   before do
-    login_as(admin_user)
+    login_gui_user(admin_user, admin: true)
   end
 
   it 'navigates to Sidekiq from the Rails Admin screen' do
