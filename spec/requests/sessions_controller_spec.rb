@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'GUI OAuth authentication' do
+RSpec.describe 'SessionsController' do
   describe 'GET /pdf_jobs/new' do
     it 'renders the auto-login page for unauthenticated users' do
       get '/pdf_jobs/new'
