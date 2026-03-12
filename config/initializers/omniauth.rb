@@ -14,6 +14,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            client_options: {
              identifier: ENV.fetch('AZURE_CLIENT_ID', nil),
              secret: ENV.fetch('AZURE_CLIENT_SECRET', nil),
-             redirect_uri: ENV.fetch('AZURE_REDIRECT_URI')
+             redirect_uri: ENV.fetch('AZURE_REDIRECT_URI', nil)
            }
 end
