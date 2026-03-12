@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class GUIAuthController < ApplicationController
-  before_action :authenticate_gui_user
+  before_action :auto_login
 
-  def authenticate_gui_user
-    request.env['warden'].authenticate!
+  def auto_login
+    render 'sessions/auto_login' unless current_user
   end
 end

@@ -33,9 +33,6 @@ gem 'aws-sdk-s3', '~> 1.0'
 # Temporary file downloads over HTTP
 gem 'down'
 
-# HTTP client
-gem 'faraday'
-
 # RSwag for API documentation
 gem 'rswag-api'
 gem 'rswag-ui'
@@ -82,7 +79,10 @@ group :test do
 end
 
 gem 'rails_admin'
-gem 'rails_warden', '~> 0.6.0'
+
+gem 'omniauth', '~> 2.0'
+gem 'omniauth_openid_connect', '~> 0.6'
+gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 gem 'bugsnag', '~> 6.28'
 gem 'sassc-rails'

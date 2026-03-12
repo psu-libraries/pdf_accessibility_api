@@ -10,7 +10,7 @@ RSpec.describe 'RailsAdmin access' do
 
   context 'when user is an admin' do
     before do
-      login_as(admin_user)
+      login_gui_user(admin_user, admin: true)
     end
 
     it 'allows access to the dashboard' do
@@ -54,7 +54,7 @@ RSpec.describe 'RailsAdmin access' do
 
   context 'when user is not an admin' do
     before do
-      login_as(non_admin_user)
+      login_gui_user(non_admin_user, admin: false)
     end
 
     it 'blocks access to dashboard' do

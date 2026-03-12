@@ -8,7 +8,7 @@ RSpec.feature 'Image Jobs show', :js do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
 
   before do
-    login_as(gui_user)
+    login_gui_user(gui_user)
   end
 
   it 'shows all job metadata including alt-text' do
