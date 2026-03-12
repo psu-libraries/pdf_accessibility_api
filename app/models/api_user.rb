@@ -14,11 +14,13 @@ class APIUser < ApplicationRecord
   validates :webhook_endpoint, format: { with: URI::RFC2396_PARSER.make_regexp('https') }
 
   RailsAdmin.config do |config|
-    config.model 'ApiUser' do
+    config.model 'APIUser' do
       list do
         field :id
         field :name
         field :email
+        field :unit
+        field :total_pages_processed_last_24_hours
         field :created_at
         field :updated_at
       end
@@ -27,6 +29,8 @@ class APIUser < ApplicationRecord
         field :id
         field :name
         field :email
+        field :unit
+        field :total_pages_processed_last_24_hours
         field :api_key
         field :webhook_key
         field :webhook_endpoint
@@ -37,6 +41,7 @@ class APIUser < ApplicationRecord
       edit do
         field :name
         field :email
+        field :unit
 
         field :api_key do
           read_only true

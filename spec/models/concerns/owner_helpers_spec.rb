@@ -4,22 +4,24 @@ require 'rails_helper'
 
 RSpec.describe OwnerHelpers do
   describe '#total_pages_processed_last_24_hours' do
-    it 'sums page_count for jobs created in the last 24 hours (APIUser)' do
+    it 'sums page_count for completed or processing jobs created in the last 24 hours (APIUser)' do
       api_user = create(:api_user)
-      create(:pdf_job, owner: api_user, page_count: 3, created_at: 2.hours.ago)
-      create(:pdf_job, owner: api_user, page_count: 1, created_at: 3.hours.ago)
-      create(:pdf_job, owner: api_user, page_count: 5, created_at: 26.hours.ago)
-      create(:pdf_job, owner: api_user, page_count: nil, created_at: 1.hour.ago)
+      create(:pdf_job, owner: api_user, status: 'completed', page_count: 3, created_at: 2.hours.ago)
+      create(:pdf_job, owner: api_user, status: 'processing', page_count: 1, created_at: 3.hours.ago)
+      create(:pdf_job, owner: api_user, status: 'completed', page_count: 5, created_at: 26.hours.ago)
+      create(:pdf_job, owner: api_user, status: 'processing', page_count: nil, created_at: 1.hour.ago)
+      create(:pdf_job, owner: api_user, status: 'failed', page_count: 3, created_at: 2.hours.ago)
 
       expect(api_user.total_pages_processed_last_24_hours).to eq(4)
     end
 
-    it 'sums page_count for jobs created in the last 24 hours (GUIUser)' do
+    it 'sums page_count for completed or processing jobs created in the last 24 hours (GUIUser)' do
       gui_user = create(:gui_user)
-      create(:pdf_job, owner: gui_user, page_count: 3, created_at: 2.hours.ago)
-      create(:pdf_job, owner: gui_user, page_count: 1, created_at: 3.hours.ago)
-      create(:pdf_job, owner: gui_user, page_count: 5, created_at: 26.hours.ago)
-      create(:pdf_job, owner: gui_user, page_count: nil, created_at: 1.hour.ago)
+      create(:pdf_job, owner: gui_user, status: 'completed', page_count: 3, created_at: 2.hours.ago)
+      create(:pdf_job, owner: gui_user, status: 'processing', page_count: 1, created_at: 3.hours.ago)
+      create(:pdf_job, owner: gui_user, status: 'completed', page_count: 5, created_at: 26.hours.ago)
+      create(:pdf_job, owner: gui_user, status: 'processing', page_count: nil, created_at: 1.hour.ago)
+      create(:pdf_job, owner: gui_user, status: 'failed', page_count: 3, created_at: 2.hours.ago)
 
       expect(gui_user.total_pages_processed_last_24_hours).to eq(4)
     end

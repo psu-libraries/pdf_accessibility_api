@@ -40,7 +40,7 @@ gem 'rswag-ui'
 gem 'image_processing'
 
 # Alt-text generation
-gem 'alt_text'
+gem 'alt_text', '~> 0.2'
 
 # PDF page counting
 gem 'pdf-reader'
