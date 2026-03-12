@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class GUIAuthController < ApplicationController
-  before_action :require_login
+  before_action :auto_login
 
-  def require_login
-    redirect_to '/auth/azure_oauth' unless current_user
+  def auto_login
+    render 'sessions/auto_login' unless current_user
   end
 end
