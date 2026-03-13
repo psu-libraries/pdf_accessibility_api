@@ -17,6 +17,7 @@ RSpec.describe ImageAltTextJob do
 
   before do
     allow(AltText::Client).to receive(:new).and_return alt_text_gem
+    allow(AltText::LLMRegistry).to receive(:resolve).and_return 'resolved-model-name'
   end
 
   describe '#perform' do
@@ -35,7 +36,8 @@ RSpec.describe ImageAltTextJob do
         reloaded_job = job.reload
         expect(reloaded_job.status).to eq 'completed'
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(job.reload.alt_text).to eq(alt_text_response)
+        expect(reloaded_job.alt_text).to eq(alt_text_response)
+        expect(reloaded_job.llm_model).to eq('resolved-model-name')
       end
     end
 
@@ -50,7 +52,7 @@ RSpec.describe ImageAltTextJob do
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
         expect(reloaded_job.processing_error_message).to eq 'StandardError'
-        expect(job.reload.alt_text).to be_nil
+        expect(reloaded_job.alt_text).to be_nil
       end
     end
   end
