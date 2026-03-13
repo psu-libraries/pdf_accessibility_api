@@ -9,6 +9,7 @@ Metrics/BlockLength:
     - 'config/routes.rb'
     - 'app/models/gui_user.rb'
     - 'app/models/unit.rb'
+    - 'config/initializers/rails_admin.rb'
 
 Metrics/CyclomaticComplexity:
   Exclude:

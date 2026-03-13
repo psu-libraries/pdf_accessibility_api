@@ -50,6 +50,7 @@ RSpec.describe 'RailsAdmin content' do
     expect(response.body).to include('123')
     expect(response.body).to include('45678')
     expect(response.body).to include(unit.total_pages_processed.to_s)
+    expect(response.body).to include('Delete')
   end
 
   it 'shows GuiUser list and show content' do
@@ -62,6 +63,7 @@ RSpec.describe 'RailsAdmin content' do
     expect(response.body).to include('gui.user@example.com')
     expect(response.body).to include('Accessibility Services Unit')
     expect(response.body).to include(gui_user_record.total_pages_processed_last_24_hours.to_s)
+    expect(response.body).not_to include('Delete')
   end
 
   it 'shows ApiUser list and show content including' do
@@ -77,6 +79,7 @@ RSpec.describe 'RailsAdmin content' do
     expect(response.body).to include('https://example.com/webhook')
     expect(response.body).to include('Accessibility Services Unit')
     expect(response.body).to include(api_user_record.total_pages_processed_last_24_hours.to_s)
+    expect(response.body).not_to include('Delete')
   end
 
   it 'shows Job list and show content' do
