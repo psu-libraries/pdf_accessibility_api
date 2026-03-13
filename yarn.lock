@@ -1275,6 +1275,17 @@
     namespace-emitter "^2.0.1"
     p-retry "^6.1.0"
 
+"@uppy/compressor@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@uppy/compressor/-/compressor-3.1.0.tgz#fcab6be0c13a568702f504b45ecee0f23b4594c1"
+  integrity sha512-EPCU1j/hvey05/ePPzuqaF7p4fORsc3PNvRGDXrT5fiZv0FCAufY5GZf4OUAiKNHkL59wwxAgMySOTJq7WBZtA==
+  dependencies:
+    "@transloadit/prettier-bytes" "^0.3.4"
+    "@uppy/utils" "^7.1.4"
+    compressorjs "^1.2.1"
+    preact "^10.5.13"
+    promise-queue "^2.2.5"
+
 "@uppy/core@^4.3.2":
   version "4.5.3"
   resolved "https://registry.yarnpkg.com/@uppy/core/-/core-4.5.3.tgz#31789fdbbf28183235d9749d1bd09af1c2c7aa09"
@@ -1352,6 +1363,14 @@
   version "6.2.2"
   resolved "https://registry.yarnpkg.com/@uppy/utils/-/utils-6.2.2.tgz#78bf41a38b6a64e8823063a34a8150412e386df4"
   integrity sha512-9mYJtbcngv2HOJIECkyfmdXTI5dW/ObCyvWP1Iti3E5bKtsa4sMmbx5Yh/tGCj8k/lBNhfvWyZuYnvnjmzNLSQ==
+  dependencies:
+    lodash "^4.17.21"
+    preact "^10.5.13"
+
+"@uppy/utils@^7.1.4":
+  version "7.1.5"
+  resolved "https://registry.yarnpkg.com/@uppy/utils/-/utils-7.1.5.tgz#82bba0fccaf36f5f913b433d492826a1ade9b34a"
+  integrity sha512-Vz4WGTjef6WebECGur4clWjpkET4o3bdvPMj1m2sD5cL+dTt69m+FIE5h5JD3HBMLEPTXPVkrXGMIFcbOYC12Q==
   dependencies:
     lodash "^4.17.21"
     preact "^10.5.13"
@@ -1648,6 +1667,11 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.3.0.tgz#f6e14a97858d327252200242d4ccfe522c445522"
   integrity sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==
 
+blueimp-canvas-to-blob@^3.29.0:
+  version "3.29.0"
+  resolved "https://registry.yarnpkg.com/blueimp-canvas-to-blob/-/blueimp-canvas-to-blob-3.29.0.tgz#d965f06cb1a67fdae207a2be56683f55ef531466"
+  integrity sha512-0pcSSGxC0QxT+yVkivxIqW0Y4VlO2XSDPofBAqoJ1qJxgH9eiUDLv50Rixij2cDuEfx4M6DpD9UGZpRhT5Q8qg==
+
 body-parser@1.20.3:
   version "1.20.3"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.20.3.tgz#1953431221c6fb5cd63c4b36d53fab0928e548c6"
@@ -1837,6 +1861,14 @@ compression@^1.7.4:
     on-headers "~1.1.0"
     safe-buffer "5.2.1"
     vary "~1.1.2"
+
+compressorjs@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/compressorjs/-/compressorjs-1.2.1.tgz#4dee18ef5032f8166bd0a3258f045eda2cd07671"
+  integrity sha512-+geIjeRnPhQ+LLvvA7wxBQE5ddeLU7pJ3FsKFWirDw6veY3s9iLxAQEw7lXGHnhCJvBujEQWuNnGzZcvCvdkLQ==
+  dependencies:
+    blueimp-canvas-to-blob "^3.29.0"
+    is-blob "^2.1.0"
 
 connect-history-api-fallback@^2.0.0:
   version "2.0.0"
@@ -2440,6 +2472,11 @@ is-binary-path@~2.1.0:
   dependencies:
     binary-extensions "^2.0.0"
 
+is-blob@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/is-blob/-/is-blob-2.1.0.tgz#e36cd82c90653f1e1b930f11baf9c64216a05385"
+  integrity sha512-SZ/fTft5eUhQM6oF/ZaASFDEdbFVe89Imltn9uZr03wdKMcWNVYSMjQPFtg05QuNkt5l5c135ElvXEQG0rk4tw==
+
 is-core-module@^2.16.0:
   version "2.16.1"
   resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.16.1.tgz#2a98801a849f43e2add644fbb6bc6229b19a4ef4"
@@ -2993,6 +3030,11 @@ process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
   integrity sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
+
+promise-queue@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/promise-queue/-/promise-queue-2.2.5.tgz#2f6f5f7c0f6d08109e967659c79b88a9ed5e93b4"
+  integrity sha512-p/iXrPSVfnqPft24ZdNNLECw/UrtLTpT3jpAAMzl/o5/rDsGCPo3/CQS2611flL6LkoEJ3oQZw7C8Q80ZISXRQ==
 
 proxy-addr@~2.0.7:
   version "2.0.7"

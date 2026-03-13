@@ -18,7 +18,7 @@ RSpec.feature 'PDF Jobs show', :js do
   end
 
   before do
-    login_as(gui_user)
+    login_gui_user(gui_user)
   end
 
   it 'shows all job metadata and download link when output_url is present' do

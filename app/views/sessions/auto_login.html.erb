@@ -1,0 +1,6 @@
+<form id="auto_login" action="/auth/azure_oauth" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+</form>
+<script>
+  document.getElementById('auto_login').submit()
+</script>

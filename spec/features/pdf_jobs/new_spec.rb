@@ -8,7 +8,7 @@ RSpec.feature 'New PDF job', :js do
   let!(:pdf_job) { create(:pdf_job, owner: gui_user, page_count: 3) }
 
   before do
-    login_as(gui_user)
+    login_gui_user(gui_user)
   end
 
   it 'shows content and submit button' do
