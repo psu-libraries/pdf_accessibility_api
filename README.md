@@ -31,22 +31,25 @@ We use an `APIUser` model to store metadata for our API users and their associat
 
 ## PDF Remediation - GUI
 
-The PDF Remediation GUI's main components are:
-
-- `/pdf_jobs` — a list of your jobs.
-- `/pdf_jobs/new` — the page for uploading a file to remediate.
-- `/pdf_jobs/{id}` — detailed information about a job (linked from `/pdf_jobs`).
-- `/sidekiq` — Sidekiq interface.
+The PDF Remediation GUI allows users to upload PDFs one-at-a-time for remeidation.  After upload, the user will be directed to a screen to await the result of remediation.  The result 
+will either be a link to download the remediated file, or an error message (if failed).  The user can also view a list of their PDF remeidation jobs from the last 24 hours.
 
 ## Image Alt Text - GUI
+
 There is also a standalone GUI just for images. This is for users who just want to generate alt-text for an image without going through the full - and pricy - PDF remediation process.
-- `/image_jobs` — a list of image jobs, their links, and their status.
-- `/image_jobs/new` — the upload page for a new image
-- `/image_jobs/{id}` — detailed information about an image, including any generated alt-text.
+Just like the PDF remediation workflow, a user can upload an image one-at-a-time.  After uplaod they will be directed to a screen to await the alt-text response.  They can
+also view a list of previous alt-text jobs.
+
+## Admin Dashboard
+
+Those with administrative authorization can access the admin dashboard.  Powered by the RailsAdmin engine, this gives priveleged users the ability to view and manage data through
+a user-friendly console.  Admins can also access the Sidekiq dashboard through the admin console.
 
 ### Authentication and Authorization
 
 - The application uses Azure AD to check for User Managed Group (UMG) membership using OAuth token. Only members of the PDF Remediation Tool user group will be allowed to access the application. Values for the necessary Azure variables can be found in Vault.
+
+- Administrators can only access admin features if they are a part of the Admin PDF Remediation Tool user group.
 
 ## Development Setup
 
@@ -55,18 +58,14 @@ The Rails application needs to be configured with settings and secrets for the v
 
 We aren't able to run the tool that does the actual PDF remediation work locally. So for the test and development environments, we'll be simulating the remediation tool using a local instance of MinIO and a simple script that mocks out the behavior of the remediation tool. By default, you should configure your environment so that it uses the credentials and settings for the local MinIO instance instead of AWS S3 for your test and development environments. However, if you want to temporarily run the real remediation workflow end-to-end in your development environment for manual testing, then you can do so by obtaining the credentials and settings needed for remotely integrating with the real tool (which is hosted in AWS) and configuring your environment to use these instead. These settings consist of individual IAM Access Key credentials and the name of the S3 bucket where the files going through the remediation workflow are stored. You should do this only when absolutely necessary since using the actual remediation tool is costly.
 
+Azure login is not mocked in the development environment.  You will need all the necessary Azure configuration variables to properly login locally.  We have an application registered
+for local development in Azure, and you can find the environment variables you need in vault. To authorize yourself to use the application locally, and access admin features, you
+will need to configure the authorized user group and admin user group environment variables locally to be a group (or groups) you are affiliated with in Azure.
+
 You'll need to set multiple configuration variables in your environment before running your local setup or Docker Compose setup.  An easy way to manage this is:
 1. Create an `.envrc` file in the project's root directory using the `.envrc.sample` file that is checked in with the source code as a template. The sample file contains the values that you'll need to use for connecting the local MinIO instance if you're running with Docker Compose.
 2. Fill in the template with the appropriate values for any integrated services that you'll be running locally. If you're running with the default Docker Compose setup, then you shouldn't need to configure anything except the settings for the MinIO (or AWS S3) connection.
 3. Run `direnv allow` to export the values (If you do not have direnv, it can be installed with Homebrew on Mac).
-
-### Set Headers
-
-To authenticate locally you will need to mock the remote user header (e.g., `HTTP_X_AUTH_REQUEST_EMAIL`).  
-You can do this using a modify-header browser extension such as [ModHeader](https://modheader.com/) or [Requestly](https://requestly.io/):
-
-- Add a request header:  
-  `HTTP_X_AUTH_REQUEST_EMAIL: your-email@psu.edu`
 
 ### Docker
 
