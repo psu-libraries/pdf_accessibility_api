@@ -23,7 +23,7 @@ RSpec.feature 'Image Jobs show', :js do
     expect(page).to have_content('test.jpg')
     expect(page).to have_content('Jul 22, 2024 10:30 AM')
     expect(page).to have_content('completed')
-    expect(page).not_to have_content('Errors:')
+    expect(page).to have_no_content('Errors:')
     expect(page).to have_content(alt_text)
     expect(page).to have_link('<< Image Jobs List', href: image_jobs_path)
   end
@@ -42,7 +42,7 @@ RSpec.feature 'Image Jobs show', :js do
 
     expect(page).to have_content('Status: processing')
     expect(page).to have_content('Finished At:')
-    expect(page).not_to have_content('Errors:')
+    expect(page).to have_no_content('Errors:')
 
     job.update!(
       status: 'completed',

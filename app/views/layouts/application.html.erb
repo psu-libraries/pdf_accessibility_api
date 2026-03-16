@@ -45,8 +45,7 @@
             <li class="nav-item">
               <%= link_to 'Help', help_page_path, class: "nav-link" %>
             </li>
-            <% if true %>
-            <!-- edit change this to admin -->
+            <% if request.session[:admin] %>
               <li class="nav-item">
                 <%= link_to 'Admin', rails_admin_path, class: "nav-link" %>
               </li>
