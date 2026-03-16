@@ -18,7 +18,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            client_auth_method: :query,
            uid_field: 'email',
            setup: lambda { |env|
-             # Set redirect_uri dynamically at runtime to handle different hosts/FQDNs
+             # Set redirect_uri per request based on the current host/URL.
              strategy = env['omniauth.strategy']
              strategy.options[:client_options][:redirect_uri] = AzureOidcConfig.redirect_uri_for(env)
            },
