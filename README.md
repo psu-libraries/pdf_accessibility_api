@@ -2,6 +2,7 @@
 
 * Ruby version: 3.4.1
 * Rails version: 7.2
+* Node 22 (with Yarn and Shakapacker)
 
 ## Overview
 
