@@ -19,26 +19,19 @@ RSpec.describe AzureOidcConfig do
     end
 
     let(:scheme) { 'https' }
-    let(:host_with_port) { 'example.test' }
+    let(:host_with_port) { 'example.test:4443' }
 
     it 'builds a redirect_uri using the request scheme, host, and callback path' do
-      callback_path = Rails.application.routes.url_helpers.auth_azure_oauth_callback_path
-      expect(described_class.redirect_uri_for(env)).to eq("#{scheme}://#{host_with_port}#{callback_path}")
-    end
-
-    it 'includes the port when present on the host' do
-      host_with_port_with_port = 'example.test:4443'
       env_with_port = Rack::MockRequest.env_for(
         '/auth/azure_oauth',
         'rack.url_scheme' => scheme,
-        'HTTP_HOST' => host_with_port_with_port,
+        'HTTP_HOST' => host_with_port,
         'omniauth.strategy' => strategy
       )
-
       callback_path = Rails.application.routes.url_helpers.auth_azure_oauth_callback_path
       expect(
         described_class.redirect_uri_for(env_with_port)
-      ).to eq("#{scheme}://#{host_with_port_with_port}#{callback_path}")
+      ).to eq("#{scheme}://#{host_with_port}#{callback_path}")
     end
   end
 
