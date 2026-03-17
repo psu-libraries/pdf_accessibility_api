@@ -12,6 +12,7 @@ class ImageAltTextJob < ApplicationJob
     )
     complete_job(job, alt_text)
   rescue StandardError => e
+    puts e
     update_with_failure(job, e.message)
   ensure
     cleanup_tmpfile(tmp_path)
@@ -49,7 +50,7 @@ class ImageAltTextJob < ApplicationJob
     end
 
     def alt_text_client
-      @alt_text_client ||= AltText::Client.new(alt_text_client_config)
+      @alt_text_client ||= AltText::Client.new(**alt_text_client_config)
     end
 
     def alt_text_client_config

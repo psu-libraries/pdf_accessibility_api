@@ -32,6 +32,14 @@ RSpec.describe ImageAltTextJob do
         )
       end
 
+      it 'initializes AltText::Client with ENV-based config' do
+        expect(AltText::Client).to have_received(:new).with(
+          access_key: ENV.fetch('AWS_ACCESS_KEY_ID', nil),
+          secret_key: ENV.fetch('AWS_SECRET_ACCESS_KEY', nil),
+          region: ENV.fetch('AWS_REGION', 'us-east-1')
+        )
+      end
+
       it 'updates the alt_text of the given image job record' do
         reloaded_job = job.reload
         expect(reloaded_job.status).to eq 'completed'
