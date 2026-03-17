@@ -49,7 +49,7 @@ class ImageAltTextJob < ApplicationJob
     end
 
     def alt_text_client
-      @alt_text_client ||= AltText::Client.new(alt_text_client_config)
+      @alt_text_client ||= AltText::Client.new(**alt_text_client_config)
     end
 
     def alt_text_client_config
