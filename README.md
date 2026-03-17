@@ -27,7 +27,7 @@ The PDF Accessibility API acts as an intermediary to send and retrieve those fil
 
 Refer to the Swagger documentation for endpoint and webhook details at `/api-docs`.
 
-We use an `APIUser` model to store metadata for our API users and their associated clients/systems. A developer with console access must manually add `APIUser` records. Each `APIUser` requires:
+We use an `APIUser` model to store metadata for our API users and their associated clients/systems. Each `APIUser` requires:
 
 - An `api_key` for authentication and authorization.
 - The client's `webhook_endpoint`, where the PDF Accessibility API will send its final request when remediation is complete.
@@ -89,8 +89,33 @@ To build the image and run necessary containers:
 
 #### Running tests
 To run the tests within the container:
+
 1. `docker compose exec web bash`
 2. `RAILS_ENV=test bundle exec rspec`
+
+#### Other
+
+Below are some tasks that should be covered in the startup scripts, but you may need to run within the container.
+
+Enter the container:
+```
+docker compose exec web bash
+```
+
+Create and migrate database:
+```
+bundle exec rake db:create && bundle exec rake db:migrate
+```
+
+Download and install node packages:
+```
+yarn install
+```
+
+Compile assets:
+```
+bin/shakapacker
+```
 
 
 ### Swagger Docs
@@ -99,6 +124,7 @@ Our API and webhook documentation is generated using RSwag and the RSwag DSL fro
 
 
 ### Preview deployments 
+
 Preview deployments are triggered off branch-name conventions. To trigger a Preview deployment, create a branch with a `preview/` prefix, and CI will generate a corresponding `Application` object that ArgoCD will deploy.
 
 Example: fixing a bug in something
