@@ -12,7 +12,6 @@ class ImageAltTextJob < ApplicationJob
     )
     complete_job(job, alt_text)
   rescue StandardError => e
-    puts e
     update_with_failure(job, e.message)
   ensure
     cleanup_tmpfile(tmp_path)
