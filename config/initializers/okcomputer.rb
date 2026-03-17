@@ -1,0 +1,23 @@
+# frozen_string_literal: true
+
+require_relative '../../lib/health_checks/queue_dead_set_check'
+
+OkComputer.mount_at = false
+
+OkComputer::Registry.register(
+  'sidekiq_deadset',
+  HealthChecks::QueueDeadSetCheck.new
+)
+
+# OkComputer::Registry.register(
+#   'sidekiq',
+#   HealthChecks::QueueLatencyCheck.new(ENV.fetch('SIDEKIQ_QUEUE_LATENCY_THRESHOLD', 30).to_i)
+# )
+
+# If you want to keep the size check, you can add it here, but scholarsphere does not have it:
+# OkComputer::Registry.register(
+#   'sidekiq_size',
+#   HealthChecks::QueueSizeCheck.new(ENV.fetch('SIDEKIQ_QUEUE_SIZE_THRESHOLD', 100).to_i)
+# )
+
+OkComputer.make_optional %w(sidekiq_deadset)
