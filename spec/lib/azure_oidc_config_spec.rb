@@ -9,29 +9,56 @@ RSpec.describe AzureOidcConfig do
       instance_double(OmniAuth::Strategies::OpenIDConnect, options: { client_options: {} })
     end
 
-    let(:env) do
-      Rack::MockRequest.env_for(
-        '/auth/azure_oauth',
-        'rack.url_scheme' => scheme,
-        'HTTP_HOST' => host_with_port,
-        'omniauth.strategy' => strategy
-      )
-    end
-
     let(:scheme) { 'https' }
     let(:host_with_port) { 'example.test:4443' }
+    let(:forwarded_host) { nil }
+    let(:forwarded_server) { nil }
+    let(:callback_path) { Rails.application.routes.url_helpers.auth_azure_oauth_callback_path }
 
-    it 'builds a redirect_uri using the request scheme, host, and callback path' do
-      env_with_port = Rack::MockRequest.env_for(
-        '/auth/azure_oauth',
+    let(:mock_request_headers) do
+      {
         'rack.url_scheme' => scheme,
         'HTTP_HOST' => host_with_port,
         'omniauth.strategy' => strategy
-      )
-      callback_path = Rails.application.routes.url_helpers.auth_azure_oauth_callback_path
-      expect(
-        described_class.redirect_uri_for(env_with_port)
-      ).to eq("#{scheme}://#{host_with_port}#{callback_path}")
+      }.tap do |headers|
+        headers['HTTP_X_FORWARDED_HOST'] = forwarded_host if forwarded_host
+        headers['HTTP_X_FORWARDED_SERVER'] = forwarded_server if forwarded_server
+      end
+    end
+
+    let(:env) { Rack::MockRequest.env_for('/auth/azure_oauth', mock_request_headers) }
+
+    subject(:redirect_uri) { described_class.redirect_uri_for(env) }
+
+    context 'when no forwarded headers are present' do
+      it 'builds a redirect_uri using the request scheme, host, and callback path' do
+        expect(redirect_uri).to eq("#{scheme}://#{host_with_port}#{callback_path}")
+      end
+    end
+
+    context 'when HTTP_X_FORWARDED_HOST is set' do
+      let(:forwarded_host) { 'external.example.org' }
+
+      it 'prefers HTTP_X_FORWARDED_HOST' do
+        expect(redirect_uri).to eq("#{scheme}://#{forwarded_host}#{callback_path}")
+      end
+    end
+
+    context 'when HTTP_X_FORWARDED_SERVER is set and HTTP_X_FORWARDED_HOST is not set' do
+      let(:forwarded_server) { 'external-server.example.org' }
+
+      it 'uses HTTP_X_FORWARDED_SERVER' do
+        expect(redirect_uri).to eq("#{scheme}://#{forwarded_server}#{callback_path}")
+      end
+    end
+
+    context 'when both HTTP_X_FORWARDED_HOST and HTTP_X_FORWARDED_SERVER are set' do
+      let(:forwarded_host) { 'external-host.example.org' }
+      let(:forwarded_server) { 'external-server.example.org' }
+
+      it 'prefers HTTP_X_FORWARDED_HOST over HTTP_X_FORWARDED_SERVER' do
+        expect(redirect_uri).to eq("#{scheme}://#{forwarded_host}#{callback_path}")
+      end
     end
   end
 
