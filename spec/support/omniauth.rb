@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 module OmniAuthHelpers
-  AUTHORIZED_USERS_GROUP = 'test-authorized-users-group'
-  ADMIN_USERS_GROUP = 'test-admin-users-group'
+  AUTHORIZED_USERS_ROLE = 'test-authorized-users-role'
+  ADMIN_USERS_ROLE = 'test-admin-users-role'
 
   def with_mock_auth_env(&)
     ClimateControl.modify(
-      AUTHORIZED_USERS_GROUP: AUTHORIZED_USERS_GROUP,
-      ADMIN_USERS_GROUP: ADMIN_USERS_GROUP, &
+      AUTHORIZED_USERS_ROLE: AUTHORIZED_USERS_ROLE,
+      ADMIN_USERS_ROLE: ADMIN_USERS_ROLE, &
     )
   end
 
   def mock_azure_login(email:, admin: false)
-    groups = [AUTHORIZED_USERS_GROUP]
-    groups << ADMIN_USERS_GROUP if admin
+    roles = [AUTHORIZED_USERS_ROLE]
+    roles << ADMIN_USERS_ROLE if admin
 
     OmniAuth.config.mock_auth[:azure_oauth] = OmniAuth::AuthHash.new(
       provider: 'azure_oauth',
@@ -23,7 +23,7 @@ module OmniAuthHelpers
       },
       extra: {
         raw_info: {
-          groups: groups
+          roles: roles
         }
       }
     )
