@@ -15,6 +15,17 @@ RSpec.describe ImageAltTextJob do
                                                   'image/jpg',
                                                   original_filename: 'lion.jpg').path }
 
+  around do |example|
+    ClimateControl.modify(
+      'AWS_ACCESS_KEY_ID' => 'test-access-key',
+      'AWS_SECRET_ACCESS_KEY' => 'test-secret-key',
+      'AWS_REGION' => 'test-region',
+      'LLM_MODEL' => 'test-llm-model'
+    ) do
+      example.run
+    end
+  end
+
   before do
     allow(AltText::Client).to receive(:new).and_return alt_text_gem
     allow(AltText::LLMRegistry).to receive(:resolve).and_return 'resolved-model-name'
@@ -28,7 +39,15 @@ RSpec.describe ImageAltTextJob do
 
       it 'calls the Alt Text gem' do
         expect(alt_text_gem).to have_received(:process_image).with(
-          /.+\.jpg/, prompt: File.read('prompt.txt'), model_id: ENV.fetch('LLM_MODEL', 'default')
+          /.+\.jpg/, prompt: File.read('prompt.txt'), model_id: 'test-llm-model'
+        )
+      end
+
+      it 'initializes AltText::Client with ENV-based config' do
+        expect(AltText::Client).to have_received(:new).with(
+          access_key: 'test-access-key',
+          secret_key: 'test-secret-key',
+          region: 'test-region'
         )
       end
 

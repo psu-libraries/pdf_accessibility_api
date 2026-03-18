@@ -45,6 +45,9 @@ gem 'alt_text', '~> 0.2'
 # PDF page counting
 gem 'pdf-reader'
 
+# Logging & Health Checks!
+gem 'okcomputer', '~> 1.18.0'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mswin mswin64 mingw x64_mingw], require: 'debug/prelude'

@@ -25,7 +25,7 @@ RSpec.describe 'SessionsController' do
       expect(response.body).to include(I18n.t('heading'))
     end
 
-    it 'returns forbidden for users outside the authorized group' do
+    it 'returns forbidden for users outside the authorized role' do
       with_mock_auth_env do
         OmniAuth.config.mock_auth[:azure_oauth] = OmniAuth::AuthHash.new(
           provider: 'azure_oauth',
@@ -35,7 +35,7 @@ RSpec.describe 'SessionsController' do
           },
           extra: {
             raw_info: {
-              groups: []
+              roles: []
             }
           }
         )
