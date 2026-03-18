@@ -46,7 +46,7 @@ There is also a standalone GUI just for images. This is for users who just want 
 
 ### Authentication and Authorization
 
-- The application uses Azure AD to check for User Managed Group (UMG) membership using OAuth token. Only members of the PDF Remediation Tool user group will be allowed to access the application. Values for the necessary Azure variables can be found in Vault.
+- The application uses Azure AD to check for App Roles associated with User Managed Group (UMG) membership using the OAuth token. Only members of the PDF Remediation Tool user group will be allowed to access the application. Values for the necessary Azure variables can be found in Vault.
 
 ## Development Setup
 

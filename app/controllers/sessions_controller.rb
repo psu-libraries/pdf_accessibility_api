@@ -5,16 +5,16 @@ class SessionsController < ApplicationController
     auth = request.env['omniauth.auth']
 
     email = auth.dig('info', 'email')
-    groups = auth.dig('extra', 'raw_info', 'groups') || []
+    roles = auth.dig('extra', 'raw_info', 'roles') || []
 
-    unless groups.include?(ENV['AUTHORIZED_USERS_GROUP'])
+    unless roles.include?(ENV['AUTHORIZED_USERS_ROLE'])
       render plain: 'Forbidden', status: :forbidden
       return
     end
 
     user = GUIUser.find_or_create_by!(email:)
     session[:user_id] = user.id
-    session[:admin]   = groups.include?(ENV.fetch('ADMIN_USERS_GROUP', nil))
+    session[:admin]   = roles.include?(ENV.fetch('ADMIN_USERS_ROLE', nil))
 
     redirect_to root_path
   end
