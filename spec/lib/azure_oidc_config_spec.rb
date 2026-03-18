@@ -5,6 +5,8 @@ require 'azure_oidc_config'
 
 RSpec.describe AzureOidcConfig do
   describe '.redirect_uri_for' do
+    subject(:redirect_uri) { described_class.redirect_uri_for(env) }
+
     let(:strategy) do
       instance_double(OmniAuth::Strategies::OpenIDConnect, options: { client_options: {} })
     end
@@ -27,8 +29,6 @@ RSpec.describe AzureOidcConfig do
     end
 
     let(:env) { Rack::MockRequest.env_for('/auth/azure_oauth', mock_request_headers) }
-
-    subject(:redirect_uri) { described_class.redirect_uri_for(env) }
 
     context 'when no forwarded headers are present' do
       it 'builds a redirect_uri using the request scheme, host, and callback path' do
