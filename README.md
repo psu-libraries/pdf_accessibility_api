@@ -59,9 +59,9 @@ a user-friendly console.  Admins can also access the Sidekiq dashboard through t
 
 ## Authentication and Authorization
 
-- The application uses Azure AD to check for App Roles associated with User Managed Group (UMG) membership using the OAuth token. Only members of the PDF Remediation Tool user group will be allowed to access the application. Values for the necessary Azure variables can be found in Vault.
+The application uses Azure AD to check for App Roles linked to User Managed Groups (UMG) using the OAuth token. Only members of the PDF Remediation Tool user group will be allowed to access the application. Values for the necessary Azure variables can be found in Vault.
 
-- Administrators can only access admin features if they are a part of the Admin PDF Remediation Tool user group.
+Administrators can only access admin features if they are a part of the Admin PDF Remediation Tool user group.
 
 ## Development
 
@@ -72,7 +72,7 @@ We aren't able to run the tool that does the actual PDF remediation work locally
 
 Azure login is not mocked in the development environment. You will need all the necessary Azure configuration variables to properly log in locally. We have an application registered
 for local development in Azure, and you can find the environment variables you need in Vault. To authorize yourself to use the application locally and access admin features, you
-will need to configure the authorized user group and admin user group environment variables locally to be a group (or groups) you are affiliated with in Azure.
+will need to configure the authorized user role and admin user role environment variables locally to be the roles configured for authorization in Azure.
 
 You'll need to set multiple configuration variables in your environment before running your local setup or Docker Compose setup.  An easy way to manage this is:
 1. Create an `.envrc` file in the project's root directory using the `.envrc.sample` file that is checked in with the source code as a template. The sample file contains the values that you'll need to use for connecting the local MinIO instance if you're running with Docker Compose.
