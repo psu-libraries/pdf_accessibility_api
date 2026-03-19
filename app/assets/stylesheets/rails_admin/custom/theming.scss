@@ -1,0 +1,46 @@
+// RailsAdmin uses the `.rails_admin` class on the body element.
+// Disable selector/important lint rules locally so we can match
+// that class name and override its styles safely.
+// scss-lint:disable SelectorFormat, ImportantRule
+
+.rails_admin {
+  .navbar.bg-primary {
+    background-color: $ra-primary !important;
+  }
+
+  .nav-link {
+    color: $ra-link-color;
+
+    &.active,
+    &:hover {
+      background-color: $ra-primary-hover !important;
+      color: $ra-white;
+    }
+  }
+
+  .btn-primary {
+    background-color: $ra-primary;
+    border-color: $ra-primary;
+
+    &:hover {
+      background-color: $ra-primary-hover;
+      border-color: $ra-primary-hover;
+    }
+  }
+
+  .btn-info {
+    background-color: $ra-info-bg;
+    border-color: $ra-primary;
+
+    &:hover {
+      background-color: $ra-primary-hover;
+    }
+  }
+
+  .breadcrumb a,
+  .table a {
+    color: $ra-link-color;
+  }
+}
+
+// scss-lint:enable SelectorFormat, ImportantRule

@@ -11,12 +11,11 @@ export S3_BUCKET_NAME=pdf_accessibility_api # Default value for MinIO in the doc
 export LLM_MODEL=default
 
 # OAuth
-export ADMIN_USERS_GROUP=
-export AUTHORIZED_USERS_GROUP=
+export ADMIN_USERS_ROLE=
+export AUTHORIZED_USERS_ROLE=
 export AZURE_CLIENT_ID=
 export AZURE_CLIENT_SECRET=
-export AZURE_TENANT_ID=
-export AZURE_REDIRECT_URI=
+export AZURE_AUTH_ENDPOINT
 
 #---------------------------------
 # The below configurations are not

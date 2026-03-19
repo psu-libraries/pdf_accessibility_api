@@ -15,8 +15,20 @@ RSpec.describe ImageAltTextJob do
                                                   'image/jpg',
                                                   original_filename: 'lion.jpg').path }
 
+  around do |example|
+    ClimateControl.modify(
+      'AWS_ACCESS_KEY_ID' => 'test-access-key',
+      'AWS_SECRET_ACCESS_KEY' => 'test-secret-key',
+      'AWS_REGION' => 'test-region',
+      'LLM_MODEL' => 'test-llm-model'
+    ) do
+      example.run
+    end
+  end
+
   before do
     allow(AltText::Client).to receive(:new).and_return alt_text_gem
+    allow(AltText::LLMRegistry).to receive(:resolve).and_return 'resolved-model-name'
   end
 
   describe '#perform' do
@@ -27,7 +39,15 @@ RSpec.describe ImageAltTextJob do
 
       it 'calls the Alt Text gem' do
         expect(alt_text_gem).to have_received(:process_image).with(
-          /.+\.jpg/, prompt: File.read('prompt.txt'), model_id: ENV.fetch('LLM_MODEL', 'default')
+          /.+\.jpg/, prompt: File.read('prompt.txt'), model_id: 'test-llm-model'
+        )
+      end
+
+      it 'initializes AltText::Client with ENV-based config' do
+        expect(AltText::Client).to have_received(:new).with(
+          access_key: 'test-access-key',
+          secret_key: 'test-secret-key',
+          region: 'test-region'
         )
       end
 
@@ -35,7 +55,8 @@ RSpec.describe ImageAltTextJob do
         reloaded_job = job.reload
         expect(reloaded_job.status).to eq 'completed'
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
-        expect(job.reload.alt_text).to eq(alt_text_response)
+        expect(reloaded_job.alt_text).to eq(alt_text_response)
+        expect(reloaded_job.llm_model).to eq('resolved-model-name')
       end
     end
 
@@ -50,7 +71,7 @@ RSpec.describe ImageAltTextJob do
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
         expect(reloaded_job.processing_error_message).to eq 'StandardError'
-        expect(job.reload.alt_text).to be_nil
+        expect(reloaded_job.alt_text).to be_nil
       end
     end
   end

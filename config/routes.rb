@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   mount Rswag::Api::Engine => '/api-docs'
   mount Rswag::Ui::Engine => '/api-docs'
   mount Sidekiq::Web => '/sidekiq', :constraints => ->(req) { req.session[:admin] == true }
+  mount OkComputer::Engine, at: '/healthcheck'
 
   get '/sidekiq', to: ->(_env) {
     [
