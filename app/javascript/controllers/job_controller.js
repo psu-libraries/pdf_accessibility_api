@@ -4,7 +4,6 @@ import consumer from '../channels/consumer'
 
 export default class extends Controller {
   static targets = [
-    'outputObjectKey',
     'status',
     'finishedAt',
     'altText',
@@ -29,9 +28,6 @@ export default class extends Controller {
   }
 
   updateResult(data) {
-    if (this.hasOutputObjectKeyTarget) {
-      this.data.set('objectKey', data.object_key || '')
-    }
     this.data.set('status', data.status || '')
     this.data.set('finishedAt', data.finished_at || '')
     this.data.set('outputUrl', data.output_url || '')

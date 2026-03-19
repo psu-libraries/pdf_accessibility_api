@@ -11,16 +11,14 @@
       <% @image_jobs.each do |job| %>
         <tr data-controller="job"
           data-job-id="<%= job.id %>"
-          data-job-object-key="<%= job.object_key %>"
           data-job-status="<%= job.status %>"
           data-job-finished-at="<%= job.finished_at %>"
           data-job-alt-text="<%= job.alt_text %>"
           id="<%= dom_id job %>">
-          <td><%= link_to job.object_key, image_job_path(job) %></td>
+          <td><%= link_to job.filename, image_job_path(job) %></td>
           <td><%= job.created_at.getlocal.strftime("%b %e, %Y %l:%M %p") %></td>
           <td><span data-job-target="status"></span></td>
           <td class='d-none'>
-            <span data-job-target="outputObjectKey"></span>
             <span data-job-target="altText"></span>
             <span data-job-target="processingErrorMessage"></span>
             <span data-job-target="finishedAt"></span>

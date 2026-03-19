@@ -21,7 +21,7 @@ class ImageJobsController < GUIAuthController
     tmp_path = uploads_tmp_dir.join(object_key).to_s
     File.binwrite(tmp_path, uploaded_file.read)
     job = current_user.image_jobs.build
-    job.object_key = uploaded_file.original_filename
+    job.filename = uploaded_file.original_filename
     job.status = 'processing'
     job.uuid = SecureRandom.uuid
     job.save!

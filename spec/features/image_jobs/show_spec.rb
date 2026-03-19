@@ -12,7 +12,7 @@ RSpec.feature 'Image Jobs show', :js do
   end
 
   it 'shows all job metadata including alt-text' do
-    job = create(:image_job, object_key: 'test.jpg',
+    job = create(:image_job, filename: 'test.jpg',
                              status: 'completed',
                              alt_text: alt_text,
                              created_at: Time.new(2024, 7, 22, 10, 30),
