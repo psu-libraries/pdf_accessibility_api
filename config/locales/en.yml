@@ -3,7 +3,7 @@ en:
   pdf:
     upload:
       heading: Remediate a PDF Document
-      remaining_pages: You have remediated %{pages_used} pages so far. You have %{pages_left} pages remaining today.
+      remaining_pages: You have remediated %{pages_used} pages today. You have %{pages_left} pages remaining today.
     index:
       link_to_upload: Upload a new PDF
     job_details:
@@ -60,12 +60,6 @@ en:
       subheading: Generation only available for jpg and png files
     index:
       link_to_upload: Generate alt-text for a new image
-    quick_guide:
-      heading: To be completed
-      block_one:
-          heading: TBD
-          bullet_one: TBD
-          bullet_two: TBD
   footer:
     heading: PDF Accessibility Remediation
     description: ''
