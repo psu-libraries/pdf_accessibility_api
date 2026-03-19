@@ -19,3 +19,8 @@
 .uppy-Dashboard-FileCard-actionsBtn[type="button"] {
   display: none;
 }
+
+// Fix color contrast issue
+a.uppy-Dashboard-poweredBy {
+  color: $black;
+}
