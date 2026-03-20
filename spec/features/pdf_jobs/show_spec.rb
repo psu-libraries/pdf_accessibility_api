@@ -9,7 +9,6 @@ RSpec.feature 'PDF Jobs show', :js do
       source_url: 'https://example.com/file1.pdf',
       object_key: 'file1.pdf',
       filename: 'file1.pdf',
-      uuid: 'abc123',
       created_at: Time.new(2024, 7, 22, 10, 30),
       finished_at: Time.new(2024, 7, 22, 11, 0, 0, '-04:00'),
       status: 'completed',
@@ -27,7 +26,6 @@ RSpec.feature 'PDF Jobs show', :js do
 
     expect(page).to have_content('Job Details')
     expect(page).to have_content('file1.pdf')
-    expect(page).to have_content('abc123')
     expect(page).to have_content('Jul 22, 2024 10:30 AM')
     expect(page).to have_content('Jul 22, 2024 11:00 AM')
     expect(page).to have_content('completed')
