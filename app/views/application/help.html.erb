@@ -1,0 +1,10 @@
+<main class='container-fluid'>
+  <h2 class="title page-title h1"><%= I18n.t('pdf.help_page.heading') %></h2>
+  <h3 class="h5"><%= I18n.t('pdf.help_page.subheading') %></h3>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.quick_start'), bullet_b: I18n.t('pdf.help_page.quick_start_details', link: I18n.t('external_links.quick_start_guide')) %>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.review'), bullet_b: I18n.t('pdf.help_page.review_details', link: I18n.t('external_links.manual_review_guide')) %>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.a11y_liaison'), bullet_b: I18n.t('pdf.help_page.a11y_liaison_details', link: I18n.t('external_links.accessibility_liason')) %>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.report_issue'), bullet_b: I18n.t('pdf.help_page.report_issue_details', link: I18n.t('external_links.report_issue')) %>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.feedback'), bullet_b: I18n.t('pdf.help_page.feedback_details', link: I18n.t('external_links.feedback')) %>
+  <%= render 'help_block', bullet_a: I18n.t('pdf.help_page.contact_a11y'), bullet_b: I18n.t('pdf.help_page.contact_a11y_details', email: I18n.t('external_links.a11y_email')) %>
+</main>

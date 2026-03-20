@@ -1,14 +1,17 @@
 <main class="container-fluid">
-  <div>
-    <h2><%= I18n.t('image.upload.heading') %></h2>
-    <p><%= I18n.t('image.upload.subheading') %></p>
+  <div class="row g-4">
+    <div class="region-content-wrapper col-lg-8 px-xl-5">
+      <div>
+        <h2><%= I18n.t('image.upload.heading') %></h2>
+        <p><%= I18n.t('image.upload.subheading') %></p>
+      </div>
+      <section>
+        <%= form_with url: image_jobs_path, id: 'image-uploader' do |form| %>
+        <div
+          data-controller="image-uppy"
+          data-uppy-parent-form="image-uploader">
+        <% end %>
+      </section>
+    </div>
   </div>
-
-  <section>
-    <%= form_with url: image_jobs_path, id: 'image-uploader' do |form| %>
-    <div
-      data-controller="image-uppy"
-      data-uppy-parent-form="image-uploader">
-    <% end %>
-  </section>
 </main>

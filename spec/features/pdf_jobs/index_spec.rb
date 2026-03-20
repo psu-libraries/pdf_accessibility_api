@@ -4,14 +4,21 @@ require 'rails_helper'
 
 RSpec.feature 'PDF Jobs index', :js do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
-  let!(:job_completed) { create(:pdf_job, object_key: 'file1.pdf',
+  let!(:job_completed) { create(:pdf_job, filename: 'file1.pdf',
                                           status: 'completed',
                                           created_at: Time.new(2024, 7, 22, 10, 30),
+                                          output_url_expires_at: 1.day.from_now,
                                           owner: gui_user) }
-  let!(:job_processing) { create(:pdf_job, object_key: 'file2.pdf',
+  let!(:job_processing) { create(:pdf_job, filename: 'file2.pdf',
                                            status: 'processing',
                                            created_at: Time.new(2024, 7, 21, 9, 0),
+                                           output_url_expires_at: 1.day.from_now,
                                            owner: gui_user) }
+  let!(:job_expired) { create(:pdf_job, filename: 'file3.pdf',
+                                        status: 'completed',
+                                        created_at: Time.new(2024, 7, 20, 8, 30),
+                                        output_url_expires_at: 1.day.ago,
+                                        owner: gui_user) }
 
   before do
     login_gui_user(gui_user)
@@ -23,10 +30,12 @@ RSpec.feature 'PDF Jobs index', :js do
     within '#jobs-table' do
       expect(page).to have_link('file1.pdf', href: pdf_job_path(job_completed))
       expect(page).to have_link('file2.pdf', href: pdf_job_path(job_processing))
+      expect(page).to have_no_link('file3.pdf', href: pdf_job_path(job_expired))
       expect(page).to have_content('completed')
       expect(page).to have_content('processing')
       expect(page).to have_content('Jul 22, 2024 10:30 AM')
       expect(page).to have_content('Jul 21, 2024 9:00 AM')
+      expect(page).to have_no_content('Jul 20, 2024 8:30 AM')
     end
   end
 

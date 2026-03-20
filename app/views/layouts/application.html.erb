@@ -16,9 +16,9 @@
   </head>
 
   <body>
-    <header>
+    <header class="navbar pb-0">
       <div class='container-fluid'>
-        <div class='header-mark'>
+        <div class='header-mark navbar-brand'>
           <%= link_to image_pack_tag('static/frontend/img/logo-penn_state_university_libraries.png', :alt => "Site logo"), 'https://libraries.psu.edu/' %>
           <h1 class="header-mark--name-slogan">
               <a href='/' class='site-title'>
@@ -26,6 +26,32 @@
               </a>
             </h1>
         </div>
+      </div>
+      <div class="container-fluid nav-main-menu-container">
+        <nav class="header-nav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <%= link_to 'New PDF Job', new_pdf_job_path, class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'My PDF Jobs', pdf_jobs_path, class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'New Alt-Text Job', new_image_job_path, class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'My Alt-Text Jobs', image_jobs_path, class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Help', help_page_path, class: "nav-link" %>
+            </li>
+            <% if request.session[:admin] %>
+              <li class="nav-item">
+                <%= link_to 'Admin', rails_admin_path, class: "nav-link" %>
+              </li>
+            <% end %>
+          </ul>
+        </nav>
       </div>
     </header>
     <%= yield %>

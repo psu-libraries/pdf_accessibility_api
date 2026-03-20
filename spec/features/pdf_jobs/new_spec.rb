@@ -8,6 +8,7 @@ RSpec.feature 'New PDF job', :js do
 
   before do
     login_gui_user(gui_user)
+    create(:pdf_job, owner: gui_user, page_count: 3)
   end
 
   it 'shows content and submit button' do
@@ -19,6 +20,11 @@ RSpec.feature 'New PDF job', :js do
     expect(page).to have_content(I18n.t('pdf.privacy_notice.header'))
     expect(page).to have_content(I18n.t('pdf.privacy_notice.adobe'))
     expect(page).to have_content(I18n.t('pdf.privacy_notice.aws'))
+  end
+
+  it 'shows daily limit and current page usage' do
+    visit new_pdf_job_path
+    expect(page).to have_content(I18n.t('pdf.upload.remaining_pages', pages_used: 3, pages_left: 7))
   end
 
   context 'when upload is successful' do
@@ -72,7 +78,14 @@ RSpec.feature 'New PDF job', :js do
 
   context 'when the user has exceeded their daily page limit' do
     before do
-      create(:pdf_job, owner: gui_user, page_count: 10)
+      create(:pdf_job, owner: gui_user, page_count: 15)
+    end
+
+    it 'displays that they have reached their limit' do
+      visit new_pdf_job_path
+      expect(page).to have_content(I18n.t('pdf.upload.remaining_pages',
+                                          pages_used: gui_user.total_pages_processed_last_24_hours,
+                                          pages_left: 0))
     end
 
     it 'shows an error message and does not proceed with the upload' do

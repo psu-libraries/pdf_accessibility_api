@@ -4,7 +4,7 @@ class PdfJobsController < GUIAuthController
   protect_from_forgery except: [:sign]
   add_flash_types :info, :error, :warning
   def index
-    @pdf_jobs = current_user.pdf_jobs.order(created_at: :desc)
+    @pdf_jobs = current_user.pdf_jobs.not_expired.order(created_at: :desc)
   end
 
   def show
@@ -13,6 +13,7 @@ class PdfJobsController < GUIAuthController
 
   def new
     @current_user = current_user
+    @unit = current_user.unit
     @pdf_job = PdfJob.new
   end
 

@@ -12,7 +12,7 @@ RSpec.feature 'Image Jobs show', :js do
   end
 
   it 'shows all job metadata including alt-text' do
-    job = create(:image_job, object_key: 'test.jpg',
+    job = create(:image_job, filename: 'test.jpg',
                              status: 'completed',
                              alt_text: alt_text,
                              created_at: Time.new(2024, 7, 22, 10, 30),
@@ -23,8 +23,7 @@ RSpec.feature 'Image Jobs show', :js do
     expect(page).to have_content('test.jpg')
     expect(page).to have_content('Jul 22, 2024 10:30 AM')
     expect(page).to have_content('completed')
-    expect(page).to have_content('Errors:')
-    expect(page).to have_content('None')
+    expect(page).to have_no_content('Errors:')
     expect(page).to have_content(alt_text)
     expect(page).to have_link('<< Image Jobs List', href: image_jobs_path)
   end
@@ -43,7 +42,7 @@ RSpec.feature 'Image Jobs show', :js do
 
     expect(page).to have_content('Status: processing')
     expect(page).to have_content('Finished At:')
-    expect(page).to have_content('Errors: None')
+    expect(page).to have_no_content('Errors:')
 
     job.update!(
       status: 'completed',

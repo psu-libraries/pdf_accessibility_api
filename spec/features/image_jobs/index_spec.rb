@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.feature 'Image Jobs index', :js do
   let!(:gui_user) { create(:gui_user, email: 'test1@psu.edu') }
-  let!(:job_completed) { create(:image_job, object_key: 'test.jpg',
+  let!(:job_completed) { create(:image_job, filename: 'test.jpg',
                                             status: 'completed',
                                             created_at: Time.new(2024, 7, 22, 10, 30),
                                             owner: gui_user) }
-  let!(:job_processing) { create(:image_job, object_key: 'test2.jpg',
+  let!(:job_processing) { create(:image_job, filename: 'test2.jpg',
                                              status: 'processing',
                                              created_at: Time.new(2024, 7, 21, 9, 0),
                                              owner: gui_user) }

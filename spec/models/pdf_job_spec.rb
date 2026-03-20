@@ -67,4 +67,15 @@ RSpec.describe PdfJob do
       end
     end
   end
+
+  describe '#self.not_expired' do
+    before do
+      job.update!(output_url_expires_at: 1.hour.from_now)
+      gui_job.update!(output_url_expires_at: 1.hour.ago)
+    end
+
+    it 'returns a list of jobs with a valid download link' do
+      expect(described_class.not_expired).to eq([job])
+    end
+  end
 end

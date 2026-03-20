@@ -4,7 +4,6 @@ import consumer from '../channels/consumer'
 
 export default class extends Controller {
   static targets = [
-    'outputObjectKey',
     'status',
     'finishedAt',
     'altText',
@@ -29,9 +28,6 @@ export default class extends Controller {
   }
 
   updateResult(data) {
-    if (this.hasOutputObjectKeyTarget) {
-      this.data.set('objectKey', data.object_key || '')
-    }
     this.data.set('status', data.status || '')
     this.data.set('finishedAt', data.finished_at || '')
     this.data.set('outputUrl', data.output_url || '')
@@ -48,10 +44,19 @@ export default class extends Controller {
     if (this.hasAltTextTarget) {
       this.altTextTarget.textContent = this.data.get('altText')
     }
-    this.statusTarget.textContent = this.data.get('status')
+    this.renderStatus()
     this.renderFinishedAt()
     this.renderOutputUrl()
     this.renderErrorMessage()
+  }
+
+  renderStatus() {
+    let status = this.data.get('status');
+    if (status.includes('processing')){
+      this.statusTarget.innerHTML = `${status} <i class="fa-solid fa-spinner fa-spin-pulse"></i>`
+      return
+    }
+    this.statusTarget.textContent = status;
   }
 
   renderFinishedAt() {
@@ -88,9 +93,7 @@ export default class extends Controller {
     const processingErrorMessage = this.data.get('processingErrorMessage')
 
     if (processingErrorMessage) {
-      this.processingErrorMessageTarget.innerHTML = '<pre>' + processingErrorMessage + '</pre>'
-    } else {
-      this.processingErrorMessageTarget.innerHTML = 'None'
+      this.processingErrorMessageTarget.innerHTML = '<li><strong>Errors:<pre>' + processingErrorMessage + '</pre></strong></li>'
     }
   }
 }

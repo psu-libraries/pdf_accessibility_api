@@ -8,6 +8,7 @@ RSpec.feature 'PDF Jobs show', :js do
     {
       source_url: 'https://example.com/file1.pdf',
       object_key: 'file1.pdf',
+      filename: 'file1.pdf',
       uuid: 'abc123',
       created_at: Time.new(2024, 7, 22, 10, 30),
       finished_at: Time.new(2024, 7, 22, 11, 0, 0, '-04:00'),
@@ -26,13 +27,11 @@ RSpec.feature 'PDF Jobs show', :js do
 
     expect(page).to have_content('Job Details')
     expect(page).to have_content('file1.pdf')
-    expect(page).to have_content('abc123')
     expect(page).to have_content('Jul 22, 2024 10:30 AM')
     expect(page).to have_content('Jul 22, 2024 11:00 AM')
     expect(page).to have_content('completed')
     expect(page).to have_link('Click to download', href: 'http://example.com/result1.pdf')
-    expect(page).to have_content('Errors:')
-    expect(page).to have_content('None')
+    expect(page).to have_no_content('Errors:')
     expect(page).to have_link('<< Jobs List', href: pdf_jobs_path)
   end
 
@@ -71,7 +70,7 @@ RSpec.feature 'PDF Jobs show', :js do
     expect(page).to have_content('Status: processing')
     expect(page).to have_content('Finished At:')
     expect(page).to have_content('Download: Not available')
-    expect(page).to have_content('Errors: None')
+    expect(page).to have_no_content('Errors')
 
     job.update!(status: 'completed', finished_at: Time.new(2024, 7, 22, 11, 0, 0, '-04:00'),
                 output_url: 'http://example.com/result1.pdf', processing_error_message: 'Something went wrong')
