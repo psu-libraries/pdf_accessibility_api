@@ -1,10 +1,11 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20260202 AS base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.9-node-22:20260317 AS base
 ARG UID=3000
 
 USER root
 RUN apt-get update && \
   apt-get install --no-install-recommends -y \
   libmariadb-dev \
+  libyaml-dev \
   mariadb-client && \
   rm -rf /var/lib/apt/lists*
 
