@@ -54,8 +54,7 @@ FROM base AS dev
 
 USER root
 
-RUN apt-get update && apt-get install -y rsync \
-    wget
+docker compose up -dRUN apt-get update && apt-get install -y rsync wget
 
 USER app
 RUN bundle config set path 'vendor/bundle'
@@ -65,8 +64,9 @@ CMD ["bin/startup"]
 # Final Target
 FROM base AS production
 
-# Clean up Bundle
-RUN bundle install --without development test && \
+# Clean up Bundle (Bundler 4 syntax)
+RUN bundle config set without 'development test' && \
+  bundle install && \
   bundle clean && \
   rm -rf /app/.bundle/cache && \
   rm -rf /app/vendor/bundle/ruby/*/cache
