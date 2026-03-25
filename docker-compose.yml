@@ -1,4 +1,3 @@
-version: '2.4'
 x-web_env: &web_env
   REDIS_HOST: redis
   REDIS_PASSWORD: ${REDIS_PASSWORD:-redispassword}
@@ -23,8 +22,6 @@ services:
     user: "${UID:-1000}:${GID:-1000}"
     depends_on:
       - db
-      - redis
-      - minio
     tty: true
     stdin_open: true
     environment:
@@ -38,12 +35,6 @@ services:
       - uploads-tmp-data:/app/tmp/uploads
     ports:
       - "3000:3000"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/up"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
   s3_poller:
     user: "${UID}:${GID}"
     depends_on:
