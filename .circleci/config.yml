@@ -247,7 +247,12 @@ jobs:
           command: |
             gem install bundler -v "$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)"
             bundle _$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs)_ install
-      - run:
+        - run:
+          name: Docker debug info
+          command: |
+          docker version || echo 'docker version failed'
+          docker info || echo 'docker info failed'
+        - run:
           name: Build and run containers
           command: docker-compose -f docker-compose.yml build && docker-compose -f docker-compose.yml up --force-recreate -d
       - run:
