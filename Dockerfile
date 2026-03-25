@@ -54,7 +54,7 @@ FROM base AS dev
 
 USER root
 
-docker compose up -dRUN apt-get update && apt-get install -y rsync wget
+RUN apt-get update && apt-get install -y rsync wget
 
 USER app
 RUN bundle config set path 'vendor/bundle'
