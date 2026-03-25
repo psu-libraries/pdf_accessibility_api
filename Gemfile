@@ -9,7 +9,7 @@ source 'https://rubygems.org'
 ruby '3.4.9'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.2.2', '>= 7.2.2.1'
+gem 'rails', '~> 8.1.3'
 
 gem 'shakapacker', '~> 9.0'
 # Use mysql as the database for Active Record
