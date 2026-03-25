@@ -252,9 +252,12 @@ jobs:
           command: |
             docker version || echo 'docker version failed'
             docker info || echo 'docker info failed'
-      - run:
+        - run:
           name: Build and run containers
           command: docker-compose -f docker-compose.yml build && docker-compose -f docker-compose.yml up --force-recreate -d
+        - run:
+          name: Print web container logs
+          command: docker-compose -f docker-compose.yml logs web || true
       - run:
           name: Wait for mysql to be ready
           command: docker-compose exec web bash ./wait_for_db.sh
