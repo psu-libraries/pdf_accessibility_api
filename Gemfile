@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Ensure secure version of rails-html-sanitizer
 gem 'rails-html-sanitizer', '>= 1.6.0'
 # frozen_string_literal: true
