@@ -3,7 +3,7 @@ version: 2.1
 orbs:
 
   docker: circleci/docker@3.0.1
-  browser-tools: circleci/browser-tools@1.5.2
+  browser-tools: circleci/browser-tools@2.4
 
 parameters:
 
