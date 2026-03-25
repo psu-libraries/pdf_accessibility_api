@@ -1,3 +1,4 @@
+version: '2.4'
 x-web_env: &web_env
   REDIS_HOST: redis
   REDIS_PASSWORD: ${REDIS_PASSWORD:-redispassword}
@@ -19,7 +20,7 @@ x-web_env: &web_env
   ADMIN_USERS_ROLE: ${ADMIN_USERS_ROLE}
 services:
   web:
-    user: "${UID}:${GID}"
+    user: "${UID:-1000}:${GID:-1000}"
     depends_on:
       db:
         condition: service_healthy
@@ -41,7 +42,7 @@ services:
     ports:
       - "3000:3000"
     healthcheck:
-      test: curl -f http://localhost:3000/up
+      test: ["CMD", "curl", "-f", "http://localhost:3000/up"]
       interval: 10s
       timeout: 5s
       retries: 5
