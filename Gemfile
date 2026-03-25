@@ -46,7 +46,7 @@ gem 'alt_text', '~> 0.2'
 gem 'pdf-reader'
 
 # Logging & Health Checks!
-gem 'okcomputer', '~> 1.18.0'
+gem 'okcomputer', '~> 1.19.1'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
