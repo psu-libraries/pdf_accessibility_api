@@ -8,7 +8,8 @@ class ImageAltTextJob < ApplicationJob
     alt_text = alt_text_client.process_image(
       tmp_path,
       prompt: prompt,
-      model_id: model_id
+      model_id: model_id,
+      temperature: temperature
     )
     complete_job(job, alt_text)
   rescue StandardError => e
@@ -59,4 +60,11 @@ class ImageAltTextJob < ApplicationJob
         region: ENV.fetch('AWS_REGION', 'us-east-1')
       }
     end
+end
+
+private
+
+def temperature
+  raw = ENV.fetch('LLM_TEMPERATURE', '0.0').to_f
+  [[raw, 0.0].max, 1.0].min
 end

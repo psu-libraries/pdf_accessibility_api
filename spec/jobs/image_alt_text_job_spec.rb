@@ -31,7 +31,7 @@ RSpec.describe ImageAltTextJob do
     allow(AltText::LLMRegistry).to receive(:resolve).and_return 'resolved-model-name'
   end
 
-  describe '#perform' do
+    describe '#perform' do
     context 'when the job is called with job uuid and file' do
       before do
         described_class.perform_now(job.uuid, file_path)
@@ -39,7 +39,10 @@ RSpec.describe ImageAltTextJob do
 
       it 'calls the Alt Text gem' do
         expect(alt_text_gem).to have_received(:process_image).with(
-          /.+\.jpg/, prompt: File.read('prompt.txt'), model_id: 'test-llm-model'
+          /.+\.jpg/,
+          prompt: File.read('prompt.txt'),
+          model_id: 'test-llm-model',
+          temperature: anything
         )
       end
 
@@ -67,11 +70,53 @@ RSpec.describe ImageAltTextJob do
 
       it 'updates the status and metadata of the given image job record' do
         described_class.perform_now(job.uuid, file_path)
+
         reloaded_job = job.reload
         expect(reloaded_job.status).to eq 'failed'
         expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
         expect(reloaded_job.processing_error_message).to eq 'StandardError'
         expect(reloaded_job.alt_text).to be_nil
+      end
+    end
+  end
+
+  context 'temperature configuration' do
+    it 'passes temperature from environment' do
+      ClimateControl.modify(LLM_TEMPERATURE: '0.2') do
+        described_class.perform_now(job.uuid, file_path)
+
+        expect(alt_text_gem).to have_received(:process_image).with(
+          anything,
+          prompt: anything,
+          model_id: anything,
+          temperature: 0.2
+        )
+      end
+    end
+
+    it 'clamps temperature above 1.0' do
+      ClimateControl.modify(LLM_TEMPERATURE: '2.0') do
+        described_class.perform_now(job.uuid, file_path)
+
+        expect(alt_text_gem).to have_received(:process_image).with(
+          anything,
+          prompt: anything,
+          model_id: anything,
+          temperature: 1.0
+        )
+      end
+    end
+
+    it 'clamps temperature below 0.0' do
+      ClimateControl.modify(LLM_TEMPERATURE: '-1.0') do
+        described_class.perform_now(job.uuid, file_path)
+
+        expect(alt_text_gem).to have_received(:process_image).with(
+          anything,
+          prompt: anything,
+          model_id: anything,
+          temperature: 0.0
+        )
       end
     end
   end

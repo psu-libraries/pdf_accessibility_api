@@ -9,6 +9,7 @@ export S3_BUCKET_NAME=pdf_accessibility_api # Default value for MinIO in the doc
 
 # Alt Text Gem Info
 export LLM_MODEL=default
+export LLM_TEMPERATURE=0.0
 
 # OAuth
 export ADMIN_USERS_ROLE=
