@@ -22,12 +22,9 @@ services:
   web:
     user: "${UID:-1000}:${GID:-1000}"
     depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_started
-      minio:
-        condition: service_started
+      - db
+      - redis
+      - minio
     tty: true
     stdin_open: true
     environment:
@@ -50,10 +47,8 @@ services:
   s3_poller:
     user: "${UID}:${GID}"
     depends_on:
-      db:
-        condition: service_healthy
-      minio:
-        condition: service_started
+      - db
+      - minio
     tty: true
     stdin_open: true
     environment:
@@ -68,8 +63,7 @@ services:
   worker:
     user: "${UID}:${GID}"
     depends_on:
-      web:
-        condition: service_healthy
+      - web
     environment:
       <<: *web_env
     build:
@@ -81,8 +75,7 @@ services:
   mock_remediation_tool:
     user: "${UID}:${GID}"
     depends_on:
-      web:
-        condition: service_healthy
+      - web
     environment:
       <<: *web_env
     build:
