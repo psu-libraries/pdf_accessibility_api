@@ -304,7 +304,7 @@ GEM
       tzinfo
       validate_url
       webfinger (~> 2.0)
-    package_json (0.1.0)
+    package_json (0.2.0)
     parallel (1.27.0)
     parser (3.3.9.0)
       ast (~> 2.4.1)
@@ -499,8 +499,8 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
-    semantic_range (3.1.0)
-    shakapacker (8.4.0)
+    semantic_range (3.1.1)
+    shakapacker (9.7.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
