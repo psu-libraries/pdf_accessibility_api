@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+# Ensure secure version of rails-html-sanitizer
+gem 'rails-html-sanitizer', '>= 1.6.0'
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
-ruby '3.4.1'
+ruby '3.4.9'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.2.2', '>= 7.2.2.1'
@@ -28,7 +32,7 @@ gem 'bootsnap', require: false
 gem 'sidekiq'
 
 # Aws S3 SDK for Ruby
-gem 'aws-sdk-s3', '~> 1.208'
+gem 'aws-sdk-s3', '>= 1.208.0'
 
 # Temporary file downloads over HTTP
 gem 'down'

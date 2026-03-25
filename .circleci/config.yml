@@ -209,7 +209,7 @@ jobs:
         type: string
       to_tag:
         type: string
-    executor: 
+    executor:
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
@@ -221,7 +221,7 @@ jobs:
       CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
       CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
-    steps:  
+    steps:
       - clone-config-repo
       - run:
           name: Tag & Release Image
@@ -235,7 +235,7 @@ jobs:
 
   test-application:
     docker:
-      - image: cimg/ruby:3.4.1
+      - image: cimg/ruby:3.4.9
         environment:
           GITHUB_USER: 'psu-stewardship-bot'
           MYSQL_PASSWORD: pdf_accessibility_api
