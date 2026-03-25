@@ -18,11 +18,9 @@ module OmniAuthHelpers
     OmniAuth.config.mock_auth[:azure_oauth] = OmniAuth::AuthHash.new(
       provider: 'azure_oauth',
       uid: SecureRandom.uuid,
-      info: {
-        email: email
-      },
       extra: {
         raw_info: {
+          upn: email,
           roles: roles
         }
       }
