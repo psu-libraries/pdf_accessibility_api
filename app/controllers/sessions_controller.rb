@@ -4,8 +4,11 @@ class SessionsController < ApplicationController
   def create
     auth = request.env['omniauth.auth']
 
-    email = auth.dig('info', 'email')
-    roles = auth.dig('extra', 'raw_info', 'roles') || []
+    raw_info = auth.dig('extra', 'raw_info') || {}
+    # UPN (User Principal Name) is the user's unique identifier in Entra ID
+    # In our case, it is the PSU Access ID followed by @psu.edu
+    email = raw_info['upn']
+    roles = raw_info['roles'] || []
 
     unless roles.include?(ENV['AUTHORIZED_USERS_ROLE'])
       render plain: 'Forbidden', status: :forbidden
