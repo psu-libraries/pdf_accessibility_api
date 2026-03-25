@@ -258,9 +258,15 @@ jobs:
       - run:
           name: Print web container logs
           command: docker-compose -f docker-compose.yml logs web || true
-      - run:
+        - run:
           name: Wait for mysql to be ready
           command: docker-compose exec web bash ./wait_for_db.sh
+        - run:
+          name: Print web container logs
+          command: docker-compose -f docker-compose.yml logs web || true
+        - run:
+          name: Print db container logs
+          command: docker-compose -f docker-compose.yml logs db || true
       - run:
           name: "Lint"
           command: docker-compose exec -T web bundle exec niftany
