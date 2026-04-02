@@ -69,12 +69,11 @@ RSpec.describe PdfJob do
   end
 
   describe '#self.not_expired' do
-    let(:pending_job) { build(:pdf_job) }
+    let(:pending_job) { create(:pdf_job) }
 
     before do
       job.update!(output_url_expires_at: 1.hour.from_now)
       gui_job.update!(output_url_expires_at: 1.hour.ago)
-      pending_job.save!
     end
 
     it 'returns jobs with a valid download link or no expiration timestamp' do
