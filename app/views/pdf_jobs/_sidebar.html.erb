@@ -4,7 +4,7 @@
     <%= render 'sidebar_block', heading: I18n.t('pdf.quick_guide.block_one.heading'), bullets: [I18n.t('pdf.quick_guide.block_one.bullet_one'), I18n.t('pdf.quick_guide.block_one.bullet_two')] %>
     <%= render 'sidebar_block', heading: I18n.t('pdf.quick_guide.block_two.heading'), bullets: [I18n.t('pdf.quick_guide.block_two.bullet_one')] %>
     <%= render 'sidebar_block', heading: I18n.t('pdf.quick_guide.block_three.heading'), bullets: [I18n.t('pdf.quick_guide.block_three.bullet_one'), I18n.t('pdf.quick_guide.block_three.bullet_two'), I18n.t('pdf.quick_guide.block_three.bullet_three')] %>
-    <%= render 'sidebar_block', heading: I18n.t('pdf.quick_guide.block_four.heading'), bullets: [I18n.t('pdf.quick_guide.block_four.bullet_one').html_safe, I18n.t('pdf.quick_guide.block_four.bullet_two')] %>
+    <%= render 'sidebar_block', heading: I18n.t('pdf.quick_guide.block_four.heading'), bullets: [I18n.t('pdf.quick_guide.block_four.bullet_one').html_safe, I18n.t('pdf.quick_guide.block_four.bullet_two', email: I18n.t('external_links.a11y_queue_email')).html_safe] %>
     <%= render 'sidebar_block', heading: I18n.t('pdf.quick_guide.block_five.heading'), bullets: [I18n.t('pdf.quick_guide.block_five.bullet_one'), I18n.t('pdf.quick_guide.block_five.bullet_two'), I18n.t('pdf.quick_guide.block_five.bullet_three')] %>
   </div>
 </div>
