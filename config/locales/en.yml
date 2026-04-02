@@ -32,7 +32,7 @@ en:
       block_four:
         heading: Daily upload limit 
         bullet_one: You may upload up to <strong>50 pages per day.</strong>
-        bullet_two: If you need help with a larger document, please contact the Digital Accessibility Queue. (link)
+        bullet_two: If you need help with a larger document, please contact the <a href="mailto:%{email}">Digital Accessibility Queue.</a>
       block_five:
         heading: What this tool does not fix
         bullet_one: Fillable form fields
@@ -71,5 +71,6 @@ en:
     report_issue: "https://libraries.psu.edu/about/accessibility/pdf-remediation-tool/pdf-accessibility-tool-help-and-support-report-technical"
     feedback: "https://forms.office.com/pages/responsepage.aspx?id=RY30fNs9iUOpwcEVUm61Lj2q48fpUh5Cu3oHEhc-CzxUMEs3NVBSWlU5SlVPVDdEVUFRNlRRNEFaMi4u&route=shorturl"
     a11y_email: "accessibility@psu.edu"
+    a11y_queue_email: "digitalaccessibility@psu.libanswers.com"
   authentication:
     no_auth: You are not authorized to use this resource.
