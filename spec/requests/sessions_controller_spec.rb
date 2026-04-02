@@ -30,11 +30,9 @@ RSpec.describe 'SessionsController' do
         OmniAuth.config.mock_auth[:azure_oauth] = OmniAuth::AuthHash.new(
           provider: 'azure_oauth',
           uid: SecureRandom.uuid,
-          info: {
-            email: 'not-authorized@example.com'
-          },
           extra: {
             raw_info: {
+              upn: 'not-authorized@example.com',
               roles: []
             }
           }
