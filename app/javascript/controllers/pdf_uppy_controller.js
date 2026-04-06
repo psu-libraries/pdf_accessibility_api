@@ -34,6 +34,7 @@ export default class extends Controller {
         doneButtonHandler: null,
       })
       .use(AwsS3, {
+        shouldUseMultipart: false,
         getUploadParameters: async (file) => {
           const pageCount = await this.getPageCount(file)
           const resp = await fetch('/pdf_jobs/sign', {
