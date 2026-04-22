@@ -164,7 +164,7 @@ GEM
       rainbow
       rubocop (>= 1)
       smart_properties
-    error_highlight (0.7.0)
+    error_highlight (0.7.1)
     erubi (1.13.1)
     factory_bot (6.5.5)
       activesupport (>= 6.1.0)
