@@ -8,7 +8,11 @@ fi
 if [ "${RAILS_ENV:-development}" != "production" ]; then
   bundle check || bundle
   echo "Initalizing the database"
-  sleep 10 && bundle exec rails db:create db:migrate
+  until bash -c "echo > /dev/tcp/db/3306" 2>/dev/null; do
+    echo "Waiting for db..."
+    sleep 2
+  done
+  bundle exec rails db:create db:migrate
 fi
 
 echo "starting rails"
