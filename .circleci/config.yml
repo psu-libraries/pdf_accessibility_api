@@ -242,7 +242,6 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          version: docker24
           docker_layer_caching: true
       - run:
           name: Install dependencies
@@ -252,6 +251,10 @@ jobs:
       - run:
           name: Build and run containers
           command: docker-compose -f docker-compose.yml build && docker-compose -f docker-compose.yml up --force-recreate -d
+      - run:
+          name: Capture web container logs on failure
+          command: docker-compose -f docker-compose.yml logs web
+          when: on_fail
       - run:
           name: Wait for mysql to be ready
           command: docker-compose exec web bash ./wait_for_db.sh
