@@ -23,6 +23,10 @@ Rails/NotNullColumn:
   Exclude:
     - 'db/migrate/20250714203038_create_gui_users.rb'
 
+Rails/SkipsModelValidations:
+  Exclude:
+    - 'db/migrate/20260727140503_add_service_name_to_active_storage_blobs.active_storage.rb'
+
 RSpec/MultipleMemoizedHelpers:
   Enabled: false
 

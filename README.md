@@ -1,7 +1,7 @@
 # PDF Accessibility API
 
 * Ruby version: 3.4.1
-* Rails version: 7.2
+* Rails version: 8.1
 * Node 22 (with Yarn and Shakapacker)
 
 ## Overview
