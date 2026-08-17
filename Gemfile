@@ -11,7 +11,7 @@ ruby '3.4.9'
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 8.1.0'
 
-gem 'shakapacker', '~> 9.0'
+gem 'shakapacker', '10.1.0'
 # Use mysql as the database for Active Record
 gem 'mysql2', '~> 0.5.7'
 # Use the Puma web server [https://github.com/puma/puma]
@@ -32,7 +32,7 @@ gem 'bootsnap', require: false
 gem 'sidekiq'
 
 # Aws S3 SDK for Ruby
-gem 'aws-sdk-s3', '>= 1.208.0'
+gem 'aws-sdk-s3', '>= 1.226.0'
 
 # Temporary file downloads over HTTP
 gem 'down'
@@ -89,7 +89,7 @@ gem 'rails_admin'
 
 gem 'omniauth', '~> 2.0'
 gem 'omniauth_openid_connect', '~> 0.6'
-gem 'omniauth-rails_csrf_protection', '~> 1.0'
+gem 'omniauth-rails_csrf_protection', '~> 2.0'
 
-gem 'bugsnag', '~> 6.28'
+gem 'bugsnag', '~> 6.30'
 gem 'sassc-rails'

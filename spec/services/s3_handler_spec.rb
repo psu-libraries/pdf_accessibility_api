@@ -20,6 +20,7 @@ RSpec.describe S3Handler, type: :service do
       allow(ENV).to receive(:fetch).with('AWS_REGION').and_return('us-east-1')
       allow(ENV).to receive(:fetch).with('AWS_ACCESS_KEY_ID').and_return('key')
       allow(ENV).to receive(:fetch).with('AWS_SECRET_ACCESS_KEY').and_return('secret')
+      allow(ENV).to receive(:fetch).with('AWS_NEW_RETRIES_2026', 'false').and_return('false')
       allow(ENV).to receive(:fetch).with('S3_BUCKET_NAME').and_return(bucket_name)
       allow(Aws::S3::Resource).to receive(:new).and_return(s3_resource)
       allow(s3_resource).to receive(:bucket).with(bucket_name).and_return(bucket)
