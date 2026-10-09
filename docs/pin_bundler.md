@@ -50,4 +50,4 @@ fi
 ## Support
 If you want, I can:
 - Add a CI job that enforces the Bundler pin.
-- Run the script across multiple repositories/images in your org (requires registry access and network). 
+- Run the script across multiple repositories/images in your org (requires registry access and network).
