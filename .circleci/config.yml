@@ -21,7 +21,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.6.4"
+    default: "v4.6.6"
   CONFIG_REPO_NAME:
     type: string
     default: "pdfapi-config"
@@ -235,7 +235,7 @@ jobs:
 
   test-application:
     docker:
-      - image: cimg/ruby:3.4.9
+      - image: cimg/ruby:3.4.11
         environment:
           GITHUB_USER: 'psu-stewardship-bot'
           MYSQL_PASSWORD: pdf_accessibility_api
