@@ -1,6 +1,6 @@
 # PDF Accessibility API
 
-* Ruby version: 3.4.1
+* Ruby version: 3.4.11
 * Rails version: 8.1
 * Node 22 (with Yarn and Shakapacker)
 
@@ -123,7 +123,7 @@ bin/shakapacker
 Our API and webhook documentation is generated using RSwag and the RSwag DSL from the spec files in `spec/requests/api/v1/api-docs`.  If you make changes to the RSwag spec files, run `RAILS_ENV=test bundle exec rails rswag` to regenerate the swagger.yaml.
 
 
-### Preview deployments 
+### Preview deployments
 
 Preview deployments are triggered off branch-name conventions. To trigger a Preview deployment, create a branch with a `preview/` prefix, and CI will generate a corresponding `Application` object that ArgoCD will deploy.
 
