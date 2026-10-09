@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.9-node-22-yarn-4.16.0 AS base
+FROM harbor.libraries.psu.edu/library/ruby-3.4.11-node-22-yarn-4.18.1 AS base
 ARG UID=3000
 
 USER root
@@ -19,13 +19,18 @@ RUN chown app:app /tmp/app && chmod 755 /tmp/app
 COPY --chown=app:app Gemfile Gemfile.lock /app/
 COPY --chown=app:app . .
 
-USER app
+# Ensure bundler is installed as root so the gem can be written to system dirs
+USER root
+# in the event that bundler runs outside of docker, install the pinned bundler
+# pin to the version recorded in Gemfile.lock to avoid Bundler auto-restarts
+RUN gem install bundler -v "4.0.22"
 
-# in the event that bundler runs outside of docker, we get in sync with it's bundler version
-RUN gem install bundler -v "$(grep -A 1 \"BUNDLED WITH\" Gemfile.lock | tail -n 1)"
+# Switch back to the app user for bundling into the application directory
+USER app
 RUN bundle config set path 'vendor/bundle'
 RUN bundle config set bin '.bundle/bin'
 ENV PATH="/app/.bundle/bin:$PATH"
+
 RUN bundle install && \
   rm -rf /app/.bundle/cache && \
   rm -rf /app/vendor/bundle/ruby/*/cache
