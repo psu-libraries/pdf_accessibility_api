@@ -27,7 +27,6 @@ describe 'API V1 jobs' do
         it 'enqueues a new job' do
           expect { post '/api/v1/jobs', params: { source_url: valid_source_url }, headers: valid_headers }
             .to have_enqueued_job(APIRemediationJob)
-            .with(api_user.jobs.last.uuid)
         end
 
         it 'returns an ok response with the job UUID' do

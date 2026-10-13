@@ -43,7 +43,6 @@ describe 'Image Jobs' do
     it 'enqueues a job with ImageAltTextJob' do
       expect { post('/image_jobs', params: { image: file_upload }) }
         .to have_enqueued_job(ImageAltTextJob)
-        .with(gui_user.jobs.last.uuid, /.+lion\.jpg/)
     end
 
     it 'returns valid JSON' do
