@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Use test adapter by default to enable have_enqueued_job matchers
+ActiveJob::Base.queue_adapter = :test
+
 # Default: prevent jobs from running (but queue them)
 RSpec.configure do |config|
   # Use the inline adapter for ActiveJob in
