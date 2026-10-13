@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.9-node-22-yarn-4.16.0 AS base
+FROM harbor.libraries.psu.edu/library/ruby-3.4.11-node-22-yarn-4.18.1 AS base
 ARG UID=3000
 
 USER root
@@ -21,10 +21,10 @@ COPY --chown=app:app . .
 
 USER app
 
-# in the event that bundler runs outside of docker, we get in sync with it's bundler version
-RUN gem install bundler -v "$(grep -A 1 \"BUNDLED WITH\" Gemfile.lock | tail -n 1)"
+# Bundler is already pre-installed in the base image
 RUN bundle config set path 'vendor/bundle'
 RUN bundle config set bin '.bundle/bin'
+RUN bundle config set allow_prerelease true
 ENV PATH="/app/.bundle/bin:$PATH"
 RUN bundle install && \
   rm -rf /app/.bundle/cache && \

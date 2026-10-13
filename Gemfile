@@ -6,7 +6,7 @@ gem 'rails-html-sanitizer', '>= 1.6.0'
 
 source 'https://rubygems.org'
 
-ruby '3.4.9'
+ruby '3.4.11'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 8.1.0'
@@ -74,9 +74,6 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
-
-  # Highlight the fine-grained location where an error occurred [https://github.com/ruby/error_highlight]
-  gem 'error_highlight', '>= 0.4.0', platforms: [:ruby]
 end
 
 group :test do
