@@ -30,7 +30,7 @@ parameters:
     default: "git@github.com:psu-libraries/pdfapi-config.git"
   REGISTRY_HOST:
     type: string
-    default: "harbor.k8s.libraries.psu.edu"
+    default: "harbor.libraries.psu.edu"
   CLUSTERS_DEV:
     type: string
     default: "uldev"
@@ -235,7 +235,7 @@ jobs:
 
   test-application:
     docker:
-      - image: cimg/ruby:3.4.9
+      - image: cimg/ruby:3.4.11
         environment:
           GITHUB_USER: 'psu-stewardship-bot'
           MYSQL_PASSWORD: pdf_accessibility_api
