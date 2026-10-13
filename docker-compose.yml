@@ -25,7 +25,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-      minio:
+      seaweedfs:
         condition: service_started
     tty: true
     stdin_open: true
@@ -51,7 +51,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      minio:
+      seaweedfs:
         condition: service_started
     tty: true
     stdin_open: true
@@ -116,23 +116,17 @@ services:
       - redis-data:/data
     ports:
     - "6379:6379"
-  minio:
-    image: pgsty/minio:RELEASE.2026-08-04T00-00-00Z
-    container_name: minio
-    restart: always
-    volumes:
-      - minio-data:/data
-    environment:
-      MINIO_ACCESS_KEY: pdf_accessibility_api
-      MINIO_SECRET_KEY: pdf_accessibility_api
-      MINIO_ROOT_USER: pdf_accessibility_api
-      MINIO_ROOT_PASSWORD: pdf_accessibility_api
+  seaweedfs:
+    image: chrislusf/seaweedfs:latest
     ports:
-    - ${MINIO_PORT:-9000}:9000 # API
-    entrypoint:
-    - /bin/sh
-    - -c
-    - mkdir -p /data/pdf_accessibility_api; minio --compat server --address ':9000' /data
+      - ${SEAWEEDFS_S3_PORT:-8333}:8333 # S3 API
+      - 8888:8888 # File Browser GUI
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-pdf_accessibility_api}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-pdf_accessibility_api}
+      S3_BUCKET: pdf_accessibility_api
+    volumes:
+      - seaweedfs-data:/data
     
 networks:
   default:
@@ -146,6 +140,6 @@ volumes:
   worker-bundle-data:
   mock-remediation-tool-bundle-data:
   node-data:
-  minio-data:
+  seaweedfs-data:
   db-data:
   uploads-tmp-data:
