@@ -7,7 +7,7 @@ class ImageJobsController < GUIAuthController
   end
 
   def show
-    @image_job = current_user.image_jobs.find(params[:id])
+    @image_job = current_user.image_jobs.find(params.expect(:id))
   end
 
   def new

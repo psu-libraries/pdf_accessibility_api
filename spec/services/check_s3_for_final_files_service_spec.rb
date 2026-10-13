@@ -59,14 +59,13 @@ RSpec.describe CheckS3ForFinalFilesService do
             .with('original.pdf', expires_in: AppJobModule::PRESIGNED_URL_EXPIRES_IN)
             .and_return('https://example.com/output.pdf')
 
-          service.call(run_once: true)
+          expect { service.call(run_once: true) }.not_to have_enqueued_job(RemediationStatusNotificationJob)
 
           reloaded_job = job.reload
           expect(reloaded_job.status).to eq('completed')
           expect(reloaded_job.output_url).to eq('https://example.com/output.pdf')
           expect(reloaded_job.finished_at).to be_within(1.minute).of(Time.zone.now)
           expect(reloaded_job.output_url_expires_at).to be_present
-          expect(RemediationStatusNotificationJob).not_to have_received(:perform_later)
         end
       end
     end
@@ -247,11 +246,10 @@ RSpec.describe CheckS3ForFinalFilesService do
 
         allow(Job).to receive(:processing_pdfjobs).once.and_call_original
 
-        # rubocop:disable RSpec/SubjectStub
+        # rubocop:disable-next RSpec/SubjectStub
         allow(service).to receive(:sleep) do
           traps['TERM']&.call
         end
-        # rubocop:enable RSpec/SubjectStub
 
         s3_handler = instance_double(S3Handler)
         allow(S3Handler).to receive(:new).and_return(s3_handler)

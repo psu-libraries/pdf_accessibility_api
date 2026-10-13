@@ -13,18 +13,18 @@ RSpec.feature 'New PDF job', :js do
 
   it 'shows content and submit button' do
     visit new_pdf_job_path
-    expect(page).to have_content(I18n.t('heading'))
-    expect(page).to have_content(I18n.t('pdf.upload.heading'))
-    expect(page).to have_content('Drop files here')
+    expect(page).to have_text(I18n.t('heading'))
+    expect(page).to have_text(I18n.t('pdf.upload.heading'))
+    expect(page).to have_text('Drop files here')
     expect(page).to have_button('browse files')
-    expect(page).to have_content(I18n.t('pdf.privacy_notice.header'))
-    expect(page).to have_content(I18n.t('pdf.privacy_notice.adobe'))
-    expect(page).to have_content(I18n.t('pdf.privacy_notice.aws'))
+    expect(page).to have_text(I18n.t('pdf.privacy_notice.header'))
+    expect(page).to have_text(I18n.t('pdf.privacy_notice.adobe'))
+    expect(page).to have_text(I18n.t('pdf.privacy_notice.aws'))
   end
 
   it 'shows daily limit and current page usage' do
     visit new_pdf_job_path
-    expect(page).to have_content(I18n.t('pdf.upload.remaining_pages', pages_used: 3, pages_left: 7))
+    expect(page).to have_text(I18n.t('pdf.upload.remaining_pages', pages_used: 3, pages_left: 7))
   end
 
   context 'when upload is successful' do
@@ -40,7 +40,7 @@ RSpec.feature 'New PDF job', :js do
 
         page
           .first('.uppy-Dashboard-input', visible: false)
-          .attach_file(Rails.root.join('spec', 'fixtures', 'files', 'testing.pdf'))
+          .attach_file(file_fixture('testing.pdf'))
         while page.has_no_selector?('.uppy-StatusBar-actionBtn--upload')
           sleep 0.1
         end
@@ -63,7 +63,7 @@ RSpec.feature 'New PDF job', :js do
 
         page
           .first('.uppy-Dashboard-input', visible: false)
-          .attach_file(Rails.root.join('spec', 'fixtures', 'files', 'special_character_ñ.pdf'))
+          .attach_file(file_fixture('special_character_ñ.pdf'))
         while page.has_no_selector?('.uppy-StatusBar-actionBtn--upload')
           sleep 0.1
         end
@@ -83,9 +83,9 @@ RSpec.feature 'New PDF job', :js do
 
     it 'displays that they have reached their limit' do
       visit new_pdf_job_path
-      expect(page).to have_content(I18n.t('pdf.upload.remaining_pages',
-                                          pages_used: gui_user.total_pages_processed_last_24_hours,
-                                          pages_left: 0))
+      expect(page).to have_text(I18n.t('pdf.upload.remaining_pages',
+                                       pages_used: gui_user.total_pages_processed_last_24_hours,
+                                       pages_left: 0))
     end
 
     it 'shows an error message and does not proceed with the upload' do
@@ -98,14 +98,14 @@ RSpec.feature 'New PDF job', :js do
 
         page
           .first('.uppy-Dashboard-input', visible: false)
-          .attach_file(Rails.root.join('spec', 'fixtures', 'files', 'testing.pdf'))
+          .attach_file(file_fixture('testing.pdf'))
         while page.has_no_selector?('.uppy-StatusBar-actionBtn--upload')
           sleep 0.1
         end
         click_button 'Upload 1 file'
         sleep 0.1
-        expect(page).to have_content('Failed to upload testing.pdf')
-        expect(page).to have_content("Page count exceeds the user's daily page limit of 10")
+        expect(page).to have_text('Failed to upload testing.pdf')
+        expect(page).to have_text("Page count exceeds the user's daily page limit of 10")
         expect(PdfJob.count).to eq(pdf_job_count_before)
         expect(page).to have_current_path(new_pdf_job_path)
       end

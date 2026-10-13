@@ -25,13 +25,13 @@ RSpec.feature 'PDF Jobs show', :js do
     job = create(:pdf_job, job_attrs.merge(output_url: 'http://example.com/result1.pdf'))
     visit pdf_job_path(job)
 
-    expect(page).to have_content('Job Details')
-    expect(page).to have_content('file1.pdf')
-    expect(page).to have_content('Jul 22, 2024 10:30 AM')
-    expect(page).to have_content('Jul 22, 2024 11:00 AM')
-    expect(page).to have_content('completed')
+    expect(page).to have_text('Job Details')
+    expect(page).to have_text('file1.pdf')
+    expect(page).to have_text('Jul 22, 2024 10:30 AM')
+    expect(page).to have_text('Jul 22, 2024 11:00 AM')
+    expect(page).to have_text('completed')
     expect(page).to have_link('Click to download', href: 'http://example.com/result1.pdf')
-    expect(page).to have_no_content('Errors:')
+    expect(page).to have_no_text('Errors:')
     expect(page).to have_link('<< Jobs List', href: pdf_jobs_path)
   end
 
@@ -40,44 +40,44 @@ RSpec.feature 'PDF Jobs show', :js do
                                          output_url_expires_at: 1.hour.ago))
     visit pdf_job_path(job)
 
-    expect(page).to have_content('Download: Expired')
+    expect(page).to have_text('Download: Expired')
   end
 
   it "shows 'Not available' if no output_url" do
     job = PdfJob.create!(job_attrs.merge(output_url: nil, output_url_expires_at: 1.hour.from_now))
     visit pdf_job_path(job)
 
-    expect(page).to have_content('Download: Not available')
+    expect(page).to have_text('Download: Not available')
 
     job2 = PdfJob.create!(job_attrs.merge(output_url: nil, output_url_expires_at: nil))
     visit pdf_job_path(job2)
 
-    expect(page).to have_content('Download: Not available')
+    expect(page).to have_text('Download: Not available')
   end
 
   it 'shows error message if present' do
     job = PdfJob.create!(job_attrs.merge(processing_error_message: 'Something went wrong'))
     visit pdf_job_path(job)
 
-    expect(page).to have_content('Errors:')
-    expect(page).to have_content('Something went wrong')
+    expect(page).to have_text('Errors:')
+    expect(page).to have_text('Something went wrong')
   end
 
   it 'updates status, finished_at, download, and errors in real-time' do
     job = create(:pdf_job, job_attrs.merge(status: 'processing'))
     visit pdf_job_path(job)
 
-    expect(page).to have_content('Status: processing')
-    expect(page).to have_content('Finished At:')
-    expect(page).to have_content('Download: Not available')
-    expect(page).to have_no_content('Errors')
+    expect(page).to have_text('Status: processing')
+    expect(page).to have_text('Finished At:')
+    expect(page).to have_text('Download: Not available')
+    expect(page).to have_no_text('Errors')
 
     job.update!(status: 'completed', finished_at: Time.new(2024, 7, 22, 11, 0, 0, '-04:00'),
                 output_url: 'http://example.com/result1.pdf', processing_error_message: 'Something went wrong')
 
-    expect(page).to have_content('Status: completed')
-    expect(page).to have_content('Jul 22, 2024 11:00 AM')
+    expect(page).to have_text('Status: completed')
+    expect(page).to have_text('Jul 22, 2024 11:00 AM')
     expect(page).to have_link('Click to download', href: 'http://example.com/result1.pdf')
-    expect(page).to have_content('Something went wrong')
+    expect(page).to have_text('Something went wrong')
   end
 end

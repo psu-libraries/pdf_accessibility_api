@@ -11,9 +11,9 @@ RSpec.feature 'New Image job', :js do
 
   it 'shows content and browse button' do
     visit new_image_job_path
-    expect(page).to have_content(I18n.t('heading'))
-    expect(page).to have_content(I18n.t('image.upload.heading'))
-    expect(page).to have_content(I18n.t('image.upload.subheading'))
+    expect(page).to have_text(I18n.t('heading'))
+    expect(page).to have_text(I18n.t('image.upload.heading'))
+    expect(page).to have_text(I18n.t('image.upload.subheading'))
     expect(page).to have_button('browse files')
   end
 
@@ -26,7 +26,7 @@ RSpec.feature 'New Image job', :js do
 
       page
         .first('.uppy-Dashboard-input', visible: false)
-        .attach_file(Rails.root.join('spec', 'fixtures', 'files', 'lion.jpg'))
+        .attach_file(file_fixture('lion.jpg'))
       while page.has_no_selector?('.uppy-StatusBar-actionBtn--upload')
         sleep 0.1
       end
@@ -45,7 +45,7 @@ RSpec.feature 'New Image job', :js do
 
       page
         .first('.uppy-Dashboard-input', visible: false)
-        .attach_file(Rails.root.join('spec', 'fixtures', 'files', 'lion_with_$$$.jpg'))
+        .attach_file(file_fixture('lion_with_$$$.jpg'))
       while page.has_no_selector?('.uppy-StatusBar-actionBtn--upload')
         sleep 0.1
       end

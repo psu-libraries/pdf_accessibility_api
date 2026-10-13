@@ -27,7 +27,7 @@ RSpec.describe 'API::V1::Jobs' do
 
         Refer to the Webhook Callbacks section for details on the webhook notifications.
       DESC
-      security [ApiKeyAuth: []]
+      security [{ ApiKeyAuth: [] }]
 
       parameter name: :'X-API-KEY',
                 in: :header,

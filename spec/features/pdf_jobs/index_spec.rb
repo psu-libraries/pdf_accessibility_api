@@ -31,11 +31,11 @@ RSpec.feature 'PDF Jobs index', :js do
       expect(page).to have_link('file1.pdf', href: pdf_job_path(job_completed))
       expect(page).to have_link('file2.pdf', href: pdf_job_path(job_processing))
       expect(page).to have_no_link('file3.pdf', href: pdf_job_path(job_expired))
-      expect(page).to have_content('completed')
-      expect(page).to have_content('processing')
-      expect(page).to have_content('Jul 22, 2024 10:30 AM')
-      expect(page).to have_content('Jul 21, 2024 9:00 AM')
-      expect(page).to have_no_content('Jul 20, 2024 8:30 AM')
+      expect(page).to have_text('completed')
+      expect(page).to have_text('processing')
+      expect(page).to have_text('Jul 22, 2024 10:30 AM')
+      expect(page).to have_text('Jul 21, 2024 9:00 AM')
+      expect(page).to have_no_text('Jul 20, 2024 8:30 AM')
     end
   end
 
@@ -50,11 +50,11 @@ RSpec.feature 'PDF Jobs index', :js do
     visit pdf_jobs_path
 
     within '#jobs-table tr:nth-child(2)' do
-      expect(page).to have_content('processing')
+      expect(page).to have_text('processing')
 
       job_processing.update!(status: 'completed')
 
-      expect(page).to have_content('completed')
+      expect(page).to have_text('completed')
     end
   end
 end

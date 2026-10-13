@@ -19,15 +19,15 @@ RSpec.feature 'Rails Admin dashboard stats' do
     visit '/admin'
 
     within('#dashboard-stats') do
-      expect(page).to have_content('Total PDF Pages Processed')
-      expect(page).to have_content('PDF Pages Processed Today')
-      expect(page).to have_content('PDF Jobs Currently Processing')
-      expect(page).to have_content('Sidekiq DeadSet')
+      expect(page).to have_text('Total PDF Pages Processed')
+      expect(page).to have_text('PDF Pages Processed Today')
+      expect(page).to have_text('PDF Jobs Currently Processing')
+      expect(page).to have_text('Sidekiq DeadSet')
 
-      expect(page).to have_content('20')
-      expect(page).to have_content('10')
-      expect(page).to have_content('1')
-      expect(page).to have_content('3')
+      expect(page).to have_text('20')
+      expect(page).to have_text('10')
+      expect(page).to have_text('1')
+      expect(page).to have_text('3')
     end
   end
 end

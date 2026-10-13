@@ -19,12 +19,12 @@ RSpec.feature 'Image Jobs show', :js do
                              owner: gui_user)
     visit image_job_path(job)
 
-    expect(page).to have_content('Job Details')
-    expect(page).to have_content('test.jpg')
-    expect(page).to have_content('Jul 22, 2024 10:30 AM')
-    expect(page).to have_content('completed')
-    expect(page).to have_no_content('Errors:')
-    expect(page).to have_content(alt_text)
+    expect(page).to have_text('Job Details')
+    expect(page).to have_text('test.jpg')
+    expect(page).to have_text('Jul 22, 2024 10:30 AM')
+    expect(page).to have_text('completed')
+    expect(page).to have_no_text('Errors:')
+    expect(page).to have_text(alt_text)
     expect(page).to have_link('<< Image Jobs List', href: image_jobs_path)
   end
 
@@ -32,17 +32,17 @@ RSpec.feature 'Image Jobs show', :js do
     job = create(:image_job, owner: gui_user, processing_error_message: error_message)
     visit image_job_path(job)
 
-    expect(page).to have_content('Errors:')
-    expect(page).to have_content(error_message)
+    expect(page).to have_text('Errors:')
+    expect(page).to have_text(error_message)
   end
 
   it 'updates status, finished_at, download, and errors in real-time' do
     job = create(:image_job, owner: gui_user)
     visit image_job_path(job)
 
-    expect(page).to have_content('Status: processing')
-    expect(page).to have_content('Finished At:')
-    expect(page).to have_no_content('Errors:')
+    expect(page).to have_text('Status: processing')
+    expect(page).to have_text('Finished At:')
+    expect(page).to have_no_text('Errors:')
 
     job.update!(
       status: 'completed',
@@ -50,8 +50,8 @@ RSpec.feature 'Image Jobs show', :js do
       alt_text: alt_text
     )
 
-    expect(page).to have_content('Status: completed')
-    expect(page).to have_content('Jul 22, 2024 11:00 AM')
-    expect(page).to have_content(alt_text)
+    expect(page).to have_text('Status: completed')
+    expect(page).to have_text('Jul 22, 2024 11:00 AM')
+    expect(page).to have_text(alt_text)
   end
 end

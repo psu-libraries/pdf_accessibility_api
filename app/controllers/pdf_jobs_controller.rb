@@ -8,7 +8,7 @@ class PdfJobsController < GUIAuthController
   end
 
   def show
-    @pdf_job = current_user.pdf_jobs.find(params[:id])
+    @pdf_job = current_user.pdf_jobs.find(params.expect(:id))
   end
 
   def new
@@ -28,7 +28,7 @@ class PdfJobsController < GUIAuthController
     render json: s3_handler.presigned_url_for_input
   rescue PageCountQuotaValidator::Error => e
     render json: { message: e.message.humanize,
-                   code: 422 }, status: :unprocessable_entity
+                   code: 422 }, status: :unprocessable_content
   end
 
   def complete

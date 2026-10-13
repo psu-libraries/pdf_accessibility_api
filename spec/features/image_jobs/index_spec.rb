@@ -23,10 +23,10 @@ RSpec.feature 'Image Jobs index', :js do
     within '#jobs-table' do
       expect(page).to have_link('test.jpg', href: image_job_path(job_completed))
       expect(page).to have_link('test2.jpg', href: image_job_path(job_processing))
-      expect(page).to have_content('completed')
-      expect(page).to have_content('processing')
-      expect(page).to have_content('Jul 22, 2024 10:30 AM')
-      expect(page).to have_content('Jul 21, 2024 9:00 AM')
+      expect(page).to have_text('completed')
+      expect(page).to have_text('processing')
+      expect(page).to have_text('Jul 22, 2024 10:30 AM')
+      expect(page).to have_text('Jul 21, 2024 9:00 AM')
     end
   end
 
@@ -46,10 +46,10 @@ RSpec.feature 'Image Jobs index', :js do
   it 'updates status in real-time' do
     visit image_jobs_path
 
-    expect(page).to have_content('processing')
+    expect(page).to have_text('processing')
 
     job_processing.update!(status: 'completed')
 
-    expect(page).to have_content('completed')
+    expect(page).to have_text('completed')
   end
 end

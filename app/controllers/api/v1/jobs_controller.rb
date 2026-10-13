@@ -12,7 +12,7 @@ module API::V1
 
       render json: job, only: :uuid
     rescue ActiveRecord::RecordInvalid => e
-      render json: { message: e.message, code: 422 }, status: :unprocessable_entity
+      render json: { message: e.message, code: 422 }, status: :unprocessable_content
     end
 
     private
