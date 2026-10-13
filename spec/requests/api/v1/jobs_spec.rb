@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 describe 'API V1 jobs' do
-  before { allow(APIRemediationJob).to receive(:perform_later) }
-
   let!(:api_user) { create(:api_user) }
   let(:valid_headers) { { 'HTTP_X_API_KEY' => api_user.api_key } }
   let(:valid_source_url) { 'https://test.com/file' }
@@ -27,9 +25,9 @@ describe 'API V1 jobs' do
         end
 
         it 'enqueues a new job' do
-          post '/api/v1/jobs', params: { source_url: valid_source_url }, headers: valid_headers
-
-          expect(APIRemediationJob).to have_received(:perform_later).with(api_user.jobs.last.uuid)
+          expect { post '/api/v1/jobs', params: { source_url: valid_source_url }, headers: valid_headers }
+            .to have_enqueued_job(APIRemediationJob)
+            .with(api_user.jobs.last.uuid)
         end
 
         it 'returns an ok response with the job UUID' do

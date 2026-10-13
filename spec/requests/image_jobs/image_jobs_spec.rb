@@ -9,7 +9,6 @@ describe 'Image Jobs' do
                                                     original_filename: 'lion.jpg')}
 
   before do
-    allow(ImageAltTextJob).to receive(:perform_later)
     login_gui_user(gui_user)
   end
 
@@ -42,10 +41,9 @@ describe 'Image Jobs' do
     end
 
     it 'enqueues a job with ImageAltTextJob' do
-      post(
-        '/image_jobs', params: { image: file_upload }
-      )
-      expect(ImageAltTextJob).to have_received(:perform_later).with(gui_user.jobs.last.uuid, /.+lion\.jpg/)
+      expect { post('/image_jobs', params: { image: file_upload }) }
+        .to have_enqueued_job(ImageAltTextJob)
+        .with(gui_user.jobs.last.uuid, /.+lion\.jpg/)
     end
 
     it 'returns valid JSON' do

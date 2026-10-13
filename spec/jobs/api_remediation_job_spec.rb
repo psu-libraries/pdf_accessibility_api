@@ -42,7 +42,6 @@ RSpec.describe APIRemediationJob do
     allow(Down).to receive(:download).with('https://test.com/special%characters!.pdf').and_return special_chars_file
     allow(PDF::Reader).to receive(:new).and_return(reader)
     allow(S3Handler).to receive(:new).and_return s3
-    allow(RemediationStatusNotificationJob).to receive(:perform_later)
     allow(File).to receive(:delete).with(file_path)
   end
 
@@ -113,8 +112,9 @@ RSpec.describe APIRemediationJob do
       end
 
       it 'queues up a notification about the status of the job' do
-        described_class.perform_now(job.uuid)
-        expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
+        expect { described_class.perform_now(job.uuid) }
+          .to have_enqueued_job(RemediationStatusNotificationJob)
+          .with(job.uuid)
       end
     end
 
@@ -136,8 +136,9 @@ RSpec.describe APIRemediationJob do
       end
 
       it 'queues up a notification about the status of the job' do
-        described_class.perform_now(job.uuid)
-        expect(RemediationStatusNotificationJob).to have_received(:perform_later).with(job.uuid)
+        expect { described_class.perform_now(job.uuid) }
+          .to have_enqueued_job(RemediationStatusNotificationJob)
+          .with(job.uuid)
       end
 
       it 'closes the temporarily downloaded file' do
