@@ -235,7 +235,7 @@ jobs:
 
   test-application:
     docker:
-      - image: cimg/ruby:3.4.9
+      - image: cimg/ruby:3.4.11
         environment:
           GITHUB_USER: 'psu-stewardship-bot'
           MYSQL_PASSWORD: pdf_accessibility_api
