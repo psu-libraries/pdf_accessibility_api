@@ -127,7 +127,7 @@ services:
       S3_BUCKET: pdf_accessibility_api
     volumes:
       - seaweedfs-data:/data
-    
+
 networks:
   default:
     driver: bridge
