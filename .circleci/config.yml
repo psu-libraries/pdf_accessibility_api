@@ -239,6 +239,11 @@ jobs:
         environment:
           GITHUB_USER: 'psu-stewardship-bot'
           MYSQL_PASSWORD: pdf_accessibility_api
+          AWS_ACCESS_KEY_ID: pdf_accessibility_api
+          AWS_SECRET_ACCESS_KEY: pdf_accessibility_api
+          AWS_REGION: us-east-1
+          S3_ENDPOINT: http://seaweedfs:8333
+          S3_BUCKET_NAME: pdf-accessibility-api
     steps:
       - checkout
       - setup_remote_docker:
