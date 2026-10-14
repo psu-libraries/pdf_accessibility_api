@@ -7,20 +7,22 @@ require 'logger'
 
 $stdout.sync = true
 logger = Logger.new($stdout)
+s3_bucket_name = ENV.fetch('S3_BUCKET_NAME', 'pdf-accessibility-api')
 
 begin
   s3_client = Aws::S3::Client.new(
     credentials: Aws::Credentials.new(
-        'pdf_accessibility_api',
-        'pdf_accessibility_api'
+        ENV.fetch('AWS_ACCESS_KEY_ID', 'pdf_accessibility_api'),
+        ENV.fetch('AWS_SECRET_ACCESS_KEY', 'pdf_accessibility_api')
       ),
-    endpoint: 'http://minio:9000',
-    region: 'none'
+    endpoint: ENV.fetch('S3_ENDPOINT', 'http://seaweedfs:8333'),
+    region: ENV.fetch('AWS_REGION', 'us-east-1'),
+    force_path_style: true
   )
   
   s3 = Aws::S3::Resource.new(client: s3_client)
 
-  bucket = s3.bucket('pdf_accessibility_api')
+  bucket = s3.bucket(s3_bucket_name)
 
   logger.info "Mock PDF remediation tool running..."
   loop do
@@ -30,7 +32,7 @@ begin
 
       unless bucket.objects.detect { |o| o.key == result_key }
         logger.info "Copying #{o.key} to #{result_key}"
-        o.copy_to(bucket: "pdf_accessibility_api", key: result_key)
+        o.copy_to(bucket: s3_bucket_name, key: result_key)
       end
     end
 

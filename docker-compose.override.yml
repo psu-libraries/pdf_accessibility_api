@@ -14,3 +14,8 @@ services:
       - type: bind
         source: ./
         target: /app
+  mock_remediation_tool:
+    volumes:
+      - type: bind
+        source: ./
+        target: /app

@@ -6,7 +6,7 @@ export AWS_REGION="us-east-1"
 # S3 Bucket Info
 export S3_ENDPOINT=http://docker.for.mac.localhost:8333 # In dev environment to connect via host port mapping to seaweedfs
 export S3_ENDPOINT=http://seaweedfs:8333 # In test environment to connect directly to seaweedfs within docker network
-export S3_BUCKET_NAME=pdf_accessibility_api # Default value for seaweedfs in the docker compose environment
+export S3_BUCKET_NAME=pdf-accessibility-api # Default value for seaweedfs in the docker compose environment
 
 # Alt Text Gem Info
 export LLM_MODEL=default

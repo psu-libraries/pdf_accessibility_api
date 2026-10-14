@@ -18,6 +18,7 @@ class S3Handler
     }
     if ENV['S3_ENDPOINT'].present?
       client_options[:endpoint] = ENV['S3_ENDPOINT']
+      client_options[:force_path_style] = true
     else
       client_options[:region] = ENV.fetch('AWS_REGION')
     end

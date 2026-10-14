@@ -18,7 +18,7 @@ RSpec.feature 'New Image job', :js do
   end
 
   it 'redirects to the job show page for a new job when one is created' do
-    with_minio_env do
+    with_seaweedfs_env do
       visit new_image_job_path
       while page.has_no_selector?('.uppy-Dashboard-AddFiles')
         sleep 0.1
@@ -37,7 +37,7 @@ RSpec.feature 'New Image job', :js do
   end
 
   it 'shows alert and does not proceed if the filename contains a special character' do
-    with_minio_env do
+    with_seaweedfs_env do
       visit new_image_job_path
       while page.has_no_selector?('.uppy-Dashboard-AddFiles')
         sleep 0.1
