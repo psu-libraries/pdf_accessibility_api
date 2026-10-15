@@ -23,9 +23,9 @@ describe 'requesting a file remediation via the API', :active_job_inline do
 
   it 'processes the file and sends a webhook notification' do
     # Here we're ensuring that even if we have configured our environment to use the real
-    # AWS S3 bucket and PDF remediation tool, this test will still use MinIO and avoid
+    # AWS S3 bucket and PDF remediation tool, this test will still use SeaweedFS and avoid
     # actually uploading the file to be remediated.
-    with_minio_env do
+    with_seaweedfs_env do
       post(
         '/api/v1/jobs',
         params: {

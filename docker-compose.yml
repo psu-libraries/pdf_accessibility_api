@@ -9,7 +9,7 @@ x-web_env: &web_env
   AWS_REGION: "${AWS_REGION}"
   AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
   AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
-  S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
+  S3_BUCKET_NAME: "${S3_BUCKET_NAME:-pdf-accessibility-api}"
   S3_ENDPOINT: "${S3_ENDPOINT}"
   LLM_MODEL: "${LLM_MODEL}"
   AZURE_CLIENT_ID: ${AZURE_CLIENT_ID}
@@ -19,13 +19,13 @@ x-web_env: &web_env
   ADMIN_USERS_ROLE: ${ADMIN_USERS_ROLE}
 services:
   web:
-    user: "${UID:-3000}:${GID:-3000}"
+    user: "root"
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_started
-      minio:
+      seaweedfs:
         condition: service_started
     tty: true
     stdin_open: true
@@ -47,11 +47,11 @@ services:
       retries: 5
       start_period: 30s
   s3_poller:
-    user: "${UID:-3000}:${GID:-3000}"
+    user: "root"
     depends_on:
       db:
         condition: service_healthy
-      minio:
+      seaweedfs:
         condition: service_started
     tty: true
     stdin_open: true
@@ -65,7 +65,7 @@ services:
     volumes:
       - bundle-data:/app/vendor/bundle
   worker:
-    user: "${UID:-3000}:${GID:-3000}"
+    user: "root"
     depends_on:
       web:
         condition: service_healthy
@@ -78,7 +78,7 @@ services:
       - worker-bundle-data:/app/vendor/bundle
       - uploads-tmp-data:/app/tmp/uploads
   mock_remediation_tool:
-    user: "${UID:-3000}:${GID:-3000}"
+    user: "root"
     depends_on:
       web:
         condition: service_healthy
@@ -116,24 +116,18 @@ services:
       - redis-data:/data
     ports:
     - "6379:6379"
-  minio:
-    image: minio/minio:RELEASE.2021-03-17T02-33-02Z
-    container_name: minio
-    restart: always
-    volumes:
-      - minio-data:/data
-    environment:
-      MINIO_ACCESS_KEY: pdf_accessibility_api
-      MINIO_SECRET_KEY: pdf_accessibility_api
-      MINIO_ROOT_USER: pdf_accessibility_api
-      MINIO_ROOT_PASSWORD: pdf_accessibility_api
+  seaweedfs:
+    image: chrislusf/seaweedfs:latest
     ports:
-    - ${MINIO_PORT:-9000}:9000 # API
-    entrypoint:
-    - /bin/sh
-    - -c
-    - mkdir -p /data/pdf_accessibility_api; minio --compat server --address ':9000' /data
-    
+      - ${SEAWEEDFS_S3_PORT:-8333}:8333 # S3 API
+      - 8888:8888 # File Browser GUI
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-pdf_accessibility_api}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-pdf_accessibility_api}
+      S3_BUCKET: ${S3_BUCKET_NAME:-pdf-accessibility-api}
+    volumes:
+      - seaweedfs-data:/data
+
 networks:
   default:
     driver: bridge
@@ -146,6 +140,6 @@ volumes:
   worker-bundle-data:
   mock-remediation-tool-bundle-data:
   node-data:
-  minio-data:
+  seaweedfs-data:
   db-data:
   uploads-tmp-data:
