@@ -21,14 +21,13 @@
     "compression-webpack-plugin": "12",
     "lodash": "4.18.1",
     "luxon": "^3.7.1",
-    "node-forge": "^1.3.2",
     "pdf-lib": "^1.17.1",
-    "shakapacker": "10.1.0",
+    "shakapacker": "10.3.0",
     "stimulus": "^3.2.2",
     "terser-webpack-plugin": "5",
     "webpack": "5",
     "webpack-assets-manifest": "5",
-    "webpack-cli": "4",
+    "webpack-cli": "^7.2.3",
     "webpack-merge": "5"
   },
   "name": "app",
@@ -42,15 +41,12 @@
   "browserslist": [
     "defaults"
   ],
-  "resolutions": {
-    "node-forge": "^1.3.2"
-  },
   "devDependencies": {
     "css-loader": "^7.1.2",
     "mini-css-extract-plugin": "^2.9.2",
     "sass": "^1.89.2",
     "sass-loader": "^16.0.5",
     "style-loader": "^4.0.0",
-    "webpack-dev-server": "^5.2.6"
+    "webpack-dev-server": "^6.0"
   }
 }
