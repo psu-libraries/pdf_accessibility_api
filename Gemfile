@@ -46,7 +46,7 @@ gem 'alt_text', '~> 0.2'
 gem 'pdf-reader'
 
 # Logging & Health Checks!
-gem 'okcomputer', '~> 1.19.0'
+gem 'okcomputer', '~> 1.20.0'
 
 # Ensure secure version of rails-html-sanitizer
 gem 'rails-html-sanitizer', '>= 1.6.0'
