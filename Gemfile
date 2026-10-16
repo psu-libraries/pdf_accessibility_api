@@ -7,7 +7,7 @@ ruby '3.4.11'
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 8.1.4'
 
-gem 'shakapacker', '10.3'
+gem 'shakapacker', '10.3.2'
 # Use mysql as the database for Active Record
 gem 'mysql2', '~> 0.5.7'
 # Use the Puma web server [https://github.com/puma/puma]
