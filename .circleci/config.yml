@@ -30,7 +30,7 @@ parameters:
     default: "git@github.com:psu-libraries/pdfapi-config.git"
   REGISTRY_HOST:
     type: string
-    default: "harbor.k8s.libraries.psu.edu"
+    default: "harbor.libraries.psu.edu"
   CLUSTERS_DEV:
     type: string
     default: "uldev"
