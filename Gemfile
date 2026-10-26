@@ -83,7 +83,7 @@ end
 
 gem 'rails_admin'
 
-gem 'omniauth', '~> 2.0'
+gem 'omniauth', '~> 2.3'
 gem 'omniauth_openid_connect', '~> 0.6'
 gem 'omniauth-rails_csrf_protection', '~> 2.0'
 

@@ -184,7 +184,7 @@ GEM
     globalid (1.4.0)
       activesupport (>= 6.1)
     hashery (2.1.2)
-    hashie (5.1.0)
+    hashie (5.2.0)
       logger
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
@@ -273,11 +273,11 @@ GEM
       racc (~> 1.4)
     okcomputer (1.20.0)
       benchmark
-    omniauth (2.1.4)
-      hashie (>= 3.4.6)
+    omniauth (2.3.1)
+      hashie (>= 3.5.2)
       logger
-      rack (>= 2.2.3)
-      rack-protection
+      rack (>= 2.2.8)
+      rack-protection (>= 2.2.0)
     omniauth-rails_csrf_protection (2.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
@@ -572,7 +572,7 @@ DEPENDENCIES
   mysql2 (~> 0.5.7)
   niftany
   okcomputer (~> 1.20.0)
-  omniauth (~> 2.0)
+  omniauth (~> 2.3)
   omniauth-rails_csrf_protection (~> 2.0)
   omniauth_openid_connect (~> 0.6)
   pdf-reader
