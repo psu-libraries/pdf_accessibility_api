@@ -231,7 +231,7 @@ jobs:
             export REGISTRY_REPO="$CIRCLE_PROJECT_REPONAME"
             /usr/local/bin/image-tag
             cd $CONFIG_REPO_NAME
-            /usr/local/bin/image-release-pr clusters/prod/manifests/prod.yaml
+            /usr/local/bin/image-release-pr clusters/ulprod/manifests/prod.yaml
 
   test-application:
     docker:
