@@ -36,7 +36,7 @@ parameters:
     default: "uldev"
   CLUSTERS_PROD:
     type: string
-    default: "prod"
+    default: "ulprod"
 
 commands:
 
