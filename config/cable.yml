@@ -10,3 +10,6 @@ production:
   adapter: redis
   url: <%= redis_url(ACTION_CABLE_REDIS_DB) %>
   channel_prefix: pdf_accessibility_api_production
+  # Allow Action Cable to recover from temporary Redis outages
+  # during Kubernetes pod restarts.
+  reconnect_attempts: [0, 1, 2, 5, 10, 10, 10, 10, 10, 10]
